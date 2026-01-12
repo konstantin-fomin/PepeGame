@@ -1,5 +1,5 @@
 // GameManager.cs
-// Version: 2026-01-12 v2.0 (Experience split, stable)
+// Version: 2026-01-12 v2.1 (Experience split + Reset)
 // Author: ChatGPT + Kostya
 
 using System;
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour
         SaveGame();
     }
 
-    // ================= EXPERIENCE LOGIC =================
+    // ================= EXPERIENCE =================
 
     private void AddExperience(int amount)
     {
@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour
         Debug.Log("[GM] Rank changed to: " + newRank.rankName);
     }
 
-    // ================= KPI LOGIC =================
+    // ================= KPI =================
 
     private void AddKpi(int amount)
     {
@@ -165,7 +165,6 @@ public class GameManager : MonoBehaviour
         if (passiveTimer >= 1f)
         {
             passiveTimer -= 1f;
-
             AddKpi(kpiPerSecond);
             AddExperience(kpiPerSecond);
         }
@@ -216,7 +215,7 @@ public class GameManager : MonoBehaviour
         ApplyUpgrade(upg);
         branch.MarkPurchased();
 
-        Debug.Log($"[GM] Bought upgrade: {upg.title}");
+        Debug.Log("[GM] Bought upgrade: " + upg.title);
     }
 
     private void ApplyUpgrade(Upgrade upg)
@@ -249,7 +248,7 @@ public class GameManager : MonoBehaviour
                 kpiPerSecond -= s.upgrade.passiveBonus;
                 activeSpecials.RemoveAt(i);
 
-                Debug.Log($"[GM] Special ended: {s.upgrade.title}");
+                Debug.Log("[GM] Special ended: " + s.upgrade.title);
             }
         }
     }
@@ -267,6 +266,28 @@ public class GameManager : MonoBehaviour
 
         remainingTime = 0f;
         return false;
+    }
+
+    // ================= RESET =================
+
+    public void ResetProgress()
+    {
+        Debug.Log("[GM] RESET GAME");
+
+        PlayerPrefs.DeleteKey(SAVE_KEY);
+
+        currentExperience = 0;
+        currentKpi = 0;
+        kpiPerClick = 1;
+        kpiPerSecond = 0;
+        passiveTimer = 0f;
+
+        activeSpecials.Clear();
+
+        currentRank = ranks[0]; // Intern
+        InitFromRank(currentRank);
+
+        SaveGame();
     }
 
     // ================= SAVE / LOAD =================
@@ -346,7 +367,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // ===== OFFLINE XP + KPI =====
         long nowTicks = DateTime.UtcNow.Ticks;
         TimeSpan delta = new TimeSpan(nowTicks - data.lastSaveUtcTicks);
 
