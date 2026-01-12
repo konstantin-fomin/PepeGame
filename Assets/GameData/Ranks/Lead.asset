@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: Lead
   requiredKpi: 10000
-  slotBranches: []
+  slotBranches:
+  - {fileID: 11400000, guid: 31541916a61c9324ea4b9e9cdbcb4dfb, type: 2}
+  - {fileID: 11400000, guid: 56970fc22505dc74498a7df4b12ceb79, type: 2}
+  - {fileID: 11400000, guid: a2c776ebffab8034c96be33989d69658, type: 2}

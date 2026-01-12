@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: Middle
   requiredKpi: 900
-  slotBranches: []
+  slotBranches:
+  - {fileID: 11400000, guid: 24910fd59714a4c448b05b6174727ee5, type: 2}
+  - {fileID: 11400000, guid: 86bb3265c4d946247af7865c8f41ec2e, type: 2}
+  - {fileID: 11400000, guid: b7c30d10c3e4f9b4dbfed10e8fb2f211, type: 2}

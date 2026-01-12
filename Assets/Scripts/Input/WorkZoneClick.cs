@@ -1,9 +1,13 @@
+// WorkZoneClick.cs
+// Version: 2026-01-12 v1.2 (Floating KPI fixed args)
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class WorkZoneClick : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
+    [SerializeField] private FloatingKpiSpawner floatingKpiSpawner;
 
     private Collider2D zoneCollider;
     private Camera mainCamera;
@@ -14,7 +18,6 @@ public class WorkZoneClick : MonoBehaviour
         mainCamera = Camera.main;
     }
 
-    // ⬇ ВАЖНО: InputValue, а не CallbackContext
     public void OnPointerClick(InputValue value)
     {
         Vector2 screenPos = Mouse.current.position.ReadValue();
@@ -32,6 +35,12 @@ public class WorkZoneClick : MonoBehaviour
         if (hit == zoneCollider)
         {
             gameManager.WorkClick();
+
+            // ✅ правильный порядок аргументов
+            floatingKpiSpawner.Spawn(
+                screenPos,                 // Vector2
+                gameManager.KpiPerClick    // int
+            );
         }
     }
 }
