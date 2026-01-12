@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3005b3f58010864f858dc6835265626, type: 3}
+  m_Name: Intern_Special
+  m_EditorClassIdentifier: Assembly-CSharp::SlotBranchConfig
+  slotType: 2
+  upgrades:
+  - id: i_special_1
+    title: "\u0411\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u044B\u0439 \u043A\u043E\u0444\u0435"
+    description: "\u0420\u0443\u043A\u0438 \u0442\u0440\u044F\u0441\u0443\u0442\u0441\u044F
+      \u043D\u043E \u0440\u0430\u0431\u043E\u0442\u0430 \u0438\u0434\u0451\u0442"
+    basePrice: 30
+    clickBonus: 1
+    passiveBonus: 1
+    specialDuration: 10
+  - id: i_special_2
+    title: "\u041F\u043E\u0445\u0432\u0430\u043B\u0430 \u043E\u0442 \u0442\u0438\u043C\u043B\u0438\u0434\u0430"
+    description: "\u0420\u0430\u0431\u043E\u0442\u0430\u0435\u0448\u044C \u0441 \u043E\u0433\u043E\u043D\u044C\u043A\u043E\u043C"
+    basePrice: 50
+    clickBonus: 2
+    passiveBonus: 1
+    specialDuration: 12
+  - id: i_special_3
+    title: "\u0420\u0430\u0431\u043E\u0442\u0430 \u0438\u0437 \u0434\u043E\u043C\u0430"
+    description: "\u041D\u0438\u043A\u0442\u043E \u043D\u0435 \u043C\u0435\u0448\u0430\u0435\u0442"
+    basePrice: 80
+    clickBonus: 2
+    passiveBonus: 2
+    specialDuration: 15
+  - id: i_special_4
+    title: "\u041D\u0438\u043A\u0442\u043E \u043D\u0435 \u0441\u043C\u043E\u0442\u0440\u0438\u0442"
+    description: "\u041C\u043E\u0436\u043D\u043E \u043D\u0435 \u0434\u0435\u043B\u0430\u0442\u044C
+      \u0432\u0438\u0434 \u0447\u0442\u043E \u0437\u0430\u043D\u044F\u0442"
+    basePrice: 120
+    clickBonus: 3
+    passiveBonus: 2
+    specialDuration: 15
+  - id: i_special_5
+    title: "\u0414\u0435\u0434\u043B\u0430\u0439\u043D \u0437\u0430\u0432\u0442\u0440\u0430"
+    description: "\u041F\u0430\u043D\u0438\u043A\u0430 \u0442\u0432\u043E\u0440\u0438\u0442
+      \u0447\u0443\u0434\u0435\u0441\u0430"
+    basePrice: 180
+    clickBonus: 4
+    passiveBonus: 3
+    specialDuration: 10

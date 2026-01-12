@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3005b3f58010864f858dc6835265626, type: 3}
+  m_Name: Senior_Special
+  m_EditorClassIdentifier: Assembly-CSharp::SlotBranchConfig
+  slotType: 2
+  upgrades:
+  - id: s_special_1
+    title: "\u0413\u043B\u0443\u0431\u043E\u043A\u0438\u0439 \u0444\u043E\u043A\u0443\u0441"
+    description: "\u041C\u0438\u0440 \u0438\u0441\u0447\u0435\u0437\u0430\u0435\u0442"
+    basePrice: 12000
+    clickBonus: 8
+    passiveBonus: 8
+    specialDuration: 25
+  - id: s_special_2
+    title: "\u0410\u0432\u0442\u043E\u0440\u0438\u0442\u0435\u0442"
+    description: "\u0412\u0441\u0435 \u0441\u043B\u0443\u0448\u0430\u044E\u0442"
+    basePrice: 18000
+    clickBonus: 10
+    passiveBonus: 10
+    specialDuration: 30
+  - id: s_special_3
+    title: "\u041A\u0440\u0438\u0437\u0438\u0441 \u043C\u0435\u043D\u0435\u0434\u0436\u043C\u0435\u043D\u0442"
+    description: "\u0420\u0430\u0437\u0440\u0443\u043B\u0438\u0432\u0430\u0435\u0448\u044C
+      \u0445\u0430\u043E\u0441"
+    basePrice: 26000
+    clickBonus: 12
+    passiveBonus: 12
+    specialDuration: 20
+  - id: s_special_4
+    title: "\u0411\u043E\u043B\u044C\u0448\u043E\u0439 \u0440\u0435\u043B\u0438\u0437"
+    description: "\u0412\u0441\u0435 \u043D\u0430 \u0443\u0448\u0430\u0445"
+    basePrice: 38000
+    clickBonus: 14
+    passiveBonus: 14
+    specialDuration: 18
+  - id: s_special_5
+    title: "\u041F\u043E\u0442\u043E\u043A \u043C\u0430\u0441\u0442\u0435\u0440\u0430"
+    description: "\u0420\u0430\u0431\u043E\u0442\u0430 \u043A\u0430\u043A \u0438\u0441\u043A\u0443\u0441\u0441\u0442\u0432\u043E"
+    basePrice: 55000
+    clickBonus: 18
+    passiveBonus: 18
+    specialDuration: 35

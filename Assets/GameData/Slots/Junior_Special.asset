@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3005b3f58010864f858dc6835265626, type: 3}
+  m_Name: Junior_Special
+  m_EditorClassIdentifier: Assembly-CSharp::SlotBranchConfig
+  slotType: 2
+  upgrades:
+  - id: j_special_1
+    title: Code Review Boost
+    description: "\u0412\u0441\u0435 \u0432\u0434\u0440\u0443\u0433 \u0434\u043E\u0432\u043E\u043B\u044C\u043D\u044B
+      \u043A\u043E\u0434\u043E\u043C"
+    basePrice: 200
+    clickBonus: 2
+    passiveBonus: 2
+    specialDuration: 15
+  - id: j_special_2
+    title: "\u0421\u0438\u043D\u043A \u043A\u043E\u043C\u0430\u043D\u0434\u044B"
+    description: "\u0412\u0441\u0435 \u043D\u0430\u043A\u043E\u043D\u0435\u0446 \u043F\u043E\u043D\u0438\u043C\u0430\u044E\u0442
+      \u0437\u0430\u0434\u0430\u0447\u0443"
+    basePrice: 350
+    clickBonus: 3
+    passiveBonus: 3
+    specialDuration: 18
+  - id: j_special_3
+    title: "\u0425\u0430\u043A\u0430\u0442\u043E\u043D"
+    description: "\u0420\u0430\u0431\u043E\u0442\u0430\u0435\u0448\u044C \u0431\u0435\u0437
+      \u0441\u043D\u0430"
+    basePrice: 550
+    clickBonus: 4
+    passiveBonus: 4
+    specialDuration: 15
+  - id: j_special_4
+    title: "\u041F\u0440\u043E\u0434\u0430\u043A\u0448\u043D \u0433\u043E\u0440\u0438\u0442"
+    description: "\u0420\u0443\u043A\u0438 \u0441\u0430\u043C\u0438 \u043F\u0438\u0448\u0443\u0442
+      \u043A\u043E\u0434"
+    basePrice: 800
+    clickBonus: 5
+    passiveBonus: 5
+    specialDuration: 12
+  - id: j_special_5
+    title: "\u0411\u043E\u043D\u0443\u0441 \u043E\u0442 \u0437\u0430\u043A\u0430\u0437\u0447\u0438\u043A\u0430"
+    description: "\u0420\u0435\u0434\u043A\u0438\u0439 \u043F\u0440\u0438\u043B\u0438\u0432
+      \u043C\u043E\u0442\u0438\u0432\u0430\u0446\u0438\u0438"
+    basePrice: 1200
+    clickBonus: 6
+    passiveBonus: 6
+    specialDuration: 20

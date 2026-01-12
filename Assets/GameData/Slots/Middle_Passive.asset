@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3005b3f58010864f858dc6835265626, type: 3}
+  m_Name: Middle_Passive
+  m_EditorClassIdentifier: Assembly-CSharp::SlotBranchConfig
+  slotType: 1
+  upgrades:
+  - id: m_passive_1
+    title: "\u041E\u043F\u0442\u0438\u043C\u0438\u0437\u0430\u0446\u0438\u044F \u043F\u0440\u043E\u0446\u0435\u0441\u0441\u043E\u0432"
+    description: "\u0420\u0430\u0431\u043E\u0442\u0430 \u0438\u0434\u0451\u0442 \u0440\u043E\u0432\u043D\u0435\u0435"
+    basePrice: 1000
+    clickBonus: 0
+    passiveBonus: 5
+    specialDuration: 0
+  - id: m_passive_2
+    title: "\u0410\u0432\u0442\u043E\u043C\u0430\u0442\u0438\u0437\u0430\u0446\u0438\u044F
+      \u0440\u0443\u0442\u0438\u043D\u044B"
+    description: "\u041C\u0435\u043D\u044C\u0448\u0435 \u0440\u0443\u0447\u043D\u043E\u0439
+      \u0440\u0430\u0431\u043E\u0442\u044B"
+    basePrice: 1500
+    clickBonus: 0
+    passiveBonus: 7
+    specialDuration: 0
+  - id: m_passive_3
+    title: "\u041C\u043E\u043D\u0438\u0442\u043E\u0440\u0438\u043D\u0433"
+    description: "\u041F\u0440\u043E\u0431\u043B\u0435\u043C\u044B \u0432\u0438\u0434\u043D\u044B
+      \u0437\u0430\u0440\u0430\u043D\u0435\u0435"
+    basePrice: 2200
+    clickBonus: 0
+    passiveBonus: 9
+    specialDuration: 0
+  - id: m_passive_4
+    title: "\u041B\u043E\u0433\u0438 \u0438 \u0430\u043B\u0435\u0440\u0442\u044B"
+    description: "\u041C\u0435\u043D\u044C\u0448\u0435 \u043F\u043E\u0436\u0430\u0440\u043E\u0432"
+    basePrice: 3200
+    clickBonus: 0
+    passiveBonus: 11
+    specialDuration: 0
+  - id: m_passive_5
+    title: "\u041D\u0430\u0434\u0451\u0436\u043D\u044B\u0439 \u043F\u0430\u0439\u043F\u043B\u0430\u0439\u043D"
+    description: "\u0421\u0438\u0441\u0442\u0435\u043C\u0430 \u0441\u0430\u043C\u0430
+      \u0441\u0435\u0431\u044F \u0434\u0435\u0440\u0436\u0438\u0442"
+    basePrice: 4600
+    clickBonus: 0
+    passiveBonus: 13
+    specialDuration: 0
