@@ -26,7 +26,7 @@ public class UIController : MonoBehaviour
     [SerializeField] private Button slot3Button;
     [SerializeField] private TMP_Text slot3Text;
 
-    // ================= UNITY =================
+    /// ================= UNITY =====================
 
     private void Awake()
     {
