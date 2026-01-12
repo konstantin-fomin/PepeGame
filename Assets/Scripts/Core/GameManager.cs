@@ -1,23 +1,45 @@
+// GameManager.cs
+// Version: 2026-01-12 v2.0 (Experience split, stable)
+// Author: ChatGPT + Kostya
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    // ================= RANKS =================
+
     [Header("Ranks")]
     [SerializeField] private List<RankData> ranks;
     [SerializeField] private RankData currentRank;
 
     private Dictionary<SlotType, SlotBranch> branches;
 
-    [Header("KPI")]
+    // ================= EXPERIENCE =================
+
+    [Header("Experience (Career Progress)")]
+    [SerializeField] private int currentExperience;
+
+    public int CurrentExperience => currentExperience;
+    public int ExperienceToNextRank =>
+        currentRank != null ? currentRank.requiredKpi : 0;
+
+    // ================= KPI (CURRENCY) =================
+
+    [Header("KPI (Currency)")]
     [SerializeField] private int currentKpi;
     [SerializeField] private int kpiPerClick = 1;
     [SerializeField] private int kpiPerSecond = 0;
 
+    public int CurrentKpi => currentKpi;
+    public int KpiPerClick => kpiPerClick;
+    public int KpiPerSecond => kpiPerSecond;
+    public RankData CurrentRank => currentRank;
+
     private float passiveTimer;
 
-    // ================= SPECIAL RUNTIME =================
+    // ================= SPECIALS =================
 
     private class ActiveSpecial
     {
@@ -27,24 +49,45 @@ public class GameManager : MonoBehaviour
 
     private readonly List<ActiveSpecial> activeSpecials = new();
 
-    // ================= PUBLIC API =================
+    // ================= SAVE =================
 
-    public int CurrentKpi => currentKpi;
-    public int KpiPerClick => kpiPerClick;
-    public int KpiPerSecond => kpiPerSecond;
-    public RankData CurrentRank => currentRank;
+    private const string SAVE_KEY = "GAME_SAVE_V2";
 
-    public int KpiInCurrentRank =>
-        currentKpi - GetRankStartKpi(currentRank);
+    [Serializable]
+    private class SaveData
+    {
+        public int experience;
+        public int kpi;
+        public int kpiPerClick;
+        public int kpiPerSecond;
 
-    public int KpiToNextRank =>
-        currentRank.requiredKpi;
+        public string currentRankName;
+        public long lastSaveUtcTicks;
+
+        public List<BranchSave> branches = new();
+        public List<SpecialSave> specials = new();
+    }
+
+    [Serializable]
+    private class BranchSave
+    {
+        public SlotType slotType;
+        public int index;
+    }
+
+    [Serializable]
+    private class SpecialSave
+    {
+        public string upgradeId;
+        public float remainingTime;
+    }
 
     // ================= UNITY =================
 
     private void Start()
     {
-        InitFromRank(currentRank);
+        LoadGame();
+        Debug.Log("[GM] Started with rank: " + currentRank.rankName);
     }
 
     private void Update()
@@ -53,7 +96,64 @@ public class GameManager : MonoBehaviour
         TickSpecials();
     }
 
-    // ================= KPI =================
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause)
+            SaveGame();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveGame();
+    }
+
+    // ================= EXPERIENCE LOGIC =================
+
+    private void AddExperience(int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        currentExperience += amount;
+        CheckRankUp();
+    }
+
+    private void CheckRankUp()
+    {
+        int index = ranks.IndexOf(currentRank);
+        if (index < 0 || index >= ranks.Count - 1)
+            return;
+
+        if (currentExperience >= currentRank.requiredKpi)
+        {
+            currentExperience -= currentRank.requiredKpi;
+            SetRank(ranks[index + 1]);
+        }
+    }
+
+    private void SetRank(RankData newRank)
+    {
+        currentRank = newRank;
+        InitFromRank(newRank);
+
+        Debug.Log("[GM] Rank changed to: " + newRank.rankName);
+    }
+
+    // ================= KPI LOGIC =================
+
+    private void AddKpi(int amount)
+    {
+        if (amount <= 0)
+            return;
+
+        currentKpi += amount;
+    }
+
+    public void WorkClick()
+    {
+        AddKpi(kpiPerClick);
+        AddExperience(kpiPerClick);
+    }
 
     private void TickPassiveIncome()
     {
@@ -65,52 +165,10 @@ public class GameManager : MonoBehaviour
         if (passiveTimer >= 1f)
         {
             passiveTimer -= 1f;
+
             AddKpi(kpiPerSecond);
+            AddExperience(kpiPerSecond);
         }
-    }
-
-    private void AddKpi(int amount)
-    {
-        currentKpi += amount;
-        CheckRankUp();
-    }
-
-    public void WorkClick()
-    {
-        AddKpi(kpiPerClick);
-    }
-
-    // ================= RANK =================
-
-    private void CheckRankUp()
-    {
-        int index = ranks.IndexOf(currentRank);
-        if (index < 0 || index >= ranks.Count - 1)
-            return;
-
-        if (KpiInCurrentRank >= currentRank.requiredKpi)
-            SetRank(ranks[index + 1]);
-    }
-
-    private void SetRank(RankData newRank)
-    {
-        currentRank = newRank;
-        InitFromRank(currentRank);
-    }
-
-    private int GetRankStartKpi(RankData rank)
-    {
-        int sum = 0;
-
-        foreach (var r in ranks)
-        {
-            if (r == rank)
-                break;
-
-            sum += r.requiredKpi;
-        }
-
-        return sum;
     }
 
     // ================= UPGRADES =================
@@ -120,7 +178,10 @@ public class GameManager : MonoBehaviour
         branches = new Dictionary<SlotType, SlotBranch>();
 
         foreach (var branchConfig in rank.slotBranches)
-            branches[branchConfig.slotType] = new SlotBranch(branchConfig);
+        {
+            branches[branchConfig.slotType] =
+                new SlotBranch(branchConfig);
+        }
     }
 
     public Upgrade GetCurrentUpgrade(SlotType slotType)
@@ -144,12 +205,18 @@ public class GameManager : MonoBehaviour
         SlotBranch branch = branches[slotType];
         Upgrade upg = branch.GetCurrentUpgrade();
 
-        if (upg == null || currentKpi < upg.basePrice)
+        if (upg == null)
+            return;
+
+        if (currentKpi < upg.basePrice)
             return;
 
         currentKpi -= upg.basePrice;
+
         ApplyUpgrade(upg);
         branch.MarkPurchased();
+
+        Debug.Log($"[GM] Bought upgrade: {upg.title}");
     }
 
     private void ApplyUpgrade(Upgrade upg)
@@ -167,7 +234,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // ================= SPECIAL =================
+    // ================= SPECIALS =================
 
     private void TickSpecials()
     {
@@ -181,6 +248,8 @@ public class GameManager : MonoBehaviour
                 kpiPerClick -= s.upgrade.clickBonus;
                 kpiPerSecond -= s.upgrade.passiveBonus;
                 activeSpecials.RemoveAt(i);
+
+                Debug.Log($"[GM] Special ended: {s.upgrade.title}");
             }
         }
     }
@@ -200,22 +269,103 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    // ================= RESET (FOR TESTING) =================
+    // ================= SAVE / LOAD =================
 
-    public void ResetProgress()
+    private void SaveGame()
     {
-        currentKpi = 0;
-        kpiPerClick = 1;
-        kpiPerSecond = 0;
-        passiveTimer = 0f;
+        SaveData data = new SaveData
+        {
+            experience = currentExperience,
+            kpi = currentKpi,
+            kpiPerClick = kpiPerClick,
+            kpiPerSecond = kpiPerSecond,
+            currentRankName = currentRank.rankName,
+            lastSaveUtcTicks = DateTime.UtcNow.Ticks
+        };
+
+        foreach (var pair in branches)
+        {
+            data.branches.Add(new BranchSave
+            {
+                slotType = pair.Key,
+                index = pair.Value.GetCurrentIndex()
+            });
+        }
+
+        foreach (var s in activeSpecials)
+        {
+            data.specials.Add(new SpecialSave
+            {
+                upgradeId = s.upgrade.id,
+                remainingTime = s.remainingTime
+            });
+        }
+
+        PlayerPrefs.SetString(SAVE_KEY, JsonUtility.ToJson(data));
+        PlayerPrefs.Save();
+    }
+
+    private void LoadGame()
+    {
+        if (!PlayerPrefs.HasKey(SAVE_KEY))
+        {
+            InitFromRank(currentRank);
+            return;
+        }
+
+        SaveData data = JsonUtility.FromJson<SaveData>(
+            PlayerPrefs.GetString(SAVE_KEY)
+        );
+
+        currentExperience = data.experience;
+        currentKpi = data.kpi;
+        kpiPerClick = data.kpiPerClick;
+        kpiPerSecond = data.kpiPerSecond;
+
+        currentRank = ranks.Find(r => r.rankName == data.currentRankName);
+        InitFromRank(currentRank);
+
+        foreach (var b in data.branches)
+        {
+            if (branches.ContainsKey(b.slotType))
+                branches[b.slotType].SetIndex(b.index);
+        }
 
         activeSpecials.Clear();
 
-        if (ranks != null && ranks.Count > 0)
-            currentRank = ranks[0];
+        foreach (var s in data.specials)
+        {
+            Upgrade upg = FindUpgradeById(s.upgradeId);
+            if (upg != null)
+            {
+                activeSpecials.Add(new ActiveSpecial
+                {
+                    upgrade = upg,
+                    remainingTime = s.remainingTime
+                });
+            }
+        }
 
-        InitFromRank(currentRank);
+        // ===== OFFLINE XP + KPI =====
+        long nowTicks = DateTime.UtcNow.Ticks;
+        TimeSpan delta = new TimeSpan(nowTicks - data.lastSaveUtcTicks);
 
-        Debug.Log("Progress reset");
+        int offlineSeconds = Mathf.Max(0, (int)delta.TotalSeconds);
+        if (offlineSeconds > 0)
+        {
+            AddKpi(offlineSeconds * kpiPerSecond);
+            AddExperience(offlineSeconds * kpiPerSecond);
+        }
+    }
+
+    private Upgrade FindUpgradeById(string id)
+    {
+        foreach (var rank in ranks)
+            foreach (var branch in rank.slotBranches)
+                foreach (var upg in branch.upgrades)
+                    if (upg.id == id)
+                        return upg;
+
+        return null;
     }
 }
