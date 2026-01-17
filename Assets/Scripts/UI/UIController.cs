@@ -1,5 +1,5 @@
 // UIController.cs
-// Version: 2026-01-12 v2.0 (Experience UI)
+// Version: 2026-01-16 v2.3 (Universal card refresh)
 // Author: ChatGPT + Kostya
 
 using UnityEngine;
@@ -26,54 +26,24 @@ public class UIController : MonoBehaviour
     [SerializeField] private Slider rankProgressBar;
     [SerializeField] private TMP_Text rankProgressText;
 
-    // ================= SLOTS =================
-    [Header("Slots")]
-    [SerializeField] private Button slot1Button;
-    [SerializeField] private TMP_Text slot1Text;
-
-    [SerializeField] private Button slot2Button;
-    [SerializeField] private TMP_Text slot2Text;
-
-    [SerializeField] private Button slot3Button;
-    [SerializeField] private TMP_Text slot3Text;
-
-    // ================= UNITY =================
+    // ================= UPGRADE CARDS =================
+    [Header("Upgrade Cards")]
+    [SerializeField] private UpgradeCardView clickCard;
+    [SerializeField] private UpgradeCardView passiveCard;
+    [SerializeField] private UpgradeCardView specialCard;
 
     private void Awake()
     {
-        Debug.Log("[UI] Awake");
-
         if (gameManager == null)
         {
             Debug.LogError("[UI] GameManager reference missing!");
             enabled = false;
-            return;
         }
-
-        BindButtons();
     }
 
     private void Update()
     {
         RefreshUI();
-    }
-
-    // ================= BUTTON BINDING =================
-
-    private void BindButtons()
-    {
-        slot1Button.onClick.RemoveAllListeners();
-        slot2Button.onClick.RemoveAllListeners();
-        slot3Button.onClick.RemoveAllListeners();
-
-        slot1Button.onClick.AddListener(() => OnUpgradeClicked(SlotType.Click));
-        slot2Button.onClick.AddListener(() => OnUpgradeClicked(SlotType.Passive));
-        slot3Button.onClick.AddListener(() => OnUpgradeClicked(SlotType.Special));
-    }
-
-    private void OnUpgradeClicked(SlotType slotType)
-    {
-        gameManager.TryBuyUpgrade(slotType);
     }
 
     // ================= UI REFRESH =================
@@ -83,10 +53,13 @@ public class UIController : MonoBehaviour
         RefreshKpi();
         RefreshRank();
         RefreshProgress();
-        RefreshSlots();
+
+        RefreshCard(SlotType.Click, clickCard);
+        RefreshCard(SlotType.Passive, passiveCard);
+        RefreshCard(SlotType.Special, specialCard);
     }
 
-    // ================= KPI UI =================
+    // ================= KPI =================
 
     private void RefreshKpi()
     {
@@ -94,14 +67,14 @@ public class UIController : MonoBehaviour
         kpiPerSecondText.text = $"+{gameManager.KpiPerSecond} KPI / сек";
     }
 
-    // ================= RANK UI =================
+    // ================= RANK =================
 
     private void RefreshRank()
     {
         rankText.text = gameManager.CurrentRank.rankName;
     }
 
-    // ================= PROGRESS UI =================
+    // ================= PROGRESS =================
 
     private void RefreshProgress()
     {
@@ -117,61 +90,23 @@ public class UIController : MonoBehaviour
 
         float progress01 = Mathf.Clamp01((float)currentXp / requiredXp);
         rankProgressBar.value = progress01;
-
         rankProgressText.text = $"{currentXp} / {requiredXp}";
     }
 
-    // ================= SLOTS UI =================
+    // ================= UPGRADE CARD =================
 
-    private void RefreshSlots()
+    private void RefreshCard(SlotType slotType, UpgradeCardView card)
     {
-        RefreshSlot(
-            SlotType.Click,
-            slot1Button,
-            slot1Text
+        Upgrade upgrade = gameManager.GetCurrentUpgrade(slotType);
+
+        card.SetUpgrade(upgrade);
+        card.SetInteractable(
+            upgrade != null && gameManager.CanBuyUpgrade(slotType)
         );
 
-        RefreshSlot(
-            SlotType.Passive,
-            slot2Button,
-            slot2Text
-        );
-
-        RefreshSlot(
-            SlotType.Special,
-            slot3Button,
-            slot3Text
-        );
-    }
-
-    private void RefreshSlot(
-        SlotType slotType,
-        Button button,
-        TMP_Text text
-    )
-    {
-        Upgrade upg = gameManager.GetCurrentUpgrade(slotType);
-
-        if (upg == null)
+        card.SetClickAction(() =>
         {
-            text.text = "—";
-            button.interactable = false;
-            return;
-        }
-
-        string label =
-            $"{upg.title}\n" +
-            $"{upg.description}\n" +
-            $"Цена: {upg.basePrice}";
-
-        // ===== SPECIAL TIMER =====
-        if (upg.specialDuration > 0 &&
-            gameManager.TryGetActiveSpecial(upg.id, out float timeLeft))
-        {
-            label += $"\n⏱ {Mathf.CeilToInt(timeLeft)} сек";
-        }
-
-        text.text = label;
-        button.interactable = gameManager.CanBuyUpgrade(slotType);
+            gameManager.TryBuyUpgrade(slotType);
+        });
     }
 }
