@@ -1,90 +1,79 @@
+// AudioManager.cs
+// Version: 2026-01-16 v1.1 (Rank-based music)
+
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    // ================= AUDIO SOURCES =================
+
     [Header("Audio Sources")]
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource specialLoopSource;
 
+    // ================= MUSIC =================
+
     [Header("Music")]
-    [SerializeField] private AudioClip backgroundMusic;
     [Range(0f, 1f)]
     [SerializeField] private float musicVolume = 0.5f;
 
+    private AudioClip currentMusic;
+
+    // ================= SFX =================
+
     [Header("SFX - Click")]
     [SerializeField] private AudioClip clickClip;
-    [Range(0f, 1f)]
-    [SerializeField] private float clickVolume = 0.5f;
+    [Range(0f, 1f)][SerializeField] private float clickVolume = 0.5f;
 
     [Header("SFX - Buy")]
     [SerializeField] private AudioClip buyClip;
-    [Range(0f, 1f)]
-    [SerializeField] private float buyVolume = 0.7f;
+    [Range(0f, 1f)][SerializeField] private float buyVolume = 0.7f;
 
     [Header("SFX - Error")]
     [SerializeField] private AudioClip errorClip;
-    [Range(0f, 1f)]
-    [SerializeField] private float errorVolume = 0.6f;
+    [Range(0f, 1f)][SerializeField] private float errorVolume = 0.6f;
 
     [Header("SFX - Rank Up")]
     [SerializeField] private AudioClip rankUpClip;
-    [Range(0f, 1f)]
-    [SerializeField] private float rankUpVolume = 1f;
+    [Range(0f, 1f)][SerializeField] private float rankUpVolume = 1f;
 
     [Header("Special Start / End")]
     [SerializeField] private AudioClip specialStartClip;
-    [Range(0f, 1f)]
-    [SerializeField] private float specialStartVolume = 0.8f;
+    [Range(0f, 1f)][SerializeField] private float specialStartVolume = 0.8f;
 
     [SerializeField] private AudioClip specialEndClip;
-    [Range(0f, 1f)]
-    [SerializeField] private float specialEndVolume = 0.6f;
+    [Range(0f, 1f)][SerializeField] private float specialEndVolume = 0.6f;
 
     [Header("Special Loop")]
     [SerializeField] private AudioClip specialLoopClip;
-    [Range(0f, 1f)]
-    [SerializeField] private float specialLoopVolume = 0.4f;
+    [Range(0f, 1f)][SerializeField] private float specialLoopVolume = 0.4f;
 
-    private void Start()
+    // ================= MUSIC API =================
+
+    public void PlayMusicForRank(RankData rank)
     {
-        PlayBackgroundMusic();
-    }
-
-    // ================= MUSIC =================
-
-    public void PlayBackgroundMusic()
-    {
-        if (musicSource == null || backgroundMusic == null)
+        if (rank == null || rank.backgroundMusic == null || musicSource == null)
             return;
 
-        musicSource.clip = backgroundMusic;
+        if (currentMusic == rank.backgroundMusic)
+            return;
+
+        currentMusic = rank.backgroundMusic;
+
+        musicSource.Stop();
+        musicSource.clip = currentMusic;
         musicSource.volume = musicVolume;
         musicSource.loop = true;
         musicSource.Play();
     }
 
-    // ================= SFX =================
+    // ================= SFX API =================
 
-    public void PlayClick()
-    {
-        PlayOneShot(clickClip, clickVolume);
-    }
-
-    public void PlayBuy()
-    {
-        PlayOneShot(buyClip, buyVolume);
-    }
-
-    public void PlayError()
-    {
-        PlayOneShot(errorClip, errorVolume);
-    }
-
-    public void PlayRankUp()
-    {
-        PlayOneShot(rankUpClip, rankUpVolume);
-    }
+    public void PlayClick() => PlayOneShot(clickClip, clickVolume);
+    public void PlayBuy() => PlayOneShot(buyClip, buyVolume);
+    public void PlayError() => PlayOneShot(errorClip, errorVolume);
+    public void PlayRankUp() => PlayOneShot(rankUpClip, rankUpVolume);
 
     public void PlaySpecialStart()
     {

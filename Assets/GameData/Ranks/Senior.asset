@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: Senior
   requiredKpi: 3000
+  backgroundMusic: {fileID: 8300000, guid: b2b31927fc53e0e42a13dce8b4fd8959, type: 3}
   slotBranches:
   - {fileID: 11400000, guid: dc7fa4bd66229824e8d845345450ddd2, type: 2}
   - {fileID: 11400000, guid: 94951168efa5ef049a65dd3ea44b7224, type: 2}

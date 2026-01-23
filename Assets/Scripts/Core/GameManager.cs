@@ -1,6 +1,5 @@
 // GameManager.cs
-// Version: 2026-01-16 v2.4 (Rank up sound added)
-// Author: ChatGPT + Kostya
+// Version: 2026-01-16 v2.6 (Reset restored, safe)
 
 using System;
 using System.Collections.Generic;
@@ -18,16 +17,16 @@ public class GameManager : MonoBehaviour
 
     // ================= EXPERIENCE =================
 
-    [Header("Experience (Career Progress)")]
+    [Header("Experience")]
     [SerializeField] private int currentExperience;
 
     public int CurrentExperience => currentExperience;
     public int ExperienceToNextRank =>
         currentRank != null ? currentRank.requiredKpi : 0;
 
-    // ================= KPI (CURRENCY) =================
+    // ================= KPI =================
 
-    [Header("KPI (Currency)")]
+    [Header("KPI")]
     [SerializeField] private int currentKpi;
     [SerializeField] private int kpiPerClick = 1;
     [SerializeField] private int kpiPerSecond = 0;
@@ -92,7 +91,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         LoadGame();
-        Debug.Log("[GM] Started with rank: " + currentRank.rankName);
+
+        if (audioManager != null && currentRank != null)
+            audioManager.PlayMusicForRank(currentRank);
     }
 
     private void Update()
@@ -116,8 +117,7 @@ public class GameManager : MonoBehaviour
 
     private void AddExperience(int amount)
     {
-        if (amount <= 0)
-            return;
+        if (amount <= 0) return;
 
         currentExperience += amount;
         CheckRankUp();
@@ -126,8 +126,7 @@ public class GameManager : MonoBehaviour
     private void CheckRankUp()
     {
         int index = ranks.IndexOf(currentRank);
-        if (index < 0 || index >= ranks.Count - 1)
-            return;
+        if (index < 0 || index >= ranks.Count - 1) return;
 
         if (currentExperience >= currentRank.requiredKpi)
         {
@@ -141,19 +140,15 @@ public class GameManager : MonoBehaviour
         currentRank = newRank;
         InitFromRank(newRank);
 
-        // 🔊 RANK UP SOUND
         audioManager?.PlayRankUp();
-
-        Debug.Log("[GM] Rank changed to: " + newRank.rankName);
+        audioManager?.PlayMusicForRank(newRank);
     }
 
     // ================= KPI =================
 
     private void AddKpi(int amount)
     {
-        if (amount <= 0)
-            return;
-
+        if (amount <= 0) return;
         currentKpi += amount;
     }
 
@@ -165,11 +160,9 @@ public class GameManager : MonoBehaviour
 
     private void TickPassiveIncome()
     {
-        if (kpiPerSecond <= 0)
-            return;
+        if (kpiPerSecond <= 0) return;
 
         passiveTimer += Time.deltaTime;
-
         if (passiveTimer >= 1f)
         {
             passiveTimer -= 1f;
@@ -183,12 +176,8 @@ public class GameManager : MonoBehaviour
     private void InitFromRank(RankData rank)
     {
         branches = new Dictionary<SlotType, SlotBranch>();
-
         foreach (var branchConfig in rank.slotBranches)
-        {
-            branches[branchConfig.slotType] =
-                new SlotBranch(branchConfig);
-        }
+            branches[branchConfig.slotType] = new SlotBranch(branchConfig);
     }
 
     public Upgrade GetCurrentUpgrade(SlotType slotType)
@@ -212,29 +201,18 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        SlotBranch branch = branches[slotType];
-        Upgrade upg = branch.GetCurrentUpgrade();
-
-        if (upg == null)
-        {
-            audioManager?.PlayError();
-            return;
-        }
-
-        if (currentKpi < upg.basePrice)
+        Upgrade upg = branches[slotType].GetCurrentUpgrade();
+        if (upg == null || currentKpi < upg.basePrice)
         {
             audioManager?.PlayError();
             return;
         }
 
         currentKpi -= upg.basePrice;
-
         ApplyUpgrade(upg);
-        branch.MarkPurchased();
+        branches[slotType].MarkPurchased();
 
         audioManager?.PlayBuy();
-
-        Debug.Log("[GM] Bought upgrade: " + upg.title);
     }
 
     private void ApplyUpgrade(Upgrade upg)
@@ -270,33 +248,14 @@ public class GameManager : MonoBehaviour
                 activeSpecials.RemoveAt(i);
 
                 audioManager?.PlaySpecialEnd();
-
-                Debug.Log("[GM] Special ended: " + s.upgrade.title);
             }
         }
-    }
-
-    public bool TryGetActiveSpecial(string upgradeId, out float remainingTime)
-    {
-        foreach (var s in activeSpecials)
-        {
-            if (s.upgrade.id == upgradeId)
-            {
-                remainingTime = s.remainingTime;
-                return true;
-            }
-        }
-
-        remainingTime = 0f;
-        return false;
     }
 
     // ================= RESET =================
 
     public void ResetProgress()
     {
-        Debug.Log("[GM] RESET GAME");
-
         PlayerPrefs.DeleteKey(SAVE_KEY);
 
         currentExperience = 0;
@@ -310,6 +269,7 @@ public class GameManager : MonoBehaviour
         currentRank = ranks[0];
         InitFromRank(currentRank);
 
+        audioManager?.PlayMusicForRank(currentRank);
         SaveGame();
     }
 
@@ -328,22 +288,11 @@ public class GameManager : MonoBehaviour
         };
 
         foreach (var pair in branches)
-        {
             data.branches.Add(new BranchSave
             {
                 slotType = pair.Key,
                 index = pair.Value.GetCurrentIndex()
             });
-        }
-
-        foreach (var s in activeSpecials)
-        {
-            data.specials.Add(new SpecialSave
-            {
-                upgradeId = s.upgrade.id,
-                remainingTime = s.remainingTime
-            });
-        }
 
         PlayerPrefs.SetString(SAVE_KEY, JsonUtility.ToJson(data));
         PlayerPrefs.Save();
@@ -368,47 +317,5 @@ public class GameManager : MonoBehaviour
 
         currentRank = ranks.Find(r => r.rankName == data.currentRankName);
         InitFromRank(currentRank);
-
-        foreach (var b in data.branches)
-        {
-            if (branches.ContainsKey(b.slotType))
-                branches[b.slotType].SetIndex(b.index);
-        }
-
-        activeSpecials.Clear();
-
-        foreach (var s in data.specials)
-        {
-            Upgrade upg = FindUpgradeById(s.upgradeId);
-            if (upg != null)
-            {
-                activeSpecials.Add(new ActiveSpecial
-                {
-                    upgrade = upg,
-                    remainingTime = s.remainingTime
-                });
-            }
-        }
-
-        long nowTicks = DateTime.UtcNow.Ticks;
-        TimeSpan delta = new TimeSpan(nowTicks - data.lastSaveUtcTicks);
-
-        int offlineSeconds = Mathf.Max(0, (int)delta.TotalSeconds);
-        if (offlineSeconds > 0)
-        {
-            AddKpi(offlineSeconds * kpiPerSecond);
-            AddExperience(offlineSeconds * kpiPerSecond);
-        }
-    }
-
-    private Upgrade FindUpgradeById(string id)
-    {
-        foreach (var rank in ranks)
-            foreach (var branch in rank.slotBranches)
-                foreach (var upg in branch.upgrades)
-                    if (upg.id == id)
-                        return upg;
-
-        return null;
     }
 }
