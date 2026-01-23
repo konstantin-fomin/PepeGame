@@ -1,6 +1,6 @@
 // UpgradeCardView.cs
-// Version: 2026-01-16
-// Purpose: UI view for upgrade card
+// Version: 2026-01-16 v1.2
+// Purpose: UI view for upgrade card + money overlay
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +20,9 @@ public class UpgradeCardView : MonoBehaviour
     [Header("Interaction")]
     [SerializeField] private Button button;
 
+    [Header("Overlay (No Money)")]
+    [SerializeField] private GameObject darkOverlay;
+
     // ================= PUBLIC API =================
 
     public void SetUpgrade(Upgrade upgrade)
@@ -32,7 +35,6 @@ public class UpgradeCardView : MonoBehaviour
 
         titleText.text = upgrade.title;
         descriptionText.text = upgrade.description;
-
         effectText.text = BuildEffectText(upgrade);
         priceText.text = upgrade.basePrice.ToString();
     }
@@ -43,9 +45,21 @@ public class UpgradeCardView : MonoBehaviour
         iconImage.enabled = sprite != null;
     }
 
+    /// <summary>
+    /// Отвечает ТОЛЬКО за кликабельность
+    /// </summary>
     public void SetInteractable(bool value)
     {
         button.interactable = value;
+    }
+
+    /// <summary>
+    /// Затемнение ТОЛЬКО если не хватает денег
+    /// </summary>
+    public void SetNoMoneyOverlay(bool show)
+    {
+        if (darkOverlay != null)
+            darkOverlay.SetActive(show);
     }
 
     public void SetClickAction(UnityEngine.Events.UnityAction action)
@@ -58,13 +72,16 @@ public class UpgradeCardView : MonoBehaviour
 
     private void Clear()
     {
-        titleText.text = "�";
+        titleText.text = "—";
         descriptionText.text = "";
         effectText.text = "";
         priceText.text = "";
 
         iconImage.enabled = false;
         button.interactable = false;
+
+        if (darkOverlay != null)
+            darkOverlay.SetActive(true);
     }
 
     private string BuildEffectText(Upgrade upgrade)

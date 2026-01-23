@@ -1,6 +1,5 @@
 // UIController.cs
-// Version: 2026-01-16 v2.4 (Cards always clickable, logic in GameManager)
-// Author: ChatGPT + Kostya
+// Version: 2026-01-16 v2.5 (No-money overlay support)
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -101,8 +100,15 @@ public class UIController : MonoBehaviour
 
         card.SetUpgrade(upgrade);
 
-        // ❗ КНОПКА ВСЕГДА КЛИКАБЕЛЬНА
+        // ❗ карточка ВСЕГДА кликабельна, если есть апгрейд
         card.SetInteractable(upgrade != null);
+
+        // 🔒 затемнение ТОЛЬКО если апгрейд есть, но денег не хватает
+        bool noMoney =
+            upgrade != null &&
+            !gameManager.CanBuyUpgrade(slotType);
+
+        card.SetNoMoneyOverlay(noMoney);
 
         card.SetClickAction(() =>
         {
