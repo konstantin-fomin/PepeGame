@@ -1,5 +1,5 @@
 // UIController.cs
-// Version: 2026-01-16 v2.3 (Universal card refresh)
+// Version: 2026-01-16 v2.4 (Cards always clickable, logic in GameManager)
 // Author: ChatGPT + Kostya
 
 using UnityEngine;
@@ -100,9 +100,9 @@ public class UIController : MonoBehaviour
         Upgrade upgrade = gameManager.GetCurrentUpgrade(slotType);
 
         card.SetUpgrade(upgrade);
-        card.SetInteractable(
-            upgrade != null && gameManager.CanBuyUpgrade(slotType)
-        );
+
+        // ❗ КНОПКА ВСЕГДА КЛИКАБЕЛЬНА
+        card.SetInteractable(upgrade != null);
 
         card.SetClickAction(() =>
         {

@@ -1,13 +1,17 @@
 // WorkZoneClick.cs
-// Version: 2026-01-12 v1.2 (Floating KPI fixed args)
+// Version: 2026-01-12 v1.4 (AudioManager click sound)
 
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class WorkZoneClick : MonoBehaviour
 {
+    [Header("Core")]
     [SerializeField] private GameManager gameManager;
     [SerializeField] private FloatingKpiSpawner floatingKpiSpawner;
+
+    [Header("Audio")]
+    [SerializeField] private AudioManager audioManager;
 
     private Collider2D zoneCollider;
     private Camera mainCamera;
@@ -29,18 +33,21 @@ public class WorkZoneClick : MonoBehaviour
         );
 
         Vector2 worldPos = mainCamera.ScreenToWorldPoint(screenPosWithZ);
-
         Collider2D hit = Physics2D.OverlapPoint(worldPos);
 
-        if (hit == zoneCollider)
-        {
-            gameManager.WorkClick();
+        if (hit != zoneCollider)
+            return;
 
-            // ✅ правильный порядок аргументов
-            floatingKpiSpawner.Spawn(
-                screenPos,                 // Vector2
-                gameManager.KpiPerClick    // int
-            );
-        }
+        // === GAME LOGIC ===
+        gameManager.WorkClick();
+
+        floatingKpiSpawner.Spawn(
+            screenPos,
+            gameManager.KpiPerClick
+        );
+
+        // === SOUND ===
+        if (audioManager != null)
+            audioManager.PlayClick();
     }
 }

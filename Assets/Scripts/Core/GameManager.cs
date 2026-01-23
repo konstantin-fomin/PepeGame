@@ -1,5 +1,5 @@
 // GameManager.cs
-// Version: 2026-01-12 v2.1 (Experience split + Reset)
+// Version: 2026-01-16 v2.4 (Rank up sound added)
 // Author: ChatGPT + Kostya
 
 using System;
@@ -38,6 +38,11 @@ public class GameManager : MonoBehaviour
     public RankData CurrentRank => currentRank;
 
     private float passiveTimer;
+
+    // ================= AUDIO =================
+
+    [Header("Audio")]
+    [SerializeField] private AudioManager audioManager;
 
     // ================= SPECIALS =================
 
@@ -136,6 +141,9 @@ public class GameManager : MonoBehaviour
         currentRank = newRank;
         InitFromRank(newRank);
 
+        // 🔊 RANK UP SOUND
+        audioManager?.PlayRankUp();
+
         Debug.Log("[GM] Rank changed to: " + newRank.rankName);
     }
 
@@ -199,21 +207,32 @@ public class GameManager : MonoBehaviour
     public void TryBuyUpgrade(SlotType slotType)
     {
         if (!branches.ContainsKey(slotType))
+        {
+            audioManager?.PlayError();
             return;
+        }
 
         SlotBranch branch = branches[slotType];
         Upgrade upg = branch.GetCurrentUpgrade();
 
         if (upg == null)
+        {
+            audioManager?.PlayError();
             return;
+        }
 
         if (currentKpi < upg.basePrice)
+        {
+            audioManager?.PlayError();
             return;
+        }
 
         currentKpi -= upg.basePrice;
 
         ApplyUpgrade(upg);
         branch.MarkPurchased();
+
+        audioManager?.PlayBuy();
 
         Debug.Log("[GM] Bought upgrade: " + upg.title);
     }
@@ -230,6 +249,8 @@ public class GameManager : MonoBehaviour
                 upgrade = upg,
                 remainingTime = upg.specialDuration
             });
+
+            audioManager?.PlaySpecialStart();
         }
     }
 
@@ -247,6 +268,8 @@ public class GameManager : MonoBehaviour
                 kpiPerClick -= s.upgrade.clickBonus;
                 kpiPerSecond -= s.upgrade.passiveBonus;
                 activeSpecials.RemoveAt(i);
+
+                audioManager?.PlaySpecialEnd();
 
                 Debug.Log("[GM] Special ended: " + s.upgrade.title);
             }
@@ -284,7 +307,7 @@ public class GameManager : MonoBehaviour
 
         activeSpecials.Clear();
 
-        currentRank = ranks[0]; // Intern
+        currentRank = ranks[0];
         InitFromRank(currentRank);
 
         SaveGame();
