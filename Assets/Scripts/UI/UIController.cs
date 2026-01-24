@@ -1,5 +1,5 @@
 // UIController.cs
-// Version: 2026-01-16 v2.5 (No-money overlay support)
+// Version: 2026-01-16 v2.6 (Upgrade icon support)
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -100,7 +100,13 @@ public class UIController : MonoBehaviour
 
         card.SetUpgrade(upgrade);
 
-        // ❗ карточка ВСЕГДА кликабельна, если есть апгрейд
+        // 🔹 иконка апгрейда
+        if (upgrade != null)
+            card.SetIcon(upgrade.icon);
+        else
+            card.SetIcon(null);
+
+        // ❗ карточка кликабельна, если есть апгрейд
         card.SetInteractable(upgrade != null);
 
         // 🔒 затемнение ТОЛЬКО если апгрейд есть, но денег не хватает
