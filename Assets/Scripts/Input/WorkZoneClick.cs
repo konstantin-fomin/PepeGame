@@ -1,5 +1,5 @@
 // WorkZoneClick.cs
-// Version: 2026-01-12 v1.4 (AudioManager click sound)
+// Version: 2026-01-26 v1.5 (Laptop screen light pulse)
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +12,9 @@ public class WorkZoneClick : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] private AudioManager audioManager;
+
+    [Header("Visual")]
+    [SerializeField] private LaptopScreenLightController laptopScreenLight;
 
     private Collider2D zoneCollider;
     private Camera mainCamera;
@@ -47,7 +50,9 @@ public class WorkZoneClick : MonoBehaviour
         );
 
         // === SOUND ===
-        if (audioManager != null)
-            audioManager.PlayClick();
+        audioManager?.PlayClick();
+
+        // === SCREEN LIGHT ===
+        laptopScreenLight?.TriggerLightPulse();
     }
 }
