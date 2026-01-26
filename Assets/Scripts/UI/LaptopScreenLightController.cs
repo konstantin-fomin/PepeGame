@@ -1,5 +1,5 @@
 // LaptopScreenLightController.cs
-// Version: 2026-01-26 v1.1
+// Version: 2026-01-26 v1.2 (Delayed pulse start)
 
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -15,9 +15,15 @@ public class LaptopScreenLightController : MonoBehaviour
     [SerializeField] private float fadeOutDuration = 0.2f;
     [SerializeField] private float holdBeforeFadeOut = 0.05f;
 
+    [Header("Timing")]
+    [SerializeField] private float pulseDelay = 0.15f; // рџ”№ Р·Р°РґРµСЂР¶РєР° СЃС‚Р°СЂС‚Р° СЃРІРµС‚Р°
+
     private float currentIntensity;
     private float fadeOutTimer;
+    private float delayTimer;
+
     private bool isActive;
+    private bool waitingForPulse;
 
     private void Awake()
     {
@@ -30,10 +36,25 @@ public class LaptopScreenLightController : MonoBehaviour
 
     private void Update()
     {
+        // === РћР–РР”РђРќРР• Р—РђР”Р•Р Р–РљР ===
+        if (waitingForPulse)
+        {
+            delayTimer -= Time.deltaTime;
+
+            if (delayTimer <= 0f)
+            {
+                waitingForPulse = false;
+                isActive = true;
+                fadeOutTimer = holdBeforeFadeOut;
+            }
+
+            return;
+        }
+
+        // === РЎРђРњ РРњРџРЈР›Р¬РЎ (РќР• РњР•РќРЇР›Р Р›РћР“РРљРЈ) ===
         if (!isActive)
             return;
 
-        // пока таймер > 0 — держим / усиливаем свет
         if (fadeOutTimer > 0f)
         {
             fadeOutTimer -= Time.deltaTime;
@@ -44,7 +65,6 @@ public class LaptopScreenLightController : MonoBehaviour
                 Time.deltaTime / fadeInDuration
             );
         }
-        // иначе — плавно гасим
         else
         {
             currentIntensity = Mathf.MoveTowards(
@@ -67,9 +87,8 @@ public class LaptopScreenLightController : MonoBehaviour
 
     public void TriggerLightPulse()
     {
-        isActive = true;
-
-        // при каждом клике просто продлеваем жизнь импульса
-        fadeOutTimer = holdBeforeFadeOut;
+        // РїСЂРё РєР°Р¶РґРѕРј РєР»РёРєРµ РїРµСЂРµР·Р°РїСѓСЃРєР°РµРј Р·Р°РґРµСЂР¶РєСѓ
+        waitingForPulse = true;
+        delayTimer = pulseDelay;
     }
 }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3e2cba257640c7d45a7141f3ca0fc51d
+guid: 3c3b388404280dd47bd7f7d05a601cb4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2666974712495860465
-    second: CardBackground_2_0
+      213: 6613434094296616055
+    second: "ChatGPT Image 25 \u044F\u043D\u0432. 2026 \u0433., 16_40_56_0"
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: CardBackground_2_0
+      name: "ChatGPT Image 25 \u044F\u043D\u0432. 2026 \u0433., 16_40_56_0"
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1024
-        height: 1536
+        x: 2
+        y: 8
+        width: 1022
+        height: 1470
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f051cb411a00dfad0800000000000000
-      internalID: -2666974712495860465
+      spriteID: 77cc100f443a7cb50800000000000000
+      internalID: 6613434094296616055
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      CardBackground_2_0: -2666974712495860465
+      "ChatGPT Image 25 \u044F\u043D\u0432. 2026 \u0433., 16_40_56_0": 6613434094296616055
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -1,8 +1,9 @@
 // WorkZoneClick.cs
-// Version: 2026-01-26 v1.5 (Laptop screen light pulse)
+// Version: 2026-01-26 v1.6 (Delayed floating KPI visual)
 
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class WorkZoneClick : MonoBehaviour
 {
@@ -15,6 +16,10 @@ public class WorkZoneClick : MonoBehaviour
 
     [Header("Visual")]
     [SerializeField] private LaptopScreenLightController laptopScreenLight;
+
+    [Header("Floating KPI")]
+    [SerializeField, Tooltip("Delay before showing +KPI visual (seconds)")]
+    private float floatingKpiDelay = 0.15f;
 
     private Collider2D zoneCollider;
     private Camera mainCamera;
@@ -41,18 +46,28 @@ public class WorkZoneClick : MonoBehaviour
         if (hit != zoneCollider)
             return;
 
-        // === GAME LOGIC ===
+        // === GAME LOGIC (—–¿«”) ===
         gameManager.WorkClick();
 
-        floatingKpiSpawner.Spawn(
-            screenPos,
-            gameManager.KpiPerClick
-        );
-
-        // === SOUND ===
+        // === SOUND (—–¿«”) ===
         audioManager?.PlayClick();
 
-        // === SCREEN LIGHT ===
+        // === SCREEN LIGHT (—–¿«”) ===
         laptopScreenLight?.TriggerLightPulse();
+
+        // === VISUAL (+KPI) — Ã» –Œ«¿ƒ≈–∆ Œ… ===
+        StartCoroutine(SpawnFloatingKpiWithDelay(
+            screenPos,
+            gameManager.KpiPerClick
+        ));
+    }
+
+    // ================= INTERNAL =================
+
+    private IEnumerator SpawnFloatingKpiWithDelay(Vector2 screenPos, int amount)
+    {
+        yield return new WaitForSeconds(floatingKpiDelay);
+
+        floatingKpiSpawner.Spawn(screenPos, amount);
     }
 }
