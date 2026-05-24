@@ -1,0 +1,29 @@
+# Unity cache — не читать
+Library/
+Temp/
+obj/
+Logs/
+.vs/
+*.csproj
+*.sln
+*.user
+
+# Бинарники и большие файлы
+*.png
+*.jpg
+*.jpeg
+*.psd
+*.wav
+*.mp3
+*.ogg
+*.ttf
+*.otf
+*.fbx
+*.asset
+*.bundle
+
+# Мета-файлы (читать только если нужна конкретная ссылка)
+*.meta
+
+# Git
+.git/

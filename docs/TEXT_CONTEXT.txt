@@ -1,0 +1,50 @@
+TEXT_CONTEXT (CANONICAL)
+
+PROJECT
+- 2D idle / clicker
+- Office / IT theme
+- Target audience: IT specialists, office workers (20–40)
+
+TONE & VOICE
+- Dry office sarcasm
+- Subtle irony
+- Burnout, routine, quiet despair
+- Absurdity treated as normal
+- Humor is restrained, not loud
+- No jokes-for-jokes-sake
+
+STYLE RULES
+- Short phrases
+- Simple sentence structure
+- Neutral or passive tone
+- Often sounds like internal corporate text
+- Slight emotional detachment
+- Text should feel “tired, but functional”
+
+LANGUAGE
+- Russian
+- Conversational but not slang-heavy
+- IT / office vocabulary allowed
+- No memes
+- No emojis
+- No profanity
+
+CARD TEXTS
+- Title: short, punchy, neutral or ironic
+- Description: 1 short sentence
+- Often sounds like a warning, note, or internal comment
+- Avoid exclamation marks
+- Avoid rhetorical questions
+
+EXAMPLES OF GOOD TONE
+- «Работает. Не спрашивай как.»
+- «Лучше не трогать.»
+- «Временно. Уже навсегда.»
+- «Так принято.»
+
+FORBIDDEN
+- Motivational tone
+- Overly emotional text
+- Loud humor
+- Explanations of jokes
+- Meta-comments about gameplay

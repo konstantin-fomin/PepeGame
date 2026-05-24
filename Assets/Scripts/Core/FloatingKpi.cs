@@ -21,6 +21,6 @@ public class FloatingKpi : MonoBehaviour
     {
         timer -= Time.deltaTime;
         if (timer <= 0f)
-            Destroy(gameObject);
+            gameObject.SetActive(false);
     }
 }

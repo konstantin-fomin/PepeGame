@@ -1,5 +1,5 @@
 // UIController.cs
-// Version: 2026-01-16 v2.6 (Upgrade icon support)
+// Version: 2026-05-24 v3.1 (Timer bar via anchorMax for Sliced Image)
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,18 +31,56 @@ public class UIController : MonoBehaviour
     [SerializeField] private UpgradeCardView passiveCard;
     [SerializeField] private UpgradeCardView specialCard;
 
+    // ================= SPECIAL EFFECTS =================
+    // specialTimerBar: Image (Sliced), Anchors Min(0,1) Max(1,1), Height 8px, Left/Right/Top = 0
+    // specialVignette: Image (full screen), sprite with dark edges + transparent center
+
+    [Header("Special Effects")]
+    [SerializeField] private Image specialTimerBar;
+    [SerializeField] private Image specialVignette;
+    [SerializeField] private Color vignetteColor = new Color(0.8f, 0.5f, 0.1f, 1f);
+
     private void Awake()
     {
-        if (gameManager == null)
-        {
-            Debug.LogError("[UI] GameManager reference missing!");
-            enabled = false;
-        }
+        bool valid = true;
+
+        if (gameManager == null)     { Debug.LogError("[UI] gameManager not assigned", this);     valid = false; }
+        if (kpiText == null)         { Debug.LogError("[UI] kpiText not assigned", this);         valid = false; }
+        if (kpiPerSecondText == null) { Debug.LogError("[UI] kpiPerSecondText not assigned", this); valid = false; }
+        if (rankText == null)        { Debug.LogError("[UI] rankText not assigned", this);        valid = false; }
+        if (rankProgressBar == null) { Debug.LogError("[UI] rankProgressBar not assigned", this); valid = false; }
+        if (rankProgressText == null) { Debug.LogError("[UI] rankProgressText not assigned", this); valid = false; }
+        if (clickCard == null)       { Debug.LogError("[UI] clickCard not assigned", this);       valid = false; }
+        if (passiveCard == null)     { Debug.LogError("[UI] passiveCard not assigned", this);     valid = false; }
+        if (specialCard == null)     { Debug.LogError("[UI] specialCard not assigned", this);     valid = false; }
+
+        if (!valid) enabled = false;
+    }
+
+    private void OnEnable()
+    {
+        if (gameManager != null)
+            gameManager.OnStateChanged += RefreshUI;
+    }
+
+    private void OnDisable()
+    {
+        if (gameManager != null)
+            gameManager.OnStateChanged -= RefreshUI;
+    }
+
+    private void Start()
+    {
+        clickCard.SetClickAction(() => gameManager.TryBuyUpgrade(SlotType.Click));
+        passiveCard.SetClickAction(() => gameManager.TryBuyUpgrade(SlotType.Passive));
+        specialCard.SetClickAction(() => gameManager.TryBuyUpgrade(SlotType.Special));
+
+        RefreshUI();
     }
 
     private void Update()
     {
-        RefreshUI();
+        UpdateSpecialEffects();
     }
 
     // ================= UI REFRESH =================
@@ -62,7 +100,7 @@ public class UIController : MonoBehaviour
 
     private void RefreshKpi()
     {
-        kpiText.text = $"KPI: {gameManager.CurrentKpi}";
+        kpiText.text = $"{gameManager.CurrentKpi}";
         kpiPerSecondText.text = $"+{gameManager.KpiPerSecond} KPI / сек";
     }
 
@@ -70,7 +108,8 @@ public class UIController : MonoBehaviour
 
     private void RefreshRank()
     {
-        rankText.text = gameManager.CurrentRank.rankName;
+        if (gameManager.CurrentRank == null) return;
+        rankText.text = $"<b>{gameManager.CurrentRank.rankName.ToUpper()}</b>";
     }
 
     // ================= PROGRESS =================
@@ -89,7 +128,7 @@ public class UIController : MonoBehaviour
 
         float progress01 = Mathf.Clamp01((float)currentXp / requiredXp);
         rankProgressBar.value = progress01;
-        rankProgressText.text = $"{currentXp} / {requiredXp}";
+        rankProgressText.text = $"<color=#FFB800>({currentXp} / {requiredXp})</color>";
     }
 
     // ================= UPGRADE CARD =================
@@ -100,25 +139,73 @@ public class UIController : MonoBehaviour
 
         card.SetUpgrade(upgrade);
 
-        // 🔹 иконка апгрейда
         if (upgrade != null)
             card.SetIcon(upgrade.icon);
         else
             card.SetIcon(null);
 
-        // ❗ карточка кликабельна, если есть апгрейд
         card.SetInteractable(upgrade != null);
 
-        // 🔒 затемнение ТОЛЬКО если апгрейд есть, но денег не хватает
         bool noMoney =
             upgrade != null &&
             !gameManager.CanBuyUpgrade(slotType);
 
         card.SetNoMoneyOverlay(noMoney);
+    }
 
-        card.SetClickAction(() =>
-        {
-            gameManager.TryBuyUpgrade(slotType);
-        });
+    // ================= SPECIAL EFFECTS =================
+
+    private void UpdateSpecialEffects()
+    {
+        if (gameManager == null) return;
+
+        bool hasSpecial = gameManager.HasActiveSpecial;
+        float progress = hasSpecial ? gameManager.GetSpecialProgress01() : 0f;
+
+        UpdateTimerBar(hasSpecial, progress);
+        UpdateVignette(hasSpecial, progress);
+    }
+
+    private void UpdateTimerBar(bool hasSpecial, float progress)
+    {
+        if (specialTimerBar == null) return;
+
+        specialTimerBar.gameObject.SetActive(hasSpecial);
+
+        if (!hasSpecial) return;
+
+        // Двигаем правый якорь: 1 → 0 по X, полоска сжимается справа налево
+        // Нижний предел 0.01 — Sliced Image схлопывается при anchorMax.x = 0
+        RectTransform rt = specialTimerBar.rectTransform;
+        float t = Mathf.Clamp01(progress);
+        rt.anchorMax = new Vector2(Mathf.Max(t, 0.01f), rt.anchorMax.y);
+
+        specialTimerBar.color = Color.Lerp(Color.red, Color.green, progress);
+    }
+
+    private void UpdateVignette(bool hasSpecial, float progress)
+    {
+        if (specialVignette == null) return;
+
+        specialVignette.gameObject.SetActive(hasSpecial);
+
+        if (!hasSpecial) return;
+
+        float remaining = gameManager.GetSpecialRemainingTime();
+
+        // Частота пульса: 2 Гц нормально, нарастает до 8 Гц в последние 3 секунды
+        float pulseFreq = remaining <= 3f
+            ? Mathf.Lerp(8f, 2f, remaining / 3f)
+            : 2f;
+
+        float oscillation = Mathf.Abs(Mathf.Sin(Time.time * pulseFreq * Mathf.PI));
+
+        // Затухание: альфа плавно уходит в 0 вместе с progress, без резкого скачка
+        float fadeOut = Mathf.Clamp01(progress * 5f);
+        float alpha = oscillation * 0.3f * fadeOut;
+
+        Color c = vignetteColor;
+        c.a = alpha;
+        specialVignette.color = c;
     }
 }

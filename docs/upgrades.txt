@@ -1,0 +1,10 @@
+rank,slot,id,title,description,price,click,passive,duration
+Intern,Click,click_1,Fast Hands,+1 KPI за клик,10,1,0,0
+Intern,Click,click_2,Better Keyboard,+2 KPI за клик,25,2,0,0
+Intern,Passive,passive_1,Background Tasks,+1 KPI в сек,20,0,1,0
+Intern,Special,special_1,Free Coffee,Временный буст продуктивности,30,0,0,10
+
+Junior,Click,j_click_1,Mechanical Keyboard,+5 KPI за клик,120,5,0,0
+Junior,Passive,j_passive_1,Async Tasks,+3 KPI в сек,150,0,3,0
+Junior,Special,j_special_1,Code Review Boost,+2 KPI за клик и +2 KPI в сек на время,200,2,2,15
+Junior,Special,j_special_2,Team Sync,Сильный временный буст всей продуктивности,400,4,4,20

@@ -1,5 +1,5 @@
 // AudioManager.cs
-// Version: 2026-01-16 v1.1 (Rank-based music)
+// Version: 2026-05-24 v1.2 (Separated loop lifecycle from one-shots)
 
 using UnityEngine;
 
@@ -78,18 +78,16 @@ public class AudioManager : MonoBehaviour
     public void PlaySpecialStart()
     {
         PlayOneShot(specialStartClip, specialStartVolume);
-        PlaySpecialLoop();
     }
 
     public void PlaySpecialEnd()
     {
-        StopSpecialLoop();
         PlayOneShot(specialEndClip, specialEndVolume);
     }
 
     // ================= SPECIAL LOOP =================
 
-    private void PlaySpecialLoop()
+    public void StartSpecialLoop()
     {
         if (specialLoopSource == null || specialLoopClip == null)
             return;
@@ -100,7 +98,7 @@ public class AudioManager : MonoBehaviour
         specialLoopSource.Play();
     }
 
-    private void StopSpecialLoop()
+    public void StopSpecialLoop()
     {
         if (specialLoopSource == null)
             return;

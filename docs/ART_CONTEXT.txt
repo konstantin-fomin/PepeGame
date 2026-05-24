@@ -1,0 +1,70 @@
+ART_CONTEXT (CANONICAL)
+
+PROJECT
+- 2D idle / clicker game
+- Office / IT theme
+- Tone: sarcasm, irony, burnout, routine, absurdity
+- Humor is subtle, visual, dry — not loud or cartoonish
+
+GLOBAL VISUAL STYLE
+- Pixel art (16-bit / 32-bit)
+- Minimalism, low detail
+- Clear, sharp pixels
+- No smoothing / blur
+- Limited color palette (6–10 colors per icon)
+- No realism
+- No 3D
+- No painterly, illustrative, or cartoon styles
+- No neon or acid colors
+
+ICONS (CORE RULES)
+- Format: PNG
+- Size: 512×512 px
+- Aspect ratio: 1:1
+- Fully transparent background
+- One main object only
+- Centered composition
+- No text
+- No frames
+- No UI elements
+- No background objects
+- Must be readable at small sizes
+
+COMPOSITION & SAFE AREA (CRITICAL)
+- The object must be fully contained within the 512×512 area
+- No parts of the object may go outside the frame
+- No cropped or cut-off elements
+- The icon must look visually complete and closed in shape
+- No elements that imply continuation beyond the frame
+  (e.g. cables, wires, hoses, pipes, long tails)
+- The object should occupy ~70–80% of the icon area
+- Visual center of mass should be close to the geometric center
+
+CARD INTEGRATION
+- Icons are used inside vertical UI cards
+- Icon must complement the card, not dominate it
+- Contrast should be sufficient but not aggressive
+- Colors and lighting must harmonize with the card background
+- Icon must feel “designed specifically for this card”
+
+READABILITY PRIORITY
+- Shape readability has priority over small details
+- Avoid excessive micro-detail and visual noise
+- Silhouette should be clear at a glance
+
+BRANCH CONSISTENCY
+- Icons must feel like part of a single cohesive set
+- Style, lighting, scale, and complexity must remain consistent
+  across all icons in the project
+
+FORBIDDEN
+- Realistic rendering
+- Overly complex shapes
+- Dynamic perspective that breaks icon readability
+- Elements that visually “escape” the icon bounds
+- Decorative details that do not support the core idea
+
+REFERENCE IMAGES
+- Any provided card backgrounds are FOR REFERENCE ONLY
+- Backgrounds must NEVER appear in the final icon
+- Final icon must ALWAYS have a fully transparent background

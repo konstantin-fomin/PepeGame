@@ -1,0 +1,32 @@
+DESIGN_CONTEXT (CANONICAL)
+
+GENRE & PLATFORM
+- 2D idle / clicker
+- Mobile (portrait)
+- Short, frequent sessions
+
+THEME & TONE
+- Office / IT setting
+- Sarcasm, burnout, routine, absurdity
+- Humor is dry and subtle
+
+PLAYER FANTASY
+- Office worker climbing the career ladder
+- Progression: Intern → Junior → Middle → Senior → Lead
+
+CORE LOOP (CURRENT VISION)
+- Click to generate KPI
+- Spend KPI on upgrades
+- Passive income grows over time
+- Offline progress works the same as online
+
+IMPORTANT CONSTRAINTS
+- KPI never goes negative
+- No forced waiting
+- Reset exists only for testing
+- Prestige planned for future, not active now
+
+WHAT IS NOT FIXED YET
+- Final economy balance
+- Prestige mechanics
+- Long-term retention systems

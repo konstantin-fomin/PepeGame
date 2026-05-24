@@ -1,5 +1,5 @@
 // UpgradeCardView.cs
-// Version: 2026-01-16 v1.2
+// Version: 2026-05-24 v1.3 (Special duration in effect text)
 // Purpose: UI view for upgrade card + money overlay
 
 using UnityEngine;
@@ -22,6 +22,23 @@ public class UpgradeCardView : MonoBehaviour
 
     [Header("Overlay (No Money)")]
     [SerializeField] private GameObject darkOverlay;
+    [SerializeField] private GameObject lockIcon;
+
+    // ================= VALIDATION =================
+
+    private void Awake()
+    {
+        bool valid = true;
+
+        if (titleText == null)       { Debug.LogError("[UpgradeCard] titleText not assigned", this);       valid = false; }
+        if (descriptionText == null) { Debug.LogError("[UpgradeCard] descriptionText not assigned", this); valid = false; }
+        if (effectText == null)      { Debug.LogError("[UpgradeCard] effectText not assigned", this);      valid = false; }
+        if (priceText == null)       { Debug.LogError("[UpgradeCard] priceText not assigned", this);       valid = false; }
+        if (iconImage == null)       { Debug.LogError("[UpgradeCard] iconImage not assigned", this);       valid = false; }
+        if (button == null)          { Debug.LogError("[UpgradeCard] button not assigned", this);          valid = false; }
+
+        if (!valid) enabled = false;
+    }
 
     // ================= PUBLIC API =================
 
@@ -33,7 +50,7 @@ public class UpgradeCardView : MonoBehaviour
             return;
         }
 
-        titleText.text = upgrade.title;
+        titleText.text = upgrade.title.ToUpper();
         descriptionText.text = upgrade.description;
         effectText.text = BuildEffectText(upgrade);
         priceText.text = upgrade.basePrice.ToString();
@@ -60,6 +77,9 @@ public class UpgradeCardView : MonoBehaviour
     {
         if (darkOverlay != null)
             darkOverlay.SetActive(show);
+
+        if (lockIcon != null)
+            lockIcon.SetActive(show);
     }
 
     public void SetClickAction(UnityEngine.Events.UnityAction action)
@@ -86,12 +106,19 @@ public class UpgradeCardView : MonoBehaviour
 
     private string BuildEffectText(Upgrade upgrade)
     {
+        string bonus = "";
+
         if (upgrade.clickBonus > 0)
-            return $"+{upgrade.clickBonus} KPI / click";
+            bonus = $"+{upgrade.clickBonus} KPI / click";
+        else if (upgrade.passiveBonus > 0)
+            bonus = $"+{upgrade.passiveBonus} KPI / sec";
 
-        if (upgrade.passiveBonus > 0)
-            return $"+{upgrade.passiveBonus} KPI / sec";
+        if (upgrade.specialDuration > 0f)
+        {
+            string duration = $"{Mathf.RoundToInt(upgrade.specialDuration)}s";
+            return string.IsNullOrEmpty(bonus) ? duration : $"{bonus} • {duration}";
+        }
 
-        return "";
+        return bonus;
     }
 }

@@ -1,5 +1,5 @@
 // GameManager.cs
-// Version: 2026-01-16 v2.6 (Reset restored, safe)
+// Version: 2026-05-24 v2.8 (Synchronized special lifecycle)
 
 using System;
 using System.Collections.Generic;
@@ -53,6 +53,28 @@ public class GameManager : MonoBehaviour
 
     private readonly List<ActiveSpecial> activeSpecials = new();
 
+    // --- Public API for Special state (single source of truth) ---
+
+    public bool HasActiveSpecial => activeSpecials.Count > 0;
+
+    public float GetSpecialProgress01()
+    {
+        if (activeSpecials.Count == 0) return 0f;
+        ActiveSpecial s = activeSpecials[activeSpecials.Count - 1];
+        if (s.upgrade.specialDuration <= 0f) return 0f;
+        return Mathf.Clamp01(s.remainingTime / s.upgrade.specialDuration);
+    }
+
+    public float GetSpecialRemainingTime()
+    {
+        if (activeSpecials.Count == 0) return 0f;
+        return activeSpecials[activeSpecials.Count - 1].remainingTime;
+    }
+
+    // ================= EVENTS =================
+
+    public event Action OnStateChanged;
+
     // ================= SAVE =================
 
     private const string SAVE_KEY = "GAME_SAVE_V2";
@@ -94,6 +116,8 @@ public class GameManager : MonoBehaviour
 
         if (audioManager != null && currentRank != null)
             audioManager.PlayMusicForRank(currentRank);
+
+        OnStateChanged?.Invoke();
     }
 
     private void Update()
@@ -156,6 +180,7 @@ public class GameManager : MonoBehaviour
     {
         AddKpi(kpiPerClick);
         AddExperience(kpiPerClick);
+        OnStateChanged?.Invoke();
     }
 
     private void TickPassiveIncome()
@@ -168,6 +193,7 @@ public class GameManager : MonoBehaviour
             passiveTimer -= 1f;
             AddKpi(kpiPerSecond);
             AddExperience(kpiPerSecond);
+            OnStateChanged?.Invoke();
         }
     }
 
@@ -213,6 +239,7 @@ public class GameManager : MonoBehaviour
         branches[slotType].MarkPurchased();
 
         audioManager?.PlayBuy();
+        OnStateChanged?.Invoke();
     }
 
     private void ApplyUpgrade(Upgrade upg)
@@ -222,6 +249,8 @@ public class GameManager : MonoBehaviour
 
         if (upg.specialDuration > 0)
         {
+            bool wasEmpty = activeSpecials.Count == 0;
+
             activeSpecials.Add(new ActiveSpecial
             {
                 upgrade = upg,
@@ -229,6 +258,9 @@ public class GameManager : MonoBehaviour
             });
 
             audioManager?.PlaySpecialStart();
+
+            if (wasEmpty)
+                audioManager?.StartSpecialLoop();
         }
     }
 
@@ -236,6 +268,8 @@ public class GameManager : MonoBehaviour
 
     private void TickSpecials()
     {
+        bool changed = false;
+
         for (int i = activeSpecials.Count - 1; i >= 0; i--)
         {
             var s = activeSpecials[i];
@@ -246,9 +280,19 @@ public class GameManager : MonoBehaviour
                 kpiPerClick -= s.upgrade.clickBonus;
                 kpiPerSecond -= s.upgrade.passiveBonus;
                 activeSpecials.RemoveAt(i);
+                changed = true;
+            }
+        }
 
+        if (changed)
+        {
+            if (activeSpecials.Count == 0)
+            {
+                audioManager?.StopSpecialLoop();
                 audioManager?.PlaySpecialEnd();
             }
+
+            OnStateChanged?.Invoke();
         }
     }
 
@@ -265,12 +309,14 @@ public class GameManager : MonoBehaviour
         passiveTimer = 0f;
 
         activeSpecials.Clear();
+        audioManager?.StopSpecialLoop();
 
         currentRank = ranks[0];
         InitFromRank(currentRank);
 
         audioManager?.PlayMusicForRank(currentRank);
         SaveGame();
+        OnStateChanged?.Invoke();
     }
 
     // ================= SAVE / LOAD =================
@@ -294,6 +340,13 @@ public class GameManager : MonoBehaviour
                 index = pair.Value.GetCurrentIndex()
             });
 
+        foreach (var s in activeSpecials)
+            data.specials.Add(new SpecialSave
+            {
+                upgradeId = s.upgrade.id,
+                remainingTime = s.remainingTime
+            });
+
         PlayerPrefs.SetString(SAVE_KEY, JsonUtility.ToJson(data));
         PlayerPrefs.Save();
     }
@@ -310,12 +363,81 @@ public class GameManager : MonoBehaviour
             PlayerPrefs.GetString(SAVE_KEY)
         );
 
+        // --- Rank ---
+
+        RankData loadedRank = ranks.Find(r => r.rankName == data.currentRankName);
+
+        if (loadedRank == null)
+        {
+            Debug.LogWarning($"[Save] Rank '{data.currentRankName}' not found. Starting new game.");
+            InitFromRank(currentRank);
+            return;
+        }
+
+        currentRank = loadedRank;
+        InitFromRank(currentRank);
+
+        // --- Stats ---
+
         currentExperience = data.experience;
         currentKpi = data.kpi;
         kpiPerClick = data.kpiPerClick;
         kpiPerSecond = data.kpiPerSecond;
 
-        currentRank = ranks.Find(r => r.rankName == data.currentRankName);
-        InitFromRank(currentRank);
+        // --- Branch indices ---
+
+        if (data.branches != null)
+        {
+            foreach (var bs in data.branches)
+            {
+                if (branches.ContainsKey(bs.slotType))
+                    branches[bs.slotType].SetIndex(bs.index);
+            }
+        }
+
+        // --- Active specials ---
+
+        activeSpecials.Clear();
+
+        if (data.specials != null)
+        {
+            foreach (var ss in data.specials)
+            {
+                Upgrade upg = FindUpgradeById(ss.upgradeId);
+                if (upg != null && ss.remainingTime > 0f)
+                {
+                    activeSpecials.Add(new ActiveSpecial
+                    {
+                        upgrade = upg,
+                        remainingTime = ss.remainingTime
+                    });
+                }
+            }
+        }
+
+        // Если загрузились с активными specials — запустить луп
+        if (activeSpecials.Count > 0)
+            audioManager?.StartSpecialLoop();
+    }
+
+    // ================= HELPERS =================
+
+    private Upgrade FindUpgradeById(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+
+        foreach (var rank in ranks)
+        {
+            foreach (var branchConfig in rank.slotBranches)
+            {
+                foreach (var upgrade in branchConfig.upgrades)
+                {
+                    if (upgrade.id == id)
+                        return upgrade;
+                }
+            }
+        }
+
+        return null;
     }
 }
