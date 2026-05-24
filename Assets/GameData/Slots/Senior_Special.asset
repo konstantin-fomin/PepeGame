@@ -21,6 +21,7 @@ MonoBehaviour:
     clickBonus: 8
     passiveBonus: 8
     specialDuration: 25
+    icon: {fileID: -144466396364227020, guid: 14dc944dd7c9a224280ead4defb60d40, type: 3}
   - id: s_special_2
     title: "\u0410\u0432\u0442\u043E\u0440\u0438\u0442\u0435\u0442"
     description: "\u0412\u0441\u0435 \u0441\u043B\u0443\u0448\u0430\u044E\u0442"
@@ -28,6 +29,7 @@ MonoBehaviour:
     clickBonus: 10
     passiveBonus: 10
     specialDuration: 30
+    icon: {fileID: -342111267990221687, guid: 6f033ea498a396848ad1a8448b775e27, type: 3}
   - id: s_special_3
     title: "\u041A\u0440\u0438\u0437\u0438\u0441 \u043C\u0435\u043D\u0435\u0434\u0436\u043C\u0435\u043D\u0442"
     description: "\u0420\u0430\u0437\u0440\u0443\u043B\u0438\u0432\u0430\u0435\u0448\u044C
@@ -36,6 +38,7 @@ MonoBehaviour:
     clickBonus: 12
     passiveBonus: 12
     specialDuration: 20
+    icon: {fileID: -3133716789598304079, guid: d79acd41d16948c4d9ad245fcd33dcde, type: 3}
   - id: s_special_4
     title: "\u0411\u043E\u043B\u044C\u0448\u043E\u0439 \u0440\u0435\u043B\u0438\u0437"
     description: "\u0412\u0441\u0435 \u043D\u0430 \u0443\u0448\u0430\u0445"
@@ -43,6 +46,7 @@ MonoBehaviour:
     clickBonus: 14
     passiveBonus: 14
     specialDuration: 18
+    icon: {fileID: 1190067076364504282, guid: 8fd40b589a50d624c9dab8ae01229e91, type: 3}
   - id: s_special_5
     title: "\u041F\u043E\u0442\u043E\u043A \u043C\u0430\u0441\u0442\u0435\u0440\u0430"
     description: "\u0420\u0430\u0431\u043E\u0442\u0430 \u043A\u0430\u043A \u0438\u0441\u043A\u0443\u0441\u0441\u0442\u0432\u043E"
@@ -50,3 +54,4 @@ MonoBehaviour:
     clickBonus: 18
     passiveBonus: 18
     specialDuration: 35
+    icon: {fileID: 7605622460819592851, guid: 2f41714482b5c1c4e88a7eac36b654e1, type: 3}
