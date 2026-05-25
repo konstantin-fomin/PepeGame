@@ -31,6 +31,12 @@ public class UIController : MonoBehaviour
     [SerializeField] private UpgradeCardView passiveCard;
     [SerializeField] private UpgradeCardView specialCard;
 
+    // ================= RANK UP =================
+    [Header("Rank Up")]
+    [SerializeField] private RankUpPopupView rankUpPopup;
+
+    public RankUpPopupView RankUpPopup => rankUpPopup;
+
     // ================= SPECIAL EFFECTS =================
     // specialTimerBar: Image (Sliced), Anchors Min(0,1) Max(1,1), Height 8px, Left/Right/Top = 0
     // specialVignette: Image (full screen), sprite with dark edges + transparent center
@@ -60,13 +66,19 @@ public class UIController : MonoBehaviour
     private void OnEnable()
     {
         if (gameManager != null)
+        {
             gameManager.OnStateChanged += RefreshUI;
+            gameManager.OnRankUp += rankUpPopup.Show;
+        }
     }
 
     private void OnDisable()
     {
         if (gameManager != null)
+        {
             gameManager.OnStateChanged -= RefreshUI;
+            gameManager.OnRankUp -= rankUpPopup.Show;
+        }
     }
 
     private void Start()

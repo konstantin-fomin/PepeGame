@@ -1,5 +1,5 @@
 // GameManager.cs
-// Version: 2026-05-24 v2.8 (Synchronized special lifecycle)
+// Version: 2026-05-26 v2.9 (OnRankUp event + isLoading guard)
 
 using System;
 using System.Collections.Generic;
@@ -74,6 +74,11 @@ public class GameManager : MonoBehaviour
     // ================= EVENTS =================
 
     public event Action OnStateChanged;
+    public event Action<RankData, RankData> OnRankUp;
+
+    // ================= STATE =================
+
+    private bool isLoading = false;
 
     // ================= SAVE =================
 
@@ -161,11 +166,16 @@ public class GameManager : MonoBehaviour
 
     private void SetRank(RankData newRank)
     {
+        RankData previousRank = currentRank;
+
         currentRank = newRank;
         InitFromRank(newRank);
 
         audioManager?.PlayRankUp();
         audioManager?.PlayMusicForRank(newRank);
+
+        if (!isLoading && previousRank != null && previousRank != newRank)
+            OnRankUp?.Invoke(previousRank, newRank);
     }
 
     // ================= KPI =================
@@ -296,6 +306,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // ================= DEBUG =================
+
+    [ContextMenu("Test Rank Up")]
+    private void TestRankUp()
+    {
+        int currentIndex = ranks.IndexOf(currentRank);
+        if (currentIndex < ranks.Count - 1)
+            SetRank(ranks[currentIndex + 1]);
+    }
+
     // ================= RESET =================
 
     public void ResetProgress()
@@ -353,9 +373,12 @@ public class GameManager : MonoBehaviour
 
     private void LoadGame()
     {
+        isLoading = true;
+
         if (!PlayerPrefs.HasKey(SAVE_KEY))
         {
             InitFromRank(currentRank);
+            isLoading = false;
             return;
         }
 
@@ -371,6 +394,7 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogWarning($"[Save] Rank '{data.currentRankName}' not found. Starting new game.");
             InitFromRank(currentRank);
+            isLoading = false;
             return;
         }
 
@@ -418,6 +442,8 @@ public class GameManager : MonoBehaviour
         // Если загрузились с активными specials — запустить луп
         if (activeSpecials.Count > 0)
             audioManager?.StartSpecialLoop();
+
+        isLoading = false;
     }
 
     // ================= HELPERS =================

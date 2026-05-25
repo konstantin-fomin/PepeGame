@@ -6,6 +6,9 @@ public class RankData : ScriptableObject
 {
     [Header("Rank Info")]
     public string rankName;
+    public string rankUpMessage;
+    public Sprite backgroundSprite;
+    public string environmentScene;
 
     [Tooltip("KPI required to unlock the NEXT rank")]
     public int requiredKpi;

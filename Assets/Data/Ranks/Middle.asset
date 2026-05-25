@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: Middle
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: Middle
+  rankUpMessage: "\u0422\u0435\u043F\u0435\u0440\u044C \u0441\u0447\u0438\u0442\u0430\u0435\u0442\u0441\u044F,
+    \u0447\u0442\u043E \u0432\u044B \u0443\u0436\u0435 \u0440\u0430\u0437\u043E\u0431\u0440\u0430\u043B\u0438\u0441\u044C.
+    \u0421\u043E\u0447\u0443\u0432\u0441\u0442\u0432\u0443\u0435\u043C."
+  backgroundSprite: {fileID: 21300000, guid: 8c7774fa79d79d345800402c2cd7f2c8, type: 3}
+  environmentScene: Env_Middle
   requiredKpi: 320000
   backgroundMusic: {fileID: 8300000, guid: 53fdb2b7d4fe213409c42d85e5ef6e8c, type: 3}
   slotBranches:

@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Intern
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: intern
+  rankUpMessage: 
+  backgroundSprite: {fileID: 21300000, guid: 393f42e58a5ca464aae1fac7712e57c4, type: 3}
+  environmentScene: Env_Intern
   requiredKpi: 2500
   backgroundMusic: {fileID: 8300000, guid: 41f39b4f31fb2244ea6c005b605e864a, type: 3}
   slotBranches:

@@ -13,6 +13,12 @@ MonoBehaviour:
   m_Name: CEO
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: CEO
+  rankUpMessage: "\u0412\u044B \u0434\u043E\u0431\u0440\u0430\u043B\u0438\u0441\u044C
+    \u0434\u043E \u0432\u0435\u0440\u0448\u0438\u043D\u044B. \u0412\u0441\u0435 \u0434\u0435\u043D\u044C\u0433\u0438
+    \u043D\u0430\u043A\u043E\u043D\u0435\u0446-\u0442\u043E \u0432 \u043F\u0440\u0430\u0432\u0438\u043B\u044C\u043D\u044B\u0445
+    \u0440\u0443\u043A\u0430\u0445."
+  backgroundSprite: {fileID: 21300000, guid: 5dafed338380bd244adef05f4bf3d6dc, type: 3}
+  environmentScene: Env_CEO
   requiredKpi: 950000000
   backgroundMusic: {fileID: 8300000, guid: 53fdb2b7d4fe213409c42d85e5ef6e8c, type: 3}
   slotBranches:

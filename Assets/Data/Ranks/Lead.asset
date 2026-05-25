@@ -13,6 +13,11 @@ MonoBehaviour:
   m_Name: Lead
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: Lead
+  rankUpMessage: "\u0422\u0435\u043F\u0435\u0440\u044C \u0432\u044B \u043E\u0442\u0432\u0435\u0447\u0430\u0435\u0442\u0435
+    \u043D\u0435 \u0442\u043E\u043B\u044C\u043A\u043E \u0437\u0430 \u0441\u0435\u0431\u044F,
+    \u043D\u043E \u0438 \u0437\u0430 \u0447\u0443\u0436\u043E\u0439 \u0445\u0430\u043E\u0441."
+  backgroundSprite: {fileID: 21300000, guid: 3af239cf160df5a43a3972cbb6cee794, type: 3}
+  environmentScene: Env_Lead
   requiredKpi: 65000000
   backgroundMusic: {fileID: 8300000, guid: 41f39b4f31fb2244ea6c005b605e864a, type: 3}
   slotBranches:
