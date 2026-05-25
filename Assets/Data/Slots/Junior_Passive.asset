@@ -14,46 +14,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlotBranchConfig
   slotType: 1
   upgrades:
-  - id: j_passive_1
-    title: "\u0410\u0441\u0438\u043D\u0445\u0440\u043E\u043D\u043D\u044B\u0435 \u0437\u0430\u0434\u0430\u0447\u0438"
-    description: "\u041F\u043E\u043A\u0430 \u0436\u0434\u0451\u0448\u044C \u2014
-      \u0434\u0435\u043B\u0430\u0435\u0448\u044C"
-    basePrice: 150
-    clickBonus: 0
-    passiveBonus: 2
-    specialDuration: 0
-    icon: {fileID: -5507248564455577655, guid: 2b3ca4165840d2b48ab4ba7fda5c9f73, type: 3}
-  - id: j_passive_2
-    title: "CI \u043F\u0430\u0439\u043F\u043B\u0430\u0439\u043D"
-    description: "\u041C\u0435\u043D\u044C\u0448\u0435 \u0440\u0443\u0447\u043D\u043E\u0439
-      \u0440\u0430\u0431\u043E\u0442\u044B"
-    basePrice: 220
-    clickBonus: 0
-    passiveBonus: 3
-    specialDuration: 0
-    icon: {fileID: 7600421932808333389, guid: 8fe89dfd0b64ec945a2ebed05d8c5a89, type: 3}
-  - id: j_passive_3
-    title: "\u0410\u0432\u0442\u043E\u0442\u0435\u0441\u0442\u044B"
-    description: "\u041B\u043E\u0432\u044F\u0442 \u0431\u0430\u0433\u0438 \u0437\u0430
-      \u0442\u0435\u0431\u044F"
-    basePrice: 320
-    clickBonus: 0
-    passiveBonus: 4
-    specialDuration: 0
-    icon: {fileID: 4028297385403172042, guid: ce38b2213e0b12b4bb4061d862d2a41a, type: 3}
-  - id: j_passive_4
-    title: "\u0414\u043E\u043A\u0443\u043C\u0435\u043D\u0442\u0430\u0446\u0438\u044F"
-    description: "\u0420\u0435\u0436\u0435 \u0441\u043F\u0440\u0430\u0448\u0438\u0432\u0430\u044E\u0442"
-    basePrice: 450
+  - id: 12
+    title: "\u0424\u043E\u043D\u043E\u0432\u0430\u044F \u0441\u0443\u0435\u0442\u0430"
+    description: "\u0427\u0442\u043E-\u0442\u043E \u0434\u0435\u043B\u0430\u0435\u0442\u0441\u044F
+      \u0441\u0430\u043C\u043E"
+    basePrice: 430
     clickBonus: 0
     passiveBonus: 5
     specialDuration: 0
-    icon: {fileID: 8570630120341573313, guid: ab2af372fa8244f418e258d1ce6bf80e, type: 3}
-  - id: j_passive_5
-    title: Code snippets
-    description: "\u041F\u0438\u0448\u0435\u0448\u044C \u0431\u044B\u0441\u0442\u0440\u0435\u0435"
-    basePrice: 650
+    icon: {fileID: 21300000, guid: 03337e09083d1a843a8bc96c1f53ce06, type: 3}
+  - id: 13
+    title: "\u0412\u0435\u0447\u043D\u044B\u0439 \u0441\u0442\u0430\u0442\u0443\u0441"
+    description: "\u0412\u0440\u043E\u0434\u0435 \u0437\u0430\u043D\u044F\u0442,
+      \u0432\u0440\u043E\u0434\u0435 \u043D\u0435\u0442"
+    basePrice: 980
     clickBonus: 0
-    passiveBonus: 6
+    passiveBonus: 12
     specialDuration: 0
-    icon: {fileID: 13920584171225881, guid: 298ee5c2e751fc44495c79c191ce2f93, type: 3}
+    icon: {fileID: 21300000, guid: fb0e85bd748529a45830381269d307f8, type: 3}
+  - id: 14
+    title: "\u0417\u0430\u0434\u0430\u0447\u0430 \u0432\u0438\u0441\u0438\u0442"
+    description: "\u041D\u0438\u043A\u0442\u043E \u043D\u0435 \u0442\u0440\u043E\u0433\u0430\u0435\u0442,
+      KPI \u0438\u0434\u0451\u0442"
+    basePrice: 1950
+    clickBonus: 0
+    passiveBonus: 22
+    specialDuration: 0
+    icon: {fileID: 21300000, guid: 083b5952216636445a54b6b68cc065ed, type: 3}

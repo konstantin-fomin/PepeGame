@@ -166,21 +166,31 @@ public class UIController : MonoBehaviour
         UpdateVignette(hasSpecial, progress);
     }
 
+    private bool wasSpecialActive = false;
+
     private void UpdateTimerBar(bool hasSpecial, float progress)
     {
-        if (specialTimerBar == null) return;
-
-        specialTimerBar.gameObject.SetActive(hasSpecial);
-
-        if (!hasSpecial) return;
-
-        // Двигаем правый якорь: 1 → 0 по X, полоска сжимается справа налево
-        // Нижний предел 0.01 — Sliced Image схлопывается при anchorMax.x = 0
         RectTransform rt = specialTimerBar.rectTransform;
+
+        if (!hasSpecial)
+        {
+            specialTimerBar.gameObject.SetActive(false);
+            rt.anchorMax = new Vector2(1f, rt.anchorMax.y);
+            wasSpecialActive = false;
+            return;
+        }
+
+        // Первый кадр активации — сброс в 1
+        if (!wasSpecialActive)
+        {
+            rt.anchorMax = new Vector2(1f, rt.anchorMax.y);
+            wasSpecialActive = true;
+        }
+
+        specialTimerBar.gameObject.SetActive(true);
         float t = Mathf.Clamp01(progress);
         rt.anchorMax = new Vector2(Mathf.Max(t, 0.01f), rt.anchorMax.y);
-
-        specialTimerBar.color = Color.Lerp(Color.red, Color.green, progress);
+        specialTimerBar.color = Color.Lerp(Color.red, Color.green, t);
     }
 
     private void UpdateVignette(bool hasSpecial, float progress)

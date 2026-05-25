@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CEO
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: CEO
-  requiredKpi: 35000
+  requiredKpi: 950000000
   backgroundMusic: {fileID: 8300000, guid: 53fdb2b7d4fe213409c42d85e5ef6e8c, type: 3}
   slotBranches:
   - {fileID: 11400000, guid: 15816ee7aec04eb47bac37b6260d4530, type: 2}

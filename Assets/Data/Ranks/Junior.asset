@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Junior
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: Junior
-  requiredKpi: 300
+  requiredKpi: 26000
   backgroundMusic: {fileID: 8300000, guid: 53fdb2b7d4fe213409c42d85e5ef6e8c, type: 3}
   slotBranches:
   - {fileID: 11400000, guid: 1484dd7647e28da4495a3c2e404289c4, type: 2}

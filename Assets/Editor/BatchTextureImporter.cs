@@ -1,5 +1,5 @@
 // BatchTextureImporter.cs
-// Editor-скрипт: применяет настройки импорта ко всем иконкам в Assets/UI/Icons.
+// Editor-скрипт: применяет настройки импорта ко всем иконкам в Assets/Art/UI/Icons.
 // Запуск: Tools → Apply Icons Import Settings
 
 using UnityEngine;
@@ -10,7 +10,7 @@ public static class BatchTextureImporter
     [MenuItem("Tools/Apply Icons Import Settings")]
     public static void Run()
     {
-        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/UI/Icons" });
+        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { "Assets/Art/UI/Icons" });
         int updated = 0;
 
         foreach (string guid in guids)
@@ -22,7 +22,8 @@ public static class BatchTextureImporter
                 continue;
 
             importer.textureType = TextureImporterType.Sprite;
-            importer.spriteImportMode = SpriteImportMode.Multiple;
+            importer.spriteImportMode = SpriteImportMode.Single;
+            importer.spritePixelsPerUnit = 100;
             importer.filterMode = FilterMode.Point;
             importer.mipmapEnabled = false;
             importer.maxTextureSize = 512;

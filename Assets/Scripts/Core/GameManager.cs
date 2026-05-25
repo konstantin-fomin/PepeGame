@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     public float GetSpecialProgress01()
     {
         if (activeSpecials.Count == 0) return 0f;
-        ActiveSpecial s = activeSpecials[activeSpecials.Count - 1];
+        ActiveSpecial s = activeSpecials[0];
         if (s.upgrade.specialDuration <= 0f) return 0f;
         return Mathf.Clamp01(s.remainingTime / s.upgrade.specialDuration);
     }

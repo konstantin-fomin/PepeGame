@@ -14,47 +14,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SlotBranchConfig
   slotType: 0
   upgrades:
-  - id: l_click_1
-    title: "\u0421\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u0447\u0435\u0441\u043A\u043E\u0435
-      \u043C\u044B\u0448\u043B\u0435\u043D\u0438\u0435"
-    description: "\u041C\u0435\u043D\u044C\u0448\u0435 \u043B\u0438\u0448\u043D\u0438\u0445
-      \u0434\u0435\u0439\u0441\u0442\u0432\u0438\u0439"
-    basePrice: 50000
-    clickBonus: 40
+  - id: 37
+    title: "\u0414\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0441\u0432\u0435\u0440\u0445\u0443"
+    description: "\u041A\u043B\u0438\u043A\u0430\u0435\u0448\u044C \u0431\u044B\u0441\u0442\u0440\u0435\u0435,
+      \u043F\u043E\u0442\u043E\u043C\u0443 \u0447\u0442\u043E \u043D\u0430\u0434\u043E"
+    basePrice: 535000
+    clickBonus: 2600
     passiveBonus: 0
     specialDuration: 0
-    icon: {fileID: 3593229017859223385, guid: 79b851076d6b8454f9bd9dc824f480f7, type: 3}
-  - id: l_click_2
-    title: "\u0414\u0435\u043B\u0435\u0433\u0438\u0440\u043E\u0432\u0430\u043D\u0438\u0435"
-    description: "\u0422\u044B \u043D\u0435 \u0432\u0441\u0451 \u0434\u0435\u043B\u0430\u0435\u0448\u044C
-      \u0441\u0430\u043C"
-    basePrice: 75000
-    clickBonus: 45
+    icon: {fileID: 21300000, guid: d3f37bc286d8a0a4288a8a0d53bc0dfb, type: 3}
+  - id: 38
+    title: "\u0420\u0430\u0437\u0431\u043E\u0440 \u043F\u043E\u043B\u0451\u0442\u043E\u0432"
+    description: "\u0412\u0441\u0435 \u0432\u0438\u043D\u043E\u0432\u0430\u0442\u044B,
+      KPI \u0442\u0432\u043E\u0439"
+    basePrice: 1220000
+    clickBonus: 5200
     passiveBonus: 0
     specialDuration: 0
-    icon: {fileID: -8418305112538355528, guid: a8ed6c7b45685ee46b8e1f53ae73e4ba, type: 3}
-  - id: l_click_3
-    title: "\u0423\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u0438\u0435 \u0445\u0430\u043E\u0441\u043E\u043C"
-    description: "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442"
-    basePrice: 110000
-    clickBonus: 50
+    icon: {fileID: 21300000, guid: 9a2cdba9030ddb64592eebcceab50299, type: 3}
+  - id: 39
+    title: "\u0421\u0438\u043B\u044C\u043D\u043E\u0435 \u0440\u0435\u0448\u0435\u043D\u0438\u0435"
+    description: "\u0421\u043E\u043C\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u043E,
+      \u0437\u0430\u0442\u043E \u0443\u0432\u0435\u0440\u0435\u043D\u043D\u043E \u0441\u043A\u0430\u0437\u0430\u043D\u043E"
+    basePrice: 2470000
+    clickBonus: 8400
     passiveBonus: 0
     specialDuration: 0
-    icon: {fileID: 6346122991010452432, guid: 597831f58dcd2114591d1cadc3fec6e0, type: 3}
-  - id: l_click_4
-    title: "\u0421\u0438\u0441\u0442\u0435\u043C\u043D\u043E\u0435 \u043C\u044B\u0448\u043B\u0435\u043D\u0438\u0435"
-    description: "\u0412\u0438\u0434\u0438\u0448\u044C \u043A\u0430\u0440\u0442\u0438\u043D\u0443
-      \u0446\u0435\u043B\u0438\u043A\u043E\u043C"
-    basePrice: 160000
-    clickBonus: 55
+    icon: {fileID: 21300000, guid: 27a6869d6d91fcb43b36246be5537418, type: 3}
+  - id: 40
+    title: "\u041F\u0438\u043D\u043E\u043A \u043F\u0440\u043E\u0446\u0435\u0441\u0441\u0443"
+    description: "\u041F\u0440\u043E\u0446\u0435\u0441\u0441 \u0437\u0430\u0441\u0442\u043E\u043D\u0430\u043B
+      \u0438 \u0443\u0441\u043A\u043E\u0440\u0438\u043B\u0441\u044F"
+    basePrice: 5050000
+    clickBonus: 14400
     passiveBonus: 0
     specialDuration: 0
-    icon: {fileID: 7364084145116958851, guid: c2b0fa2c44ac237409b0c1c4ba135569, type: 3}
-  - id: l_click_5
-    title: "\u041A\u043E\u043D\u0442\u0440\u043E\u043B\u044C \u043F\u0440\u043E\u0446\u0435\u0441\u0441\u043E\u0432"
-    description: "\u041D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u0443\u0441\u043A\u043E\u043B\u044C\u0437\u0430\u0435\u0442"
-    basePrice: 230000
-    clickBonus: 60
-    passiveBonus: 0
-    specialDuration: 0
-    icon: {fileID: -9114931335374424708, guid: 943a41e3db301834ebf656d12e212701, type: 3}
+    icon: {fileID: 21300000, guid: 175735ae169e8604a837fd66997aa4be, type: 3}

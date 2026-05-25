@@ -1,94 +1,49 @@
-// LaptopScreenLightController.cs
-// Version: 2026-01-26 v1.2 (Delayed pulse start)
-
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class LaptopScreenLightController : MonoBehaviour
 {
-    [Header("Light")]
-    [SerializeField] private Light2D screenLight;
+    private Light2D light2D;
 
-    [Header("Pulse Settings")]
-    [SerializeField] private float maxIntensity = 1.2f;
-    [SerializeField] private float fadeInDuration = 0.08f;
-    [SerializeField] private float fadeOutDuration = 0.2f;
-    [SerializeField] private float holdBeforeFadeOut = 0.05f;
-
-    [Header("Timing")]
-    [SerializeField] private float pulseDelay = 0.15f; // 🔹 задержка старта света
+    [SerializeField] private float baseIntensity = 0.03f;
+    [SerializeField] private float pulseIntensity = 1.2f;
+    [SerializeField] private float pulseSpeed = 15f;
+    [SerializeField] private float returnSpeed = 1.5f;
+    [SerializeField] private float breathingSpeed = 0.8f;
+    [SerializeField] private float breathingAmount = 0.02f;
 
     private float currentIntensity;
-    private float fadeOutTimer;
-    private float delayTimer;
+    private bool isPulsing;
 
-    private bool isActive;
-    private bool waitingForPulse;
-
-    private void Awake()
+    void Start()
     {
-        if (screenLight == null)
-            screenLight = GetComponent<Light2D>();
-
-        currentIntensity = 0f;
-        screenLight.intensity = 0f;
+        light2D = GetComponent<Light2D>();
+        currentIntensity = baseIntensity;
     }
 
-    private void Update()
+    void Update()
     {
-        // === ОЖИДАНИЕ ЗАДЕРЖКИ ===
-        if (waitingForPulse)
+        if (isPulsing)
         {
-            delayTimer -= Time.deltaTime;
-
-            if (delayTimer <= 0f)
-            {
-                waitingForPulse = false;
-                isActive = true;
-                fadeOutTimer = holdBeforeFadeOut;
-            }
-
-            return;
-        }
-
-        // === САМ ИМПУЛЬС (НЕ МЕНЯЛИ ЛОГИКУ) ===
-        if (!isActive)
-            return;
-
-        if (fadeOutTimer > 0f)
-        {
-            fadeOutTimer -= Time.deltaTime;
-
-            currentIntensity = Mathf.MoveTowards(
-                currentIntensity,
-                maxIntensity,
-                Time.deltaTime / fadeInDuration
-            );
+            currentIntensity = Mathf.Lerp(
+                currentIntensity, pulseIntensity, Time.deltaTime * pulseSpeed);
+            if (currentIntensity >= pulseIntensity * 0.95f)
+                isPulsing = false;
         }
         else
         {
-            currentIntensity = Mathf.MoveTowards(
-                currentIntensity,
-                0f,
-                Time.deltaTime / fadeOutDuration
-            );
-
-            if (currentIntensity <= 0f)
-            {
-                currentIntensity = 0f;
-                isActive = false;
-            }
+            float breathing = Mathf.Sin(Time.time * breathingSpeed)
+                * breathingAmount;
+            float target = baseIntensity + breathing;
+            currentIntensity = Mathf.Lerp(
+                currentIntensity, target, Time.deltaTime * returnSpeed);
         }
 
-        screenLight.intensity = currentIntensity;
+        light2D.intensity = currentIntensity;
     }
-
-    // ================= PUBLIC API =================
 
     public void TriggerLightPulse()
     {
-        // при каждом клике перезапускаем задержку
-        waitingForPulse = true;
-        delayTimer = pulseDelay;
+        isPulsing = true;
     }
 }

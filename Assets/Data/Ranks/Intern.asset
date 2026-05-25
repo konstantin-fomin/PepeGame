@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Intern
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: intern
-  requiredKpi: 100
+  requiredKpi: 2500
   backgroundMusic: {fileID: 8300000, guid: 41f39b4f31fb2244ea6c005b605e864a, type: 3}
   slotBranches:
   - {fileID: 11400000, guid: a9f13f0a65150ce4b9e5b76448e0ccc1, type: 2}

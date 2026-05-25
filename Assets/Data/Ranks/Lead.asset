@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lead
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: Lead
-  requiredKpi: 10000
+  requiredKpi: 65000000
   backgroundMusic: {fileID: 8300000, guid: 41f39b4f31fb2244ea6c005b605e864a, type: 3}
   slotBranches:
   - {fileID: 11400000, guid: 31541916a61c9324ea4b9e9cdbcb4dfb, type: 2}

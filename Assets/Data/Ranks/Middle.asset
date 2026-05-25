@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Middle
   m_EditorClassIdentifier: Assembly-CSharp::RankData
   rankName: Middle
-  requiredKpi: 900
+  requiredKpi: 320000
   backgroundMusic: {fileID: 8300000, guid: 53fdb2b7d4fe213409c42d85e5ef6e8c, type: 3}
   slotBranches:
   - {fileID: 11400000, guid: 24910fd59714a4c448b05b6174727ee5, type: 2}
