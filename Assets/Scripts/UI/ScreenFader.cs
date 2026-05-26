@@ -11,6 +11,22 @@ public class ScreenFader : MonoBehaviour
         Instance = this;
     }
 
+    public void SetBlack()
+    {
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
+    }
+
+    public void SetColor(Color color)
+    {
+        GetComponent<UnityEngine.UI.Image>().color = color;
+    }
+
+    public void SetAlpha(float alpha)
+    {
+        canvasGroup.alpha = alpha;
+    }
+
     public IEnumerator FadeOut(float duration = 0.3f)
     {
         canvasGroup.blocksRaycasts = true;

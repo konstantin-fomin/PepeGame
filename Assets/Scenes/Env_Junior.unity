@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 418177323}
   - component: {fileID: 418177324}
   m_Layer: 0
-  m_Name: pepe_intern
+  m_Name: pepe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -177,8 +177,8 @@ Transform:
   m_GameObject: {fileID: 418177322}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1065.38, y: -357.04, z: 0}
-  m_LocalScale: {x: 0.51, y: 0.51, z: 0.51}
+  m_LocalPosition: {x: -1065.55, y: -357.41, z: 0}
+  m_LocalScale: {x: 0.56003094, y: 0.56003094, z: 0.56003094}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 706079154}
@@ -229,10 +229,10 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1754565909
-  m_SortingLayer: 3
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 4f533435c454a96438a21221f6bdb186, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f6c5928b6b675b647834cecfcbe0add3, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -514,8 +514,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 4.48835, y: 2.7359998, z: 0}
-    m_Extent: {x: 11.20045, y: 7.5523996, z: 0}
+    m_Center: {x: 4.3309, y: 2.7812498, z: 0}
+    m_Extent: {x: 11.043, y: 7.5976496, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
@@ -528,15 +528,15 @@ MonoBehaviour:
   m_ShapePath:
   - {x: -5.342869, y: -3.4313354, z: 0}
   - {x: 4.973665, y: -3.4472609, z: 0}
-  - {x: 13.004043, y: -0.5547018, z: 0.000001527369}
-  - {x: 14.2288475, y: 1.6436234, z: 0}
-  - {x: 14.319179, y: 4.1175613, z: 0.000001527369}
-  - {x: 13.869651, y: 5.528564, z: 0.000001527369}
-  - {x: 12.877171, y: 6.789861, z: 0.000001527369}
-  - {x: 11.146096, y: 8.884247, z: 0}
-  - {x: 8.961388, y: 8.185187, z: 0.000001527369}
-  - {x: 6.679095, y: 8.920284, z: 0.000001527369}
-  - {x: 4.6541877, y: 7.249736, z: 0.000001527369}
+  - {x: 12.598094, y: -0.4644909, z: 0.000001527369}
+  - {x: 13.732688, y: 1.5083075, z: 0}
+  - {x: 14.003441, y: 3.9822454, z: 0.000001527369}
+  - {x: 13.599018, y: 5.4834585, z: 0.000001527369}
+  - {x: 12.651644, y: 6.7447557, z: 0.000001527369}
+  - {x: 10.469515, y: 8.884247, z: 0}
+  - {x: 8.104385, y: 8.410714, z: 0.000001527369}
+  - {x: 6.273146, y: 9.010495, z: 0.000001527369}
+  - {x: 3.6618695, y: 7.5654736, z: 0.000001527369}
   - {x: 3.4634862, y: 5.018066, z: 0.000001527369}
   - {x: 2.0256925, y: 3.2135324, z: 0.000001527369}
   - {x: -5.1693954, y: 3.1800842, z: 0}
@@ -566,8 +566,8 @@ Transform:
   m_GameObject: {fileID: 1107418339}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1065.9235, y: -358.56, z: 0}
-  m_LocalScale: {x: 0.52, y: 0.52, z: 0.52}
+  m_LocalPosition: {x: -1065.73, y: -359.34, z: 0}
+  m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 789665307}
@@ -618,10 +618,10 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -891384805
-  m_SortingLayer: 2
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: ca8fcd66e7b72854db5bb731369f2e82, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ee12f02a17e2c1d4186968df726858f2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -932,7 +932,7 @@ Transform:
   m_GameObject: {fileID: 1574988877}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1067.72, y: -357.29, z: 0}
+  m_LocalPosition: {x: -1067.762, y: -357.315, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -1045,9 +1045,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18dbcecf7dbde1840bbe5b3d56c5f7e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CeilingLightFlicker
-  minIntensity: 0
-  maxIntensity: 0.5
+  minIntensity: 0.1
+  maxIntensity: 0.6
   flickerSpeed: 0.05
+  flickerChance: 0.025
+  blackoutChance: 0.003
+  flickerMinTarget: 0.2
+  normalMinTarget: 0.42
 --- !u!114 &1868595140
 MonoBehaviour:
   m_ObjectHideFlags: 0

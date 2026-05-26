@@ -38,6 +38,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip rankUpClip;
     [Range(0f, 1f)][SerializeField] private float rankUpVolume = 1f;
 
+    [Header("SFX - Start Scene")]
+    [SerializeField] private AudioClip startSceneClip;
+
     [Header("Special Start / End")]
     [SerializeField] private AudioClip specialStartClip;
     [Range(0f, 1f)][SerializeField] private float specialStartVolume = 0.8f;
@@ -74,6 +77,8 @@ public class AudioManager : MonoBehaviour
     public void PlayBuy() => PlayOneShot(buyClip, buyVolume);
     public void PlayError() => PlayOneShot(errorClip, errorVolume);
     public void PlayRankUp() => PlayOneShot(rankUpClip, rankUpVolume);
+
+    public void PlayStartScene() => PlayOneShot(startSceneClip, 1.0f);
 
     public void PlaySpecialStart()
     {

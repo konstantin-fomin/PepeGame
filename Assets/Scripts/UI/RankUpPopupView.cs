@@ -27,6 +27,8 @@ public class RankUpPopupView : MonoBehaviour
 
     public event System.Action OnPopupClosed;
 
+    public static bool IsShowing { get; private set; }
+
     private bool isShowing = false;
 
     private void Awake()
@@ -38,6 +40,7 @@ public class RankUpPopupView : MonoBehaviour
     {
         if (isShowing) return;
         isShowing = true;
+        IsShowing = true;
 
         rankTransitionText.text = $"{previousRank.rankName}  →  {newRank.rankName}";
         sarcasticMessageText.text = newRank.rankUpMessage;
@@ -89,11 +92,14 @@ public class RankUpPopupView : MonoBehaviour
     private IEnumerator HideSequence()
     {
         continueButtonGroup.interactable = false;
-        yield return StartCoroutine(FadeCanvasGroup(popupGroup, 1f, 0f, 0.15f));
-        yield return StartCoroutine(FadeCanvasGroup(overlay, 1f, 0f, 0.2f));
+
+        if (ScreenFader.Instance != null)
+            yield return StartCoroutine(ScreenFader.Instance.FadeOut(0.35f));
+
+        IsShowing = false;
         isShowing = false;
-        OnPopupClosed?.Invoke();
         gameObject.SetActive(false);
+        OnPopupClosed?.Invoke();
     }
 
     private IEnumerator FadeCanvasGroup(CanvasGroup cg, float from, float to, float duration)

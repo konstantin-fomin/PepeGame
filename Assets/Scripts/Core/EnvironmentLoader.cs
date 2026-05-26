@@ -24,7 +24,25 @@ public class EnvironmentLoader : MonoBehaviour
     {
         string sceneName = gameManager.CurrentRank?.environmentScene;
         if (!string.IsNullOrEmpty(sceneName))
-            StartCoroutine(LoadEnvironment(sceneName, animate: false));
+            StartCoroutine(LoadInitial(sceneName));
+    }
+
+    private IEnumerator LoadInitial(string sceneName)
+    {
+        ScreenFader.Instance.SetBlack();
+
+        bool sceneLoaded = false;
+        StartCoroutine(LoadEnvironment(sceneName, false,
+            delegate { sceneLoaded = true; }));
+
+        yield return StartCoroutine(
+            MonitorStartupEffect.Instance.PlayLinePhase());
+
+        yield return StartCoroutine(
+            MonitorStartupEffect.Instance.PlayWaitLoop(() => sceneLoaded));
+
+        yield return StartCoroutine(
+            MonitorStartupEffect.Instance.PlayRevealPhase());
     }
 
     private void OnRankUp(RankData previousRank, RankData newRank)
@@ -40,12 +58,10 @@ public class EnvironmentLoader : MonoBehaviour
             StartCoroutine(LoadEnvironment(pendingScene, animate: true));
     }
 
-    private IEnumerator LoadEnvironment(string sceneName, bool animate)
+    private IEnumerator LoadEnvironment(string sceneName, bool animate,
+        System.Action onDone = null)
     {
         if (sceneName == currentEnvironmentScene) yield break;
-
-        if (animate)
-            yield return StartCoroutine(ScreenFader.Instance.FadeOut(0.3f));
 
         if (!string.IsNullOrEmpty(currentEnvironmentScene))
         {
@@ -63,7 +79,6 @@ public class EnvironmentLoader : MonoBehaviour
         currentEnvironmentScene = sceneName;
         pendingScene = "";
 
-        if (animate)
-            yield return StartCoroutine(ScreenFader.Instance.FadeIn(0.4f));
+        onDone?.Invoke();
     }
 }

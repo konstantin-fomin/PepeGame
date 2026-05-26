@@ -15,7 +15,7 @@ public class WorkZoneClick : MonoBehaviour
     [SerializeField] private AudioManager audioManager;
 
     [Header("Visual")]
-    [SerializeField] private LaptopScreenLightController laptopScreenLight;
+    private LaptopScreenLightController laptopScreenLight;
 
     [Header("Floating KPI")]
     [SerializeField, Tooltip("Delay before showing +KPI visual (seconds)")]
@@ -30,8 +30,15 @@ public class WorkZoneClick : MonoBehaviour
         mainCamera = Camera.main;
     }
 
+    private void Start()
+    {
+        laptopScreenLight = FindObjectOfType<LaptopScreenLightController>();
+    }
+
     public void OnPointerClick(InputValue value)
     {
+        if (RankUpPopupView.IsShowing) return;
+
         Vector2 screenPos = Mouse.current.position.ReadValue();
 
         Vector3 screenPosWithZ = new Vector3(
@@ -46,16 +53,16 @@ public class WorkZoneClick : MonoBehaviour
         if (hit != zoneCollider)
             return;
 
-        // === GAME LOGIC (ÑÐÀÇÓ) ===
+        // === GAME LOGIC (ï¿½ï¿½ï¿½ï¿½ï¿½) ===
         gameManager.WorkClick();
 
-        // === SOUND (ÑÐÀÇÓ) ===
+        // === SOUND (ï¿½ï¿½ï¿½ï¿½ï¿½) ===
         audioManager?.PlayClick();
 
-        // === SCREEN LIGHT (ÑÐÀÇÓ) ===
+        // === SCREEN LIGHT (ï¿½ï¿½ï¿½ï¿½ï¿½) ===
         laptopScreenLight?.TriggerLightPulse();
 
-        // === VISUAL (+KPI) Ñ ÌÈÊÐÎÇÀÄÅÐÆÊÎÉ ===
+        // === VISUAL (+KPI) ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ===
         StartCoroutine(SpawnFloatingKpiWithDelay(
             screenPos,
             gameManager.KpiPerClick
