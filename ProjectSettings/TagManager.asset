@@ -44,11 +44,11 @@ TagManager:
   - name: Background
     uniqueID: 3950808021
     locked: 0
-  - name: Desk
-    uniqueID: 3403582491
-    locked: 0
   - name: Character
     uniqueID: 2540401387
+    locked: 0
+  - name: Desk
+    uniqueID: 3403582491
     locked: 0
   - name: 'Foreground '
     uniqueID: 1894595967
