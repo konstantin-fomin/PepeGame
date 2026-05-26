@@ -31,6 +31,12 @@ public class UIController : MonoBehaviour
     [SerializeField] private UpgradeCardView passiveCard;
     [SerializeField] private UpgradeCardView specialCard;
 
+    // ================= CARD ANIMATORS =================
+    [Header("Card Animators")]
+    [SerializeField] private CardBuyAnimator clickAnimator;
+    [SerializeField] private CardBuyAnimator passiveAnimator;
+    [SerializeField] private CardBuyAnimator specialAnimator;
+
     // ================= RANK UP =================
     [Header("Rank Up")]
     [SerializeField] private RankUpPopupView rankUpPopup;
@@ -83,9 +89,32 @@ public class UIController : MonoBehaviour
 
     private void Start()
     {
-        clickCard.SetClickAction(() => gameManager.TryBuyUpgrade(SlotType.Click));
-        passiveCard.SetClickAction(() => gameManager.TryBuyUpgrade(SlotType.Passive));
-        specialCard.SetClickAction(() => gameManager.TryBuyUpgrade(SlotType.Special));
+        clickCard.SetClickAction(() =>
+        {
+            int cost = gameManager.GetCurrentUpgrade(SlotType.Click)?.basePrice ?? 0;
+            bool canBuy = gameManager.CanBuyUpgrade(SlotType.Click);
+            gameManager.TryBuyUpgrade(SlotType.Click);
+            if (canBuy) clickAnimator?.PlayBuyAnimation(cost);
+            else        clickAnimator?.PlayErrorAnimation();
+        });
+
+        passiveCard.SetClickAction(() =>
+        {
+            int cost = gameManager.GetCurrentUpgrade(SlotType.Passive)?.basePrice ?? 0;
+            bool canBuy = gameManager.CanBuyUpgrade(SlotType.Passive);
+            gameManager.TryBuyUpgrade(SlotType.Passive);
+            if (canBuy) passiveAnimator?.PlayBuyAnimation(cost);
+            else        passiveAnimator?.PlayErrorAnimation();
+        });
+
+        specialCard.SetClickAction(() =>
+        {
+            int cost = gameManager.GetCurrentUpgrade(SlotType.Special)?.basePrice ?? 0;
+            bool canBuy = gameManager.CanBuyUpgrade(SlotType.Special);
+            gameManager.TryBuyUpgrade(SlotType.Special);
+            if (canBuy) specialAnimator?.PlayBuyAnimation(cost);
+            else        specialAnimator?.PlayErrorAnimation();
+        });
 
         RefreshUI();
     }

@@ -1,0 +1,65 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class StatsController : MonoBehaviour
+{
+    [SerializeField] private GameManager gameManager;
+    [SerializeField] private TextMeshProUGUI playtimeText;
+    [SerializeField] private TextMeshProUGUI kpiText;
+    [SerializeField] private TextMeshProUGUI clicksText;
+    [SerializeField] private TextMeshProUGUI rankText;
+    [SerializeField] private TextMeshProUGUI upgradesText;
+    [SerializeField] private TextMeshProUGUI hrCommentText;
+    [SerializeField] private Button backButton;
+
+    private static readonly string[] hrComments = {
+        "Показатели приемлемые. Отдых не одобрен.",
+        "Компания ценит ваше потраченное время.",
+        "Продуктивность на уровне. Ожиданий нет.",
+        "HR доволен. Это подозрительно.",
+        "Вы кликаете. Это уже больше чем от вас ждали.",
+        "Прогресс зафиксирован. Премия не предусмотрена.",
+        "Данные получены. Выводы неутешительны.",
+        "Спасибо за службу. Продолжайте страдать."
+    };
+
+    private void Start()
+    {
+        backButton.onClick.AddListener(() =>
+            MenuNavigationController.Instance.HideStats());
+    }
+
+    private void OnEnable()
+    {
+        Refresh();
+    }
+
+    private void Refresh()
+    {
+        var stats = StatsTracker.Instance;
+        if (stats == null) return;
+
+        playtimeText.text  = $"Время в офисе:      {FormatTime(stats.TotalPlaytimeSeconds)}";
+        kpiText.text       = $"KPI заработано:     {FormatNumber(stats.TotalKpiEarned)}";
+        clicksText.text    = $"Кликов совершено:   {FormatNumber(stats.TotalClicks)}";
+        rankText.text      = $"Текущий ранг:       {gameManager.CurrentRank?.rankName ?? "—"}";
+        upgradesText.text  = $"Апгрейдов куплено:  {stats.UpgradesBought} / 57";
+        hrCommentText.text = $"\"{hrComments[Random.Range(0, hrComments.Length)]}\"";
+    }
+
+    private string FormatTime(float totalSeconds)
+    {
+        int h = (int)(totalSeconds / 3600);
+        int m = (int)(totalSeconds % 3600) / 60;
+        if (h > 0) return $"{h}ч {m:00}м";
+        return $"{m}м {(int)(totalSeconds % 60):00}с";
+    }
+
+    private string FormatNumber(long value)
+    {
+        if (value >= 1000000) return $"{value / 1000000f:0.#}M";
+        if (value >= 1000)    return $"{value / 1000f:0.#}K";
+        return value.ToString("N0");
+    }
+}

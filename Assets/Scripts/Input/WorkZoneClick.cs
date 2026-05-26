@@ -1,5 +1,5 @@
 // WorkZoneClick.cs
-// Version: 2026-01-26 v1.6 (Delayed floating KPI visual)
+// Version: 2026-05-26 v1.7 (StatsTracker integration)
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -53,16 +53,13 @@ public class WorkZoneClick : MonoBehaviour
         if (hit != zoneCollider)
             return;
 
-        // === GAME LOGIC (�����) ===
         gameManager.WorkClick();
+        StatsTracker.Instance?.AddClick();
 
-        // === SOUND (�����) ===
         audioManager?.PlayClick();
 
-        // === SCREEN LIGHT (�����) ===
         laptopScreenLight?.TriggerLightPulse();
 
-        // === VISUAL (+KPI) � �������������� ===
         StartCoroutine(SpawnFloatingKpiWithDelay(
             screenPos,
             gameManager.KpiPerClick

@@ -1,5 +1,5 @@
 // AudioManager.cs
-// Version: 2026-05-24 v1.2 (Separated loop lifecycle from one-shots)
+// Version: 2026-05-26 v1.3 (Runtime volume control + fullscreen)
 
 using UnityEngine;
 
@@ -52,6 +52,52 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip specialLoopClip;
     [Range(0f, 1f)][SerializeField] private float specialLoopVolume = 0.4f;
 
+    // ================= RUNTIME VOLUME =================
+
+    private float musicVolumeMultiplier = 1f;
+    private float sfxVolumeMultiplier = 1f;
+
+    // ================= UNITY =================
+
+    private void Start()
+    {
+        SetMusicVolume(PlayerPrefs.GetFloat("MusicVolume", 1f));
+        sfxVolumeMultiplier = PlayerPrefs.GetFloat("SFXVolume", 1f);
+    }
+
+    // ================= VOLUME API =================
+
+    public void SetMusicVolume(float value)
+    {
+        musicVolumeMultiplier = Mathf.Clamp01(value);
+        if (musicSource != null)
+            musicSource.volume = musicVolume * musicVolumeMultiplier;
+        PlayerPrefs.SetFloat("MusicVolume", value);
+    }
+
+    public void SetSFXVolume(float value)
+    {
+        sfxVolumeMultiplier = Mathf.Clamp01(value);
+        PlayerPrefs.SetFloat("SFXVolume", value);
+    }
+
+    public float GetMusicVolume() =>
+        PlayerPrefs.GetFloat("MusicVolume", 1f);
+
+    public float GetSFXVolume() =>
+        PlayerPrefs.GetFloat("SFXVolume", 1f);
+
+    // ================= FULLSCREEN =================
+
+    public static void SetFullscreen(bool value)
+    {
+        Screen.fullScreen = value;
+        PlayerPrefs.SetInt("Fullscreen", value ? 1 : 0);
+    }
+
+    public static bool GetFullscreen() =>
+        PlayerPrefs.GetInt("Fullscreen", 0) == 1;
+
     // ================= MUSIC API =================
 
     public void PlayMusicForRank(RankData rank)
@@ -66,7 +112,7 @@ public class AudioManager : MonoBehaviour
 
         musicSource.Stop();
         musicSource.clip = currentMusic;
-        musicSource.volume = musicVolume;
+        musicSource.volume = musicVolume * musicVolumeMultiplier;
         musicSource.loop = true;
         musicSource.Play();
     }
@@ -118,6 +164,6 @@ public class AudioManager : MonoBehaviour
         if (sfxSource == null || clip == null)
             return;
 
-        sfxSource.PlayOneShot(clip, volume);
+        sfxSource.PlayOneShot(clip, volume * sfxVolumeMultiplier);
     }
 }

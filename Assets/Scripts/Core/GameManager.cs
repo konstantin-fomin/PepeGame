@@ -1,5 +1,5 @@
 // GameManager.cs
-// Version: 2026-05-26 v2.9 (OnRankUp event + isLoading guard)
+// Version: 2026-05-26 v3.0 (offline progress)
 
 using System;
 using System.Collections.Generic;
@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
     // ================= STATE =================
 
     private bool isLoading = false;
+    public int PendingOfflineKpi { get; private set; } = 0;
 
     // ================= SAVE =================
 
@@ -190,6 +191,7 @@ public class GameManager : MonoBehaviour
     {
         AddKpi(kpiPerClick);
         AddExperience(kpiPerClick);
+        StatsTracker.Instance?.AddKpi(kpiPerClick);
         OnStateChanged?.Invoke();
     }
 
@@ -203,6 +205,7 @@ public class GameManager : MonoBehaviour
             passiveTimer -= 1f;
             AddKpi(kpiPerSecond);
             AddExperience(kpiPerSecond);
+            StatsTracker.Instance?.AddKpi(kpiPerSecond);
             OnStateChanged?.Invoke();
         }
     }
@@ -248,6 +251,7 @@ public class GameManager : MonoBehaviour
         ApplyUpgrade(upg);
         branches[slotType].MarkPurchased();
 
+        StatsTracker.Instance?.AddUpgrade();
         audioManager?.PlayBuy();
         OnStateChanged?.Invoke();
     }
@@ -334,6 +338,7 @@ public class GameManager : MonoBehaviour
         currentRank = ranks[0];
         InitFromRank(currentRank);
 
+        StatsTracker.Instance?.ResetStats();
         audioManager?.PlayMusicForRank(currentRank);
         SaveGame();
         OnStateChanged?.Invoke();
@@ -341,7 +346,7 @@ public class GameManager : MonoBehaviour
 
     // ================= SAVE / LOAD =================
 
-    private void SaveGame()
+    public void SaveGame()
     {
         SaveData data = new SaveData
         {
@@ -439,9 +444,26 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Если загрузились с активными specials — запустить луп
         if (activeSpecials.Count > 0)
             audioManager?.StartSpecialLoop();
+
+        // --- Offline progress ---
+
+        if (data.lastSaveUtcTicks > 0)
+        {
+            DateTime lastSave = new DateTime(data.lastSaveUtcTicks, DateTimeKind.Utc);
+            double offlineSeconds = (DateTime.UtcNow - lastSave).TotalSeconds;
+
+            offlineSeconds = Mathf.Min((float)offlineSeconds, 8 * 3600f);
+
+            int earned = Mathf.FloorToInt((float)(kpiPerSecond * offlineSeconds * 0.6f));
+
+            if (earned > 0)
+            {
+                currentKpi += earned;
+                PendingOfflineKpi = earned;
+            }
+        }
 
         isLoading = false;
     }

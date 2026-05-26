@@ -20,11 +20,28 @@ public class EnvironmentLoader : MonoBehaviour
         gameManager.OnRankUp -= OnRankUp;
     }
 
-    private void Start()
+    public void StartGameFlow(bool loadSave)
     {
         string sceneName = gameManager.CurrentRank?.environmentScene;
         if (!string.IsNullOrEmpty(sceneName))
             StartCoroutine(LoadInitial(sceneName));
+    }
+
+    public void UnloadCurrentEnvironment()
+    {
+        if (!string.IsNullOrEmpty(currentEnvironmentScene))
+            StartCoroutine(UnloadScene(currentEnvironmentScene));
+    }
+
+    private IEnumerator UnloadScene(string sceneName)
+    {
+        Scene scene = SceneManager.GetSceneByName(sceneName);
+        if (scene.isLoaded)
+        {
+            AsyncOperation op = SceneManager.UnloadSceneAsync(scene);
+            while (!op.isDone) yield return null;
+        }
+        currentEnvironmentScene = "";
     }
 
     private IEnumerator LoadInitial(string sceneName)
@@ -80,5 +97,12 @@ public class EnvironmentLoader : MonoBehaviour
         pendingScene = "";
 
         onDone?.Invoke();
+
+        // Возвращаем картинку после смены сцены
+        if (animate && ScreenFader.Instance != null)
+        {
+            yield return new WaitForSeconds(0.1f);
+            yield return StartCoroutine(ScreenFader.Instance.FadeIn(0.5f));
+        }
     }
 }
