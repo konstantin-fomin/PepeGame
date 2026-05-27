@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c45cf7cd6bd884e9343f28b7bcff0c, type: 3}
   m_Name: Junior
   m_EditorClassIdentifier: Assembly-CSharp::RankData
+  rankId: junior
   rankName: Junior
   rankUpMessage: "\u0422\u0435\u043F\u0435\u0440\u044C \u043E\u0442 \u0432\u0430\u0441
     \u0436\u0434\u0443\u0442 \u0431\u043E\u043B\u044C\u0448\u0435, \u043F\u043B\u0430\u0442\u044F\u0442

@@ -38,6 +38,19 @@ public class GameManager : MonoBehaviour
 
     private float passiveTimer;
 
+    // ================= MULTIPLIERS =================
+
+    [HideInInspector] public float clickKpiMultiplier   = 1f;
+    [HideInInspector] public float passiveKpiMultiplier = 1f;
+    [HideInInspector] public float xpMultiplier         = 1f;
+    [HideInInspector] public float cardDiscountMultiplier = 1f;
+
+    // ================= CRITICAL CLICK =================
+
+    [Header("Critical Bug Fix")]
+    [SerializeField, Range(0f, 0.5f)] private float criticalChance = 0.05f;
+    [SerializeField, Min(1f)] private float criticalMultiplier = 5f;
+
     // ================= AUDIO =================
 
     [Header("Audio")]
@@ -75,6 +88,26 @@ public class GameManager : MonoBehaviour
 
     public event Action OnStateChanged;
     public event Action<RankData, RankData> OnRankUp;
+
+    public struct WorkClickResult
+    {
+        public int kpiEarned;
+        public int xpEarned;
+        public bool isCritical;
+        public float criticalMultiplier;
+
+        public WorkClickResult(
+            int kpiEarned,
+            int xpEarned,
+            bool isCritical,
+            float criticalMultiplier)
+        {
+            this.kpiEarned = kpiEarned;
+            this.xpEarned = xpEarned;
+            this.isCritical = isCritical;
+            this.criticalMultiplier = criticalMultiplier;
+        }
+    }
 
     // ================= STATE =================
 
@@ -124,6 +157,12 @@ public class GameManager : MonoBehaviour
             audioManager.PlayMusicForRank(currentRank);
 
         OnStateChanged?.Invoke();
+    }
+
+    private void OnValidate()
+    {
+        criticalChance = Mathf.Clamp(criticalChance, 0f, 0.5f);
+        criticalMultiplier = Mathf.Max(1f, criticalMultiplier);
     }
 
     private void Update()
@@ -187,12 +226,46 @@ public class GameManager : MonoBehaviour
         currentKpi += amount;
     }
 
-    public void WorkClick()
+    public void AddKpiPublic(int amount)
     {
-        AddKpi(kpiPerClick);
-        AddExperience(kpiPerClick);
-        StatsTracker.Instance?.AddKpi(kpiPerClick);
+        AddKpi(amount);
         OnStateChanged?.Invoke();
+    }
+
+    public void AddXpPublic(int amount)
+    {
+        AddExperience(amount);
+        OnStateChanged?.Invoke();
+    }
+
+    public WorkClickResult WorkClick()
+    {
+        float safeCriticalChance = Mathf.Clamp(criticalChance, 0f, 0.5f);
+        float safeCriticalMultiplier = Mathf.Max(1f, criticalMultiplier);
+
+        bool isCritical =
+            safeCriticalChance > 0f &&
+            safeCriticalMultiplier > 1f &&
+            UnityEngine.Random.value < safeCriticalChance;
+
+        float kpiMultiplierForClick = isCritical ? safeCriticalMultiplier : 1f;
+        int kpiEarned = Mathf.RoundToInt(
+            kpiPerClick * clickKpiMultiplier * kpiMultiplierForClick
+        );
+
+        AddKpi(kpiEarned);
+
+        int xpEarned = Mathf.RoundToInt(kpiPerClick * xpMultiplier);
+        AddExperience(xpEarned);
+        StatsTracker.Instance?.AddKpi(kpiEarned);
+        OnStateChanged?.Invoke();
+
+        return new WorkClickResult(
+            kpiEarned,
+            xpEarned,
+            isCritical,
+            kpiMultiplierForClick
+        );
     }
 
     private void TickPassiveIncome()
@@ -203,9 +276,11 @@ public class GameManager : MonoBehaviour
         if (passiveTimer >= 1f)
         {
             passiveTimer -= 1f;
-            AddKpi(kpiPerSecond);
-            AddExperience(kpiPerSecond);
-            StatsTracker.Instance?.AddKpi(kpiPerSecond);
+            int earned = Mathf.RoundToInt(kpiPerSecond * passiveKpiMultiplier);
+            AddKpi(earned);
+            int xpEarned = Mathf.RoundToInt(kpiPerSecond * xpMultiplier);
+            AddExperience(xpEarned);
+            StatsTracker.Instance?.AddKpi(earned);
             OnStateChanged?.Invoke();
         }
     }
@@ -229,7 +304,9 @@ public class GameManager : MonoBehaviour
     public bool CanBuyUpgrade(SlotType slotType)
     {
         Upgrade upg = GetCurrentUpgrade(slotType);
-        return upg != null && currentKpi >= upg.basePrice;
+        if (upg == null) return false;
+        int price = Mathf.RoundToInt(upg.basePrice * cardDiscountMultiplier);
+        return currentKpi >= price;
     }
 
     public void TryBuyUpgrade(SlotType slotType)
@@ -241,13 +318,14 @@ public class GameManager : MonoBehaviour
         }
 
         Upgrade upg = branches[slotType].GetCurrentUpgrade();
-        if (upg == null || currentKpi < upg.basePrice)
+        int price = upg != null ? Mathf.RoundToInt(upg.basePrice * cardDiscountMultiplier) : 0;
+        if (upg == null || currentKpi < price)
         {
             audioManager?.PlayError();
             return;
         }
 
-        currentKpi -= upg.basePrice;
+        currentKpi -= price;
         ApplyUpgrade(upg);
         branches[slotType].MarkPurchased();
 

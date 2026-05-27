@@ -19,11 +19,15 @@ public class LaptopScreenLightController : MonoBehaviour
     private float currentIntensity;
     private float currentCharacterIntensity;
     private bool isPulsing;
+    private float activePulseIntensity;
+    private float activeCharacterPulseIntensity;
 
     void Start()
     {
         currentIntensity = baseIntensity;
         currentCharacterIntensity = characterBaseIntensity;
+        activePulseIntensity = pulseIntensity;
+        activeCharacterPulseIntensity = characterPulseIntensity;
     }
 
     void Update()
@@ -31,10 +35,10 @@ public class LaptopScreenLightController : MonoBehaviour
         if (isPulsing)
         {
             currentIntensity = Mathf.Lerp(
-                currentIntensity, pulseIntensity, Time.deltaTime * pulseSpeed);
+                currentIntensity, activePulseIntensity, Time.deltaTime * pulseSpeed);
             currentCharacterIntensity = Mathf.Lerp(
-                currentCharacterIntensity, characterPulseIntensity, Time.deltaTime * pulseSpeed);
-            if (currentIntensity >= pulseIntensity * 0.95f)
+                currentCharacterIntensity, activeCharacterPulseIntensity, Time.deltaTime * pulseSpeed);
+            if (currentIntensity >= activePulseIntensity * 0.95f)
                 isPulsing = false;
         }
         else
@@ -60,6 +64,14 @@ public class LaptopScreenLightController : MonoBehaviour
 
     public void TriggerLightPulse()
     {
+        TriggerLightPulse(1f);
+    }
+
+    public void TriggerLightPulse(float strengthMultiplier)
+    {
+        float safeMultiplier = Mathf.Max(1f, strengthMultiplier);
+        activePulseIntensity = pulseIntensity * safeMultiplier;
+        activeCharacterPulseIntensity = characterPulseIntensity * safeMultiplier;
         isPulsing = true;
     }
 }

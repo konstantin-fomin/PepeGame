@@ -16,6 +16,7 @@ public class WorkZoneClick : MonoBehaviour
 
     [Header("Visual")]
     private LaptopScreenLightController laptopScreenLight;
+    [SerializeField, Min(1f)] private float criticalPulseStrength = 1.35f;
 
     [Header("Floating KPI")]
     [SerializeField, Tooltip("Delay before showing +KPI visual (seconds)")]
@@ -53,25 +54,35 @@ public class WorkZoneClick : MonoBehaviour
         if (hit != zoneCollider)
             return;
 
-        gameManager.WorkClick();
+        GameManager.WorkClickResult clickResult = gameManager.WorkClick();
         StatsTracker.Instance?.AddClick();
 
-        audioManager?.PlayClick();
+        if (clickResult.isCritical)
+            audioManager?.PlayCriticalClick();
+        else
+            audioManager?.PlayClick();
 
-        laptopScreenLight?.TriggerLightPulse();
+        if (clickResult.isCritical)
+            laptopScreenLight?.TriggerLightPulse(criticalPulseStrength);
+        else
+            laptopScreenLight?.TriggerLightPulse();
 
         StartCoroutine(SpawnFloatingKpiWithDelay(
             screenPos,
-            gameManager.KpiPerClick
+            clickResult.kpiEarned,
+            clickResult.isCritical
         ));
     }
 
     // ================= INTERNAL =================
 
-    private IEnumerator SpawnFloatingKpiWithDelay(Vector2 screenPos, int amount)
+    private IEnumerator SpawnFloatingKpiWithDelay(
+        Vector2 screenPos,
+        int amount,
+        bool isCritical)
     {
         yield return new WaitForSeconds(floatingKpiDelay);
 
-        floatingKpiSpawner.Spawn(screenPos, amount);
+        floatingKpiSpawner.Spawn(screenPos, amount, isCritical);
     }
 }

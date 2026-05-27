@@ -23,6 +23,11 @@ public class FloatingKpiSpawner : MonoBehaviour
 
     public void Spawn(Vector2 screenPosition, int amount)
     {
+        Spawn(screenPosition, amount, false);
+    }
+
+    public void Spawn(Vector2 screenPosition, int amount, bool isCritical)
+    {
         FloatingKpi instance = GetFromPool();
 
         instance.gameObject.SetActive(true);
@@ -30,7 +35,7 @@ public class FloatingKpiSpawner : MonoBehaviour
         RectTransform rt = instance.GetComponent<RectTransform>();
         rt.position = screenPosition;
 
-        instance.Init(amount);
+        instance.Init(amount, isCritical);
     }
 
     // ================= POOL =================

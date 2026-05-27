@@ -25,6 +25,8 @@ public class AudioManager : MonoBehaviour
     [Header("SFX - Click")]
     [SerializeField] private AudioClip clickClip;
     [Range(0f, 1f)][SerializeField] private float clickVolume = 0.5f;
+    [SerializeField] private AudioClip criticalClickClip;
+    [Range(0f, 1f)][SerializeField] private float criticalClickVolume = 0.7f;
 
     [Header("SFX - Buy")]
     [SerializeField] private AudioClip buyClip;
@@ -120,6 +122,7 @@ public class AudioManager : MonoBehaviour
     // ================= SFX API =================
 
     public void PlayClick() => PlayOneShot(clickClip, clickVolume);
+    public void PlayCriticalClick() => PlayOneShot(criticalClickClip, criticalClickVolume);
     public void PlayBuy() => PlayOneShot(buyClip, buyVolume);
     public void PlayError() => PlayOneShot(errorClip, errorVolume);
     public void PlayRankUp() => PlayOneShot(rankUpClip, rankUpVolume);

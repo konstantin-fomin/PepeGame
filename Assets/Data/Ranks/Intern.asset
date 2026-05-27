@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c45cf7cd6bd884e9343f28b7bcff0c, type: 3}
   m_Name: Intern
   m_EditorClassIdentifier: Assembly-CSharp::RankData
+  rankId: intern
   rankName: intern
   rankUpMessage: 
   backgroundSprite: {fileID: 21300000, guid: 393f42e58a5ca464aae1fac7712e57c4, type: 3}

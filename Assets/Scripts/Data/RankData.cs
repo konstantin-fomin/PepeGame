@@ -5,6 +5,7 @@ using UnityEngine;
 public class RankData : ScriptableObject
 {
     [Header("Rank Info")]
+    public string rankId;
     public string rankName;
     public string rankUpMessage;
     public Sprite backgroundSprite;

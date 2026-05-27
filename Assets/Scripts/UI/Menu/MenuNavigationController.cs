@@ -58,6 +58,7 @@ public class MenuNavigationController : MonoBehaviour
         FindObjectOfType<SessionTimerView>()?.StopTimer();
         StatsTracker.Instance?.StopTracking();
         StatsTracker.Instance?.Save();
+        OfficeEventManager.Instance?.StopEventSystem();
 
         SetActive(mainMenuPanel, true);
         SetActive(gameHudPanel, false);
@@ -82,6 +83,7 @@ public class MenuNavigationController : MonoBehaviour
         environmentLoader.StartGameFlow(loadSave);
         FindObjectOfType<SessionTimerView>()?.StartTimer();
         StatsTracker.Instance?.StartTracking();
+        OfficeEventManager.Instance?.StartEventSystem();
     }
 
     // --- Pause ---
@@ -182,5 +184,25 @@ public class MenuNavigationController : MonoBehaviour
     private void SetActive(GameObject panel, bool active)
     {
         if (panel != null) panel.SetActive(active);
+    }
+
+
+public MenuState CurrentState => currentState;
+
+    public bool IsGameplayAvailableForOfficeEvents =>
+        currentState == MenuState.Game &&
+        IsPanelVisible(gameHudPanel) &&
+        !IsPanelVisible(mainMenuPanel) &&
+        !IsPanelVisible(pausePanel) &&
+        !IsPanelVisible(settingsPanel) &&
+        !IsPanelVisible(statsPanel) &&
+        !IsConfirmDialogVisible;
+
+    private bool IsConfirmDialogVisible =>
+        confirmDialog != null && confirmDialog.gameObject.activeInHierarchy;
+
+    private bool IsPanelVisible(GameObject panel)
+    {
+        return panel != null && panel.activeInHierarchy;
     }
 }
