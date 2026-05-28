@@ -47,6 +47,9 @@ public class UIController : MonoBehaviour
     // specialTimerBar: Image (Sliced), Anchors Min(0,1) Max(1,1), Height 8px, Left/Right/Top = 0
     // specialVignette: Image (full screen), sprite with dark edges + transparent center
 
+    [Header("Pause")]
+    [SerializeField] private Button pauseButton;
+
     [Header("Special Effects")]
     [SerializeField] private Image specialTimerBar;
     [SerializeField] private Image specialVignette;
@@ -106,6 +109,10 @@ public class UIController : MonoBehaviour
             if (canBuy) passiveAnimator?.PlayBuyAnimation(cost);
             else        passiveAnimator?.PlayErrorAnimation();
         });
+
+        if (pauseButton != null)
+            pauseButton.onClick.AddListener(() =>
+                MenuNavigationController.Instance.ShowPause());
 
         specialCard.SetClickAction(() =>
         {

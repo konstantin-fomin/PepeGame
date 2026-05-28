@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
     public int KpiPerClick => kpiPerClick;
     public int KpiPerSecond => kpiPerSecond;
     public RankData CurrentRank => currentRank;
+    public List<RankData> Ranks => ranks;
+    public int CurrentRankIndex => ranks.IndexOf(currentRank);
 
     private float passiveTimer;
 

@@ -18,7 +18,6 @@ public class ConfirmDialogController : MonoBehaviour
     {
         confirmButton.onClick.AddListener(OnConfirm);
         cancelButton.onClick.AddListener(OnCancel);
-        gameObject.SetActive(false);
     }
 
     public void Show(string title, string message,

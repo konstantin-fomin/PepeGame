@@ -54,6 +54,8 @@ public class MenuNavigationController : MonoBehaviour
     // --- Main Menu ---
     public void ShowMainMenu(bool hasSave)
     {
+        Time.timeScale = 1f;
+
         if (currentState == MenuState.Game || currentState == MenuState.Pause)
             environmentLoader?.UnloadCurrentEnvironment();
 
@@ -116,10 +118,13 @@ public class MenuNavigationController : MonoBehaviour
     {
         SetActive(pausePanel, true);
         SetState(MenuState.Pause);
+        Time.timeScale = 0f;
+        FindObjectOfType<CareerTrackView>()?.Refresh();
     }
 
     public void ResumeGame()
     {
+        Time.timeScale = 1f;
         SetActive(pausePanel, false);
         SetState(MenuState.Game);
     }
@@ -195,6 +200,7 @@ public class MenuNavigationController : MonoBehaviour
             "Выйти из игры?\nПрогресс будет сохранён.",
             onConfirm: () => {
                 gameManager.SaveGame();
+                Time.timeScale = 1f;
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
 #else

@@ -12,7 +12,6 @@ public class OfflineRewardPopup : MonoBehaviour
 
     private void Start()
     {
-        gameObject.SetActive(false);
         okButton.onClick.AddListener(Hide);
     }
 

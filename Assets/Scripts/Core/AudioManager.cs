@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    public static AudioManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     // ================= AUDIO SOURCES =================
 
     [Header("Audio Sources")]
@@ -42,6 +49,7 @@ public class AudioManager : MonoBehaviour
 
     [Header("SFX - Start Scene")]
     [SerializeField] private AudioClip startSceneClip;
+    [Range(0f, 1f)][SerializeField] private float startSceneVolume = 1.0f;
 
     [Header("Special Start / End")]
     [SerializeField] private AudioClip specialStartClip;
@@ -53,6 +61,12 @@ public class AudioManager : MonoBehaviour
     [Header("Special Loop")]
     [SerializeField] private AudioClip specialLoopClip;
     [Range(0f, 1f)][SerializeField] private float specialLoopVolume = 0.4f;
+
+    [Header("SFX - Menu")]
+    [SerializeField] private AudioClip menuHoverClip;
+    [Range(0f, 1f)][SerializeField] private float menuHoverVolume = 0.4f;
+    [SerializeField] private AudioClip menuClickClip;
+    [Range(0f, 1f)][SerializeField] private float menuClickVolume = 0.7f;
 
     // ================= RUNTIME VOLUME =================
 
@@ -127,7 +141,10 @@ public class AudioManager : MonoBehaviour
     public void PlayError() => PlayOneShot(errorClip, errorVolume);
     public void PlayRankUp() => PlayOneShot(rankUpClip, rankUpVolume);
 
-    public void PlayStartScene() => PlayOneShot(startSceneClip, 1.0f);
+    public void PlayMenuHover() => PlayOneShot(menuHoverClip, menuHoverVolume);
+    public void PlayMenuClick() => PlayOneShot(menuClickClip, menuClickVolume);
+
+    public void PlayStartScene() => PlayOneShot(startSceneClip, startSceneVolume);
 
     public void PlaySpecialStart()
     {
