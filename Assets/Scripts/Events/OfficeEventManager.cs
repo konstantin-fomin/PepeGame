@@ -13,6 +13,10 @@ public class OfficeEventManager : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private MenuNavigationController menuNav;
 
+    [Header("Floating KPI")]
+    [SerializeField] private FloatingKpiSpawner floatingKpiSpawner;
+    [SerializeField] private RectTransform kpiDisplayTransform;
+
     [Header("Timing")]
     [SerializeField] private float firstEventDelay   = 60f;
     [SerializeField] private float minInterval       = 60f;
@@ -34,7 +38,6 @@ public class OfficeEventManager : MonoBehaviour
     public event System.Action<OfficeEventToastResult> OnEventToast;
     public event System.Action OnEventToastExpired;
 
-    public event System.Action<OfficeEventData> OnEventAvailable;
     public event System.Action OnEventExpired;
     public event System.Action<OfficeEventData> OnEventActivated;
     public event System.Action OnEventEnded;
@@ -81,11 +84,6 @@ private IEnumerator EventLoop()
             float wait = Random.Range(minInterval, maxInterval);
             yield return new WaitForSeconds(wait);
         }
-    }
-
-public void AcceptEvent(OfficeEventData ev)
-    {
-        // Kept only for old scene/UI references. Random Office Events are automatic now.
     }
 
 private IEnumerator RunEvent(OfficeEventData ev)
@@ -148,6 +146,11 @@ private float GetSafeMultiplier(float value)
         return Mathf.Max(0, Mathf.RoundToInt(baseKpi * safeValue));
     }
 
+    private void SpawnFloatingKpiAtDisplay(int amount)
+    {
+        if (floatingKpiSpawner == null || kpiDisplayTransform == null) return;
+        floatingKpiSpawner.Spawn(kpiDisplayTransform.position, amount, false);
+    }
 
 private bool IsGameplayAvailableForEvent()
     {
@@ -257,11 +260,6 @@ private void SpawnEventToast(OfficeEventData ev)
 
         if (result.hasTemporaryBuff)
         {
-            if (activeEventCoroutine != null)
-            {
-                StopCoroutine(activeEventCoroutine);
-                ClearActiveEvent();
-            }
             activeEventCoroutine = StartCoroutine(RunEvent(ev));
         }
     }
@@ -292,13 +290,13 @@ private void SpawnEventToast(OfficeEventData ev)
                     float clickMultiplier = GetSafeMultiplier(effect.value);
                     gameManager.clickKpiMultiplier = clickMultiplier;
                     result.hasTemporaryBuff = true;
-                    effectMessages.Add($"Клики x{FormatMultiplier(clickMultiplier)} на {Mathf.CeilToInt(ev.durationSeconds)} сек.");
+                    effectMessages.Add($"Клики x{FormatMultiplier(clickMultiplier)} · {Mathf.CeilToInt(ev.durationSeconds)} сек.");
                     break;
                 case OfficeEventType.PassiveKpiMultiplier:
                     float passiveMultiplier = GetSafeMultiplier(effect.value);
                     gameManager.passiveKpiMultiplier = passiveMultiplier;
                     result.hasTemporaryBuff = true;
-                    effectMessages.Add($"Пассивный KPI x{FormatMultiplier(passiveMultiplier)} на {Mathf.CeilToInt(ev.durationSeconds)} сек.");
+                    effectMessages.Add($"Пассивный KPI x{FormatMultiplier(passiveMultiplier)} · {Mathf.CeilToInt(ev.durationSeconds)} сек.");
                     break;
                 case OfficeEventType.InstantKpiReward:
                     int reward = CalculateInstantKpiReward(effect.value);
@@ -306,6 +304,7 @@ private void SpawnEventToast(OfficeEventData ev)
                     {
                         gameManager.AddKpiPublic(reward);
                         result.kpiReward += reward;
+                        SpawnFloatingKpiAtDisplay(reward);
                     }
                     break;
                 case OfficeEventType.NoEffectFlavor:

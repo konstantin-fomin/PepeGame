@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 using System.Collections;
 
 public class OfficeEventPopupView : MonoBehaviour
@@ -11,45 +12,37 @@ public class OfficeEventPopupView : MonoBehaviour
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private TextMeshProUGUI effectText;
     [SerializeField] private TextMeshProUGUI timerText;
-    [SerializeField] private Button acceptButton;
-    [SerializeField] private TextMeshProUGUI buttonText;
     [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private Button dismissButton;
 
-    private OfficeEventData currentEvent;
-    private float lifetime;
-    private float elapsed;
+    private Action onAcceptCallback;
     private bool isShowing = false;
-    private Coroutine lifetimeCoroutine;
 
-private void Awake()
+    private void Awake()
     {
         CacheMissingReferences();
 
-        if (acceptButton != null)
+        if (dismissButton != null)
         {
-            acceptButton.gameObject.SetActive(false);
+            dismissButton.onClick.AddListener(OnDismissClicked);
         }
 
         SetHiddenImmediate();
     }
 
-public void Show(OfficeEventManager.OfficeEventToastResult result)
+    public void Show(ActiveOfficeEventData data, Action onAccept)
     {
-        if (result == null) return;
+        if (data == null) return;
 
         CacheMissingReferences();
 
-        currentEvent = result.eventData;
-        elapsed      = 0f;
-        lifetime     = result.displaySeconds;
-        isShowing    = true;
+        onAcceptCallback = onAccept;
+        isShowing = true;
 
-        if (titleText != null)       titleText.text       = currentEvent != null ? currentEvent.title : string.Empty;
-        if (descriptionText != null) descriptionText.text = result.message;
-        if (effectText != null)      effectText.text      = string.Empty;
-        if (timerText != null)       timerText.text       = string.Empty;
-        if (buttonText != null)      buttonText.text      = string.Empty;
-        if (acceptButton != null)    acceptButton.gameObject.SetActive(false);
+        if (titleText != null)       titleText.text       = data.title ?? string.Empty;
+        if (descriptionText != null) descriptionText.text = data.description ?? string.Empty;
+        if (effectText != null)      effectText.text      = data.effectDescription ?? string.Empty;
+        if (timerText != null)       timerText.text       = data.buttonText ?? string.Empty;
 
         gameObject.SetActive(true);
 
@@ -65,50 +58,27 @@ public void Show(OfficeEventManager.OfficeEventToastResult result)
         }
     }
 
-public void Show(OfficeEventData ev)
-    {
-        if (ev == null) return;
-
-        Show(new OfficeEventManager.OfficeEventToastResult
-        {
-            eventData = ev,
-            message = ev.description,
-            kpiReward = 0,
-            hasTemporaryBuff = false,
-            displaySeconds = ev.popupLifetimeSeconds
-        });
-    }
-
-
     public void Hide()
     {
         if (!isShowing) return;
         isShowing = false;
-        if (lifetimeCoroutine != null) StopCoroutine(lifetimeCoroutine);
+        onAcceptCallback = null;
         StartCoroutine(SlideOut());
     }
 
-private void OnAccept()
+    private void OnDismissClicked()
     {
-        Hide();
+        if (!isShowing) return;
+
+        Action callback = onAcceptCallback;
+        onAcceptCallback = null;
+        isShowing = false;
+        StartCoroutine(SlideOut());
+
+        callback?.Invoke();
     }
 
-private IEnumerator LifetimeCountdown()
-    {
-        while (elapsed < lifetime)
-        {
-            elapsed += Time.deltaTime;
-            float remaining = lifetime - elapsed;
-            if (timerText != null)
-            {
-                timerText.text = $"{Mathf.CeilToInt(remaining)}с";
-            }
-            yield return null;
-        }
-        Hide();
-    }
-
-private IEnumerator SlideIn()
+    private IEnumerator SlideIn()
     {
         if (canvasGroup == null || popupRect == null)
         {
@@ -132,15 +102,21 @@ private IEnumerator SlideIn()
         }
         popupRect.anchoredPosition = endPos;
         canvasGroup.alpha = 1f;
+
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
     }
 
-private IEnumerator SlideOut()
+    private IEnumerator SlideOut()
     {
         if (canvasGroup == null || popupRect == null)
         {
             SetHiddenImmediate();
             yield break;
         }
+
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
 
         Vector2 startPos = popupRect.anchoredPosition;
         Vector2 endPos   = new Vector2(400f, startPos.y);
@@ -158,7 +134,7 @@ private IEnumerator SlideOut()
         SetHiddenImmediate();
     }
 
-private void SetHiddenImmediate()
+    private void SetHiddenImmediate()
     {
         if (canvasGroup != null)
         {
@@ -175,8 +151,7 @@ private void SetHiddenImmediate()
         }
     }
 
-
-private void CacheMissingReferences()
+    private void CacheMissingReferences()
     {
         if (popupRect == null) popupRect = transform as RectTransform;
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
@@ -203,17 +178,6 @@ private void CacheMissingReferences()
         {
             Transform timer = transform.Find("TimerText");
             if (timer != null) timerText = timer.GetComponent<TextMeshProUGUI>();
-        }
-
-        if (acceptButton == null)
-        {
-            Transform button = transform.Find("AcceptButton");
-            if (button != null) acceptButton = button.GetComponent<Button>();
-        }
-
-        if (buttonText == null && acceptButton != null)
-        {
-            buttonText = acceptButton.GetComponentInChildren<TextMeshProUGUI>(true);
         }
     }
 }

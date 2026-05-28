@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class MenuNavigationController : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public class MenuNavigationController : MonoBehaviour
     [Header("Dependencies")]
     [SerializeField] private GameManager gameManager;
     [SerializeField] private EnvironmentLoader environmentLoader;
+    [SerializeField] private MonitorZoomTransition zoomTransition;
 
     private MenuState currentState;
     private MenuState settingsPreviousState;
@@ -59,6 +61,7 @@ public class MenuNavigationController : MonoBehaviour
         StatsTracker.Instance?.StopTracking();
         StatsTracker.Instance?.Save();
         OfficeEventManager.Instance?.StopEventSystem();
+        FindObjectOfType<ActiveOfficeEventManager>()?.StopSystem();
 
         SetActive(mainMenuPanel, true);
         SetActive(gameHudPanel, false);
@@ -66,6 +69,8 @@ public class MenuNavigationController : MonoBehaviour
         SetActive(settingsPanel, false);
         SetActive(statsPanel, false);
         SetState(MenuState.MainMenu);
+
+        zoomTransition?.ResetMonitor();
 
         mainMenuPanel.GetComponent<MainMenuController>()?.SetHasSave(hasSave);
     }
@@ -81,9 +86,29 @@ public class MenuNavigationController : MonoBehaviour
         SetState(MenuState.Game);
 
         environmentLoader.StartGameFlow(loadSave);
-        FindObjectOfType<SessionTimerView>()?.StartTimer();
+
+        SessionTimerView sessionTimer = FindObjectOfType<SessionTimerView>();
+        if (!loadSave)
+        {
+            sessionTimer?.ResetTimer();
+        }
+        sessionTimer?.StartTimer();
+
         StatsTracker.Instance?.StartTracking();
         OfficeEventManager.Instance?.StartEventSystem();
+        FindObjectOfType<ActiveOfficeEventManager>()?.StartSystem();
+    }
+
+    public void StartGameWithZoom(bool loadSave)
+    {
+        StartCoroutine(ZoomThenStart(loadSave));
+    }
+
+    private IEnumerator ZoomThenStart(bool loadSave)
+    {
+        yield return StartCoroutine(
+            zoomTransition.PlayZoomIn(() => { }));
+        StartGame(loadSave);
     }
 
     // --- Pause ---
@@ -146,7 +171,7 @@ public class MenuNavigationController : MonoBehaviour
             "Начать заново?\nВесь прогресс будет сброшен.",
             onConfirm: () => {
                 gameManager.ResetProgress();
-                StartGame(loadSave: false);
+                StartGameWithZoom(loadSave: false);
             }
         );
     }
@@ -186,8 +211,9 @@ public class MenuNavigationController : MonoBehaviour
         if (panel != null) panel.SetActive(active);
     }
 
+    public MenuState CurrentState => currentState;
 
-public MenuState CurrentState => currentState;
+    public bool IsGameActive => currentState == MenuState.Game;
 
     public bool IsGameplayAvailableForOfficeEvents =>
         currentState == MenuState.Game &&

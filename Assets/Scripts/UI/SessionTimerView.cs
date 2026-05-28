@@ -11,6 +11,13 @@ public class SessionTimerView : MonoBehaviour
     public void StartTimer() => isRunning = true;
     public void StopTimer()  => isRunning = false;
 
+    public void ResetTimer()
+    {
+        sessionSeconds = 0f;
+        isRunning = false;
+        if (timerText != null) timerText.text = FormatTime(0f);
+    }
+
     private void Update()
     {
         if (!isRunning) return;

@@ -3,18 +3,20 @@ using UnityEngine;
 public class EventsCoordinator : MonoBehaviour
 {
     [SerializeField] private OfficeEventPopupView popupView;
+    [SerializeField] private OfficeEventToastView toastView;
     [SerializeField] private OfficeEventManager eventManager;
-private void OnEnable()
+
+    private void OnEnable()
     {
-        if (eventManager == null || popupView == null) return;
-        eventManager.OnEventToast += popupView.Show;
-        eventManager.OnEventToastExpired += popupView.Hide;
+        if (eventManager == null || toastView == null) return;
+        eventManager.OnEventToast += toastView.Show;
+        eventManager.OnEventToastExpired += toastView.Hide;
     }
 
-private void OnDisable()
+    private void OnDisable()
     {
-        if (eventManager == null || popupView == null) return;
-        eventManager.OnEventToast -= popupView.Show;
-        eventManager.OnEventToastExpired -= popupView.Hide;
+        if (eventManager == null || toastView == null) return;
+        eventManager.OnEventToast -= toastView.Show;
+        eventManager.OnEventToastExpired -= toastView.Hide;
     }
 }
