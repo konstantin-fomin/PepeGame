@@ -12,7 +12,7 @@ public class MainMenuController : MonoBehaviour
     private void Start()
     {
         continueButton.onClick.AddListener(() =>
-            MenuNavigationController.Instance.StartGame(loadSave: true));
+            MenuNavigationController.Instance.StartGameWithZoom(loadSave: true));
         newCareerButton.onClick.AddListener(() =>
             MenuNavigationController.Instance.ConfirmNewCareer());
         settingsButton.onClick.AddListener(() =>

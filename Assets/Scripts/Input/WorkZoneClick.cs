@@ -39,6 +39,8 @@ public class WorkZoneClick : MonoBehaviour
     public void OnPointerClick(InputValue value)
     {
         if (RankUpPopupView.IsShowing) return;
+        if (MenuNavigationController.Instance != null &&
+            !MenuNavigationController.Instance.IsGameActive) return;
 
         Vector2 screenPos = Mouse.current.position.ReadValue();
 

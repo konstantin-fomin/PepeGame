@@ -18,17 +18,26 @@ MonoBehaviour:
     title: "\u0411\u0435\u0441\u043F\u043B\u0430\u0442\u043D\u044B\u0439 \u043A\u043E\u0444\u0435"
     description: "\u0420\u0443\u043A\u0438 \u0442\u0440\u044F\u0441\u0443\u0442\u0441\u044F,
       \u043D\u043E \u0440\u0430\u0431\u043E\u0442\u0430 \u0438\u0434\u0451\u0442"
-    basePrice: 65
+    basePrice: 345
     clickBonus: 3
-    passiveBonus: 5
+    passiveBonus: 8
     specialDuration: 10
     icon: {fileID: 21300000, guid: 64ff447333f961944adbc3f608f8ac5c, type: 3}
   - id: 8
     title: "\u041C\u0435\u043D\u0442\u043E\u0440 \u043E\u043D\u043B\u0430\u0439\u043D"
     description: "\u0421\u0435\u0439\u0447\u0430\u0441 \u043E\u0431\u044A\u044F\u0441\u043D\u0438\u0442
       \u0438 \u0438\u0441\u0447\u0435\u0437\u043D\u0435\u0442 \u0441\u043D\u043E\u0432\u0430"
-    basePrice: 130
-    clickBonus: 5
-    passiveBonus: 8
+    basePrice: 2350
+    clickBonus: 8
+    passiveBonus: 15
     specialDuration: 15
     icon: {fileID: 21300000, guid: 1a4d97be3057c7e4a8d59bb3e3349bc9, type: 3}
+  - id: 61
+    title: "\u0427\u0430\u0439 \u0438\u0437 \u043A\u0443\u043B\u0435\u0440\u0430"
+    description: "\u0412\u043A\u0443\u0441 \u0441\u043E\u043C\u043D\u0438\u0442\u0435\u043B\u044C\u043D\u044B\u0439,
+      \u0441\u043A\u043E\u0440\u043E\u0441\u0442\u044C \u0440\u0430\u0431\u043E\u0447\u0430\u044F"
+    basePrice: 3150
+    clickBonus: 12
+    passiveBonus: 20
+    specialDuration: 12
+    icon: {fileID: 5772045612596400122, guid: 51f9c085b9c1bd148b46159ab8b21a6f, type: 3}

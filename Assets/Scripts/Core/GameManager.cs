@@ -40,10 +40,23 @@ public class GameManager : MonoBehaviour
 
     // ================= MULTIPLIERS =================
 
-    [HideInInspector] public float clickKpiMultiplier   = 1f;
-    [HideInInspector] public float passiveKpiMultiplier = 1f;
+    private float _flavorClickMult   = 1f;
+    private float _activeClickMult   = 1f;
+    private float _flavorPassiveMult  = 1f;
+    private float _activePassiveMult  = 1f;
+
+    public float clickKpiMultiplier   => _flavorClickMult * _activeClickMult;
+    public float passiveKpiMultiplier => _flavorPassiveMult * _activePassiveMult;
+
     [HideInInspector] public float xpMultiplier         = 1f;
     [HideInInspector] public float cardDiscountMultiplier = 1f;
+
+    public void SetFlavorClickMult(float v)   => _flavorClickMult = Mathf.Max(1f, v);
+    public void SetFlavorPassiveMult(float v)  => _flavorPassiveMult = Mathf.Max(1f, v);
+    public void SetActiveClickMult(float v)   => _activeClickMult = Mathf.Max(1f, v);
+    public void SetActivePassiveMult(float v)  => _activePassiveMult = Mathf.Max(1f, v);
+    public void ResetFlavorMults()  { _flavorClickMult = 1f; _flavorPassiveMult = 1f; }
+    public void ResetActiveMults()  { _activeClickMult = 1f; _activePassiveMult = 1f; }
 
     // ================= CRITICAL CLICK =================
 
@@ -413,6 +426,9 @@ public class GameManager : MonoBehaviour
         activeSpecials.Clear();
         audioManager?.StopSpecialLoop();
 
+        ResetFlavorMults();
+        ResetActiveMults();
+
         currentRank = ranks[0];
         InitFromRank(currentRank);
 
@@ -532,7 +548,7 @@ public class GameManager : MonoBehaviour
             DateTime lastSave = new DateTime(data.lastSaveUtcTicks, DateTimeKind.Utc);
             double offlineSeconds = (DateTime.UtcNow - lastSave).TotalSeconds;
 
-            offlineSeconds = Mathf.Min((float)offlineSeconds, 8 * 3600f);
+            offlineSeconds = Mathf.Min((float)offlineSeconds, 4 * 3600f);
 
             int earned = Mathf.FloorToInt((float)(kpiPerSecond * offlineSeconds * 0.6f));
 

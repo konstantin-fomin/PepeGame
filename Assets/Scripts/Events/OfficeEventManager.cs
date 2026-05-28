@@ -113,10 +113,10 @@ private void ApplyEffects(OfficeEventData ev, bool apply)
             switch (effect.type)
             {
                 case OfficeEventType.ClickKpiMultiplier:
-                    gameManager.clickKpiMultiplier = apply ? GetSafeMultiplier(effect.value) : 1f;
+                    if (apply) gameManager.SetFlavorClickMult(effect.value);
                     break;
                 case OfficeEventType.PassiveKpiMultiplier:
-                    gameManager.passiveKpiMultiplier = apply ? GetSafeMultiplier(effect.value) : 1f;
+                    if (apply) gameManager.SetFlavorPassiveMult(effect.value);
                     break;
                 case OfficeEventType.InstantKpiReward:
                     if (apply)
@@ -238,7 +238,7 @@ private void ClearVisibleToast()
 private void ClearActiveEvent()
     {
         if (ActiveEvent == null) return;
-        ApplyEffects(ActiveEvent, apply: false);
+        gameManager.ResetFlavorMults();
         ActiveEvent = null;
         ActiveTimeRemaining = 0f;
         OnEventEnded?.Invoke();
@@ -288,13 +288,13 @@ private void SpawnEventToast(OfficeEventData ev)
             {
                 case OfficeEventType.ClickKpiMultiplier:
                     float clickMultiplier = GetSafeMultiplier(effect.value);
-                    gameManager.clickKpiMultiplier = clickMultiplier;
+                    gameManager.SetFlavorClickMult(clickMultiplier);
                     result.hasTemporaryBuff = true;
                     effectMessages.Add($"Клики x{FormatMultiplier(clickMultiplier)} · {Mathf.CeilToInt(ev.durationSeconds)} сек.");
                     break;
                 case OfficeEventType.PassiveKpiMultiplier:
                     float passiveMultiplier = GetSafeMultiplier(effect.value);
-                    gameManager.passiveKpiMultiplier = passiveMultiplier;
+                    gameManager.SetFlavorPassiveMult(passiveMultiplier);
                     result.hasTemporaryBuff = true;
                     effectMessages.Add($"Пассивный KPI x{FormatMultiplier(passiveMultiplier)} · {Mathf.CeilToInt(ev.durationSeconds)} сек.");
                     break;

@@ -18,26 +18,35 @@ MonoBehaviour:
     title: "\u041F\u0435\u0440\u0435\u0440\u044B\u0432 \u043D\u0430 \u043C\u0435\u043C\u044B"
     description: "\u041C\u043E\u0437\u0433 \u043F\u0435\u0440\u0435\u0437\u0430\u0433\u0440\u0443\u0437\u0438\u043B\u0441\u044F,
       \u0432\u0438\u043D\u0430 \u043E\u0441\u0442\u0430\u043B\u0430\u0441\u044C"
-    basePrice: 9600
-    clickBonus: 180
-    passiveBonus: 400
+    basePrice: 22500
+    clickBonus: 800
+    passiveBonus: 1500
     specialDuration: 12
     icon: {fileID: 21300000, guid: b141478dad4cf114786f3baa018ce02a, type: 3}
   - id: 25
     title: "\u041D\u0430\u0448\u0451\u043B \u0432\u0438\u043D\u043E\u0432\u0430\u0442\u043E\u0433\u043E"
     description: "\u041A\u043E\u043C\u0430\u043D\u0434\u0430 \u0432\u044B\u0434\u043E\u0445\u043D\u0443\u043B\u0430,
       \u0442\u044B \u043D\u0435\u0442"
-    basePrice: 19200
-    clickBonus: 280
-    passiveBonus: 600
+    basePrice: 93000
+    clickBonus: 1800
+    passiveBonus: 3200
     specialDuration: 15
     icon: {fileID: 21300000, guid: ca55d3ea0a2c2a549a787a687d429a78, type: 3}
   - id: 26
     title: "\u041C\u0438\u043D\u0443\u0441 \u043E\u0434\u0438\u043D \u0431\u0430\u0433"
     description: "\u041F\u043E\u044F\u0432\u0438\u043B\u043E\u0441\u044C \u0434\u0432\u0430,
       \u043D\u043E \u043F\u043E\u0442\u043E\u043C"
-    basePrice: 34000
-    clickBonus: 450
-    passiveBonus: 900
+    basePrice: 285000
+    clickBonus: 3500
+    passiveBonus: 6000
     specialDuration: 12
     icon: {fileID: 21300000, guid: 0ccb9920bf3ac2f4b912ee34654e2238, type: 3}
+  - id: 74
+    title: "\u0422\u0438\u0445\u0438\u0439 \u0434\u0435\u043F\u043B\u043E\u0439"
+    description: "\u041D\u0438\u0447\u0435\u0433\u043E \u043D\u0435 \u0443\u043F\u0430\u043B\u043E,
+      \u043F\u043E\u0434\u043E\u0437\u0440\u0438\u0442\u0435\u043B\u044C\u043D\u043E"
+    basePrice: 385000
+    clickBonus: 5000
+    passiveBonus: 8500
+    specialDuration: 15
+    icon: {fileID: -5792779561323871724, guid: 61eca452384a71a4896f108d4769b2a9, type: 3}

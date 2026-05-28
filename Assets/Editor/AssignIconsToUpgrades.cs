@@ -93,9 +93,7 @@ public static class AssignIconsToUpgrades
 
                 foreach (SpriteEntry entry in sprites)
                 {
-                    // Имя файла: "09_Junior_Click_Горящие клавиши"
-                    // Проверяем: содержит rank И title
-                    if (entry.fileName.Contains(rank) && entry.fileName.Contains(upgrade.title))
+                    if (IsMatch(entry.fileName, rank, upgrade.title))
                     {
                         found = entry.sprite;
                         foundName = entry.fileName;
@@ -158,6 +156,20 @@ public static class AssignIconsToUpgrades
         }
 
         return result;
+    }
+
+    private static bool IsMatch(string fileName, string rank, string title)
+    {
+        // Strategy 1 (old format): filename contains rank AND title with spaces
+        if (fileName.Contains(rank) && fileName.Contains(title))
+            return true;
+
+        // Strategy 2 (new format): filename contains title with spaces→underscores
+        string titleWithUnderscores = title.Replace(" ", "_");
+        if (fileName.Contains(titleWithUnderscores))
+            return true;
+
+        return false;
     }
 
     private struct SpriteEntry

@@ -166,8 +166,15 @@ public static class ImportUpgrades
             {
                 List<ParsedUpgrade> rows = groups[assetName];
 
-                // Сортировка по id
-                rows.Sort((a, b) => string.Compare(a.id, b.id, System.StringComparison.Ordinal));
+                // Сортировка по id (числовая)
+                rows.Sort((a, b) =>
+                {
+                    int ia, ib;
+                    bool aOk = int.TryParse(a.id, out ia);
+                    bool bOk = int.TryParse(b.id, out ib);
+                    if (aOk && bOk) return ia.CompareTo(ib);
+                    return string.Compare(a.id, b.id, System.StringComparison.Ordinal);
+                });
 
                 foreach (ParsedUpgrade row in rows)
                 {

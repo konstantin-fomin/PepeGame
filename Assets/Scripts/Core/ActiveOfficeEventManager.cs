@@ -98,11 +98,11 @@ public class ActiveOfficeEventManager : MonoBehaviour
 
         if (data.effectType == OfficeEventType.ClickKpiMultiplier)
         {
-            gameManager.clickKpiMultiplier *= data.effectValue;
+            gameManager.SetActiveClickMult(data.effectValue);
         }
         else if (data.effectType == OfficeEventType.PassiveKpiMultiplier)
         {
-            gameManager.passiveKpiMultiplier *= data.effectValue;
+            gameManager.SetActivePassiveMult(data.effectValue);
         }
 
         isBoostActive = true;
@@ -114,15 +114,7 @@ public class ActiveOfficeEventManager : MonoBehaviour
     {
         yield return new WaitForSeconds(data.durationSeconds);
 
-        if (data.effectType == OfficeEventType.ClickKpiMultiplier && data.effectValue != 0f)
-        {
-            gameManager.clickKpiMultiplier /= data.effectValue;
-        }
-        else if (data.effectType == OfficeEventType.PassiveKpiMultiplier && data.effectValue != 0f)
-        {
-            gameManager.passiveKpiMultiplier /= data.effectValue;
-        }
-
+        gameManager.ResetActiveMults();
         isBoostActive = false;
         boostCoroutine = null;
         OnActiveEventEnded?.Invoke();
@@ -132,8 +124,7 @@ public class ActiveOfficeEventManager : MonoBehaviour
     {
         if (isBoostActive)
         {
-            gameManager.clickKpiMultiplier = 1f;
-            gameManager.passiveKpiMultiplier = 1f;
+            gameManager.ResetActiveMults();
             isBoostActive = false;
             OnActiveEventEnded?.Invoke();
         }

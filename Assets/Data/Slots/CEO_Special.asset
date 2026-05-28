@@ -18,26 +18,35 @@ MonoBehaviour:
     title: "\u041C\u0430\u0441\u0441\u043E\u0432\u0430\u044F \u043E\u043F\u0442\u0438\u043C\u0438\u0437\u0430\u0446\u0438\u044F"
     description: "\u041B\u044E\u0434\u0435\u0439 \u043C\u0435\u043D\u044C\u0448\u0435,
       \u0433\u0440\u0430\u0444\u0438\u043A \u0431\u043E\u0434\u0440\u0435\u0435"
-    basePrice: 21200000
-    clickBonus: 550000
-    passiveBonus: 1500000
+    basePrice: 53000000
+    clickBonus: 1500000
+    passiveBonus: 2500000
     specialDuration: 12
     icon: {fileID: 21300000, guid: 7f7b81618edf6da48a848ee51fa467f9, type: 3}
   - id: 56
     title: "\u0412\u0435\u043B\u0438\u043A\u0430\u044F \u043F\u0440\u0435\u0437\u0435\u043D\u0442\u0430\u0446\u0438\u044F"
     description: "\u0421\u043B\u0430\u0439\u0434\u044B \u0441\u0438\u044F\u044E\u0442,
       \u0440\u0435\u0430\u043B\u044C\u043D\u043E\u0441\u0442\u044C \u043C\u043E\u043B\u0447\u0438\u0442"
-    basePrice: 42500000
-    clickBonus: 850000
-    passiveBonus: 2300000
+    basePrice: 177000000
+    clickBonus: 3000000
+    passiveBonus: 5000000
     specialDuration: 15
     icon: {fileID: 21300000, guid: a9962e561038b8648890d9ddede8af7a, type: 3}
   - id: 57
     title: "\u041A\u0440\u0438\u0437\u0438\u0441\u043D\u044B\u0439 \u0431\u043E\u043D\u0443\u0441"
     description: "\u0412\u0441\u0451 \u0433\u043E\u0440\u0438\u0442, \u043D\u043E
       \u043F\u0440\u0435\u043C\u0438\u044F \u043A\u0430\u043F\u0430\u0435\u0442"
-    basePrice: 75000000
-    clickBonus: 1350000
-    passiveBonus: 3700000
+    basePrice: 955000000
+    clickBonus: 7000000
+    passiveBonus: 12000000
     specialDuration: 12
     icon: {fileID: 21300000, guid: b2435eac23bd51541b779779495e3858, type: 3}
+  - id: 100
+    title: "\u0413\u0440\u043E\u043C\u043A\u0438\u0439 \u0430\u043D\u043E\u043D\u0441"
+    description: "\u041D\u043E\u0432\u043E\u0441\u0442\u0435\u0439 \u043C\u0430\u043B\u043E,
+      \u0448\u0443\u043C\u0430 \u043C\u043D\u043E\u0433\u043E"
+    basePrice: 1120000000
+    clickBonus: 10000000
+    passiveBonus: 17000000
+    specialDuration: 15
+    icon: {fileID: 6450579989325568101, guid: 1f6f6b9024891f543b65428170ba2fc9, type: 3}
