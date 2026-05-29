@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Event_08_WorksLocally
   m_EditorClassIdentifier: Assembly-CSharp::OfficeEventData
   id: works_locally
-  title: "\u0420\u0430\u0431\u043E\u0442\u0430\u0435\u0442 \u043D\u0430 \u043F\u0440\u043E\u0434\u0435"
-  description: "> \u041D\u0430 \u043F\u0440\u043E\u0434\u0435 \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442.
-    \u041B\u043E\u043A\u0430\u043B\u044C\u043D\u043E \u043E\u0431\u0438\u0434\u0435\u043B\u043E\u0441\u044C."
+  title: "\u041B\u043E\u043A\u0430\u043B\u044C\u043D\u043E \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442"
+  description: "> \u041B\u043E\u043A\u0430\u043B\u044C\u043D\u043E \u0440\u0430\u0431\u043E\u0442\u0430\u0435\u0442.
+    \u041F\u0440\u043E\u0434 \u043E\u0431\u0438\u0434\u0435\u043B\u0441\u044F."
   effectDescription: 
   buttonText: 
   effects:
@@ -23,7 +23,7 @@ MonoBehaviour:
     value: 0
   durationSeconds: 0
   popupLifetimeSeconds: 4
-  weight: 0
+  weight: 7
   minRankId: junior
-  maxRankId: 
+  maxRankId: senior
   canRepeat: 1

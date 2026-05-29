@@ -24,7 +24,7 @@ MonoBehaviour:
     value: 0
   durationSeconds: 0
   popupLifetimeSeconds: 4
-  weight: 0
+  weight: 7
   minRankId: junior
-  maxRankId: 
+  maxRankId: middle
   canRepeat: 1

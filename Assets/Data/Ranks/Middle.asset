@@ -20,7 +20,7 @@ MonoBehaviour:
   backgroundSprite: {fileID: 21300000, guid: 8c7774fa79d79d345800402c2cd7f2c8, type: 3}
   environmentScene: Env_Middle
   requiredKpi: 320000
-  backgroundMusic: {fileID: 8300000, guid: 53fdb2b7d4fe213409c42d85e5ef6e8c, type: 3}
+  backgroundMusic: {fileID: 8300000, guid: d44710ceb5fb8464b8a64172ce1f8a0e, type: 3}
   slotBranches:
   - {fileID: 11400000, guid: 24910fd59714a4c448b05b6174727ee5, type: 2}
   - {fileID: 11400000, guid: 86bb3265c4d946247af7865c8f41ec2e, type: 2}

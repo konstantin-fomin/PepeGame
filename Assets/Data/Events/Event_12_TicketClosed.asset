@@ -21,10 +21,10 @@ MonoBehaviour:
   buttonText: 
   effects:
   - type: 3
-    value: 25
+    value: 20
   durationSeconds: 0
   popupLifetimeSeconds: 5
-  weight: 0
+  weight: 5
   minRankId: junior
-  maxRankId: 
+  maxRankId: senior
   canRepeat: 1

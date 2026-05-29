@@ -23,7 +23,7 @@ MonoBehaviour:
     value: 2
   durationSeconds: 12
   popupLifetimeSeconds: 6
-  weight: 0
+  weight: 2
   minRankId: lead
   maxRankId: 
   canRepeat: 1

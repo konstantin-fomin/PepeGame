@@ -22,7 +22,7 @@ MonoBehaviour:
     value: 1.5
   durationSeconds: 15
   popupLifetimeSeconds: 6
-  weight: 0
+  weight: 4
   minRankId: intern
   maxRankId: 
   canRepeat: 1

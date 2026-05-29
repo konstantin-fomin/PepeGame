@@ -1,0 +1,80 @@
+# =====================================================
+# PepeIdle — Events Balance & Texts
+# =====================================================
+#
+# =====================================================
+# TIMING — Настройки тайминга менеджеров
+# =====================================================
+#
+# OfficeEventManager (Flavor Feed):
+#   firstEventDelay = 60       ⚠️ в сцене стоит 5  (тест)
+#   minInterval     = 60       ⚠️ в сцене стоит 8  (тест)
+#   maxInterval     = 150      ⚠️ в сцене стоит 15 (тест)
+#
+# ActiveOfficeEventManager (Active Events):
+#   minInterval     = 180      ⚠️ в сцене стоит 15 (тест)
+#   maxInterval     = 420      ⚠️ в сцене стоит 15 (тест)
+#
+# =====================================================
+
+
+# =====================================================
+# SECTION 1 — FLAVOR FEED (OfficeEventManager)
+# =====================================================
+#
+# effectType:
+#   NoEffectFlavor       — только текст, без механики
+#   InstantKpiReward     — reward = kpiPerClick * effectValue (мгновенно)
+#   ClickKpiMultiplier   — множитель на клики на durationSeconds секунд
+#   PassiveKpiMultiplier — множитель на пассив на durationSeconds секунд
+#
+# Веса:
+#   NoEffect    8–10  часто, держат атмосферу
+#   Instant     4–6   приятный сюрприз
+#   Multiplier  2–4   редко, ощущается как удача
+#
+# maxRankId ограничивает нарратив — «баг не воспроизвёлся» не должен
+# выпадать у CEO, это уже не его проблема.
+# =====================================================
+
+id	title	description	effectType	effectValue	durationSeconds	popupLifetimeSeconds	weight	minRankId	maxRankId
+jira_updated	Jira обновилась	> Jira обновилась. Старые кнопки снова не там.	NoEffectFlavor	0	0	4	10	intern	middle
+hr_mailing	Рассылка от HR	> HR прислал рассылку. Усталость получена.	NoEffectFlavor	0	0	4	10	intern	lead
+bug_not_reproduced	Баг не воспроизвёлся	> Баг почувствовал проверку и исчез.	NoEffectFlavor	0	0	4	9	intern	senior
+manager_said_fast	«Это быстро»	> Менеджер сказал «это быстро». Плохой знак.	NoEffectFlavor	0	0	4	9	intern	middle
+colleague_hello	Привет от коллеги	> Коллега написал «привет» и пропал.	NoEffectFlavor	0	0	4	8	intern	senior
+docs_found	Документация	> Документация найдена. Уже устарела.	NoEffectFlavor	0	0	4	8	intern	lead
+quiet_hour	Тихий час	> Никто не пишет. Система напряглась.	NoEffectFlavor	0	0	4	8	intern	
+tests_green	Тесты зелёные	> Всё зелёное. Тесты точно запускались?	NoEffectFlavor	0	0	4	7	junior	senior
+works_locally	Локально работает	> Локально работает. Прод обиделся.	NoEffectFlavor	0	0	4	7	junior	senior
+ticket_returned	Задача вернулась	> Задача вернулась из ревью. Комментарий: «не то».	NoEffectFlavor	0	0	4	7	junior	middle
+fixed_by_itself	Само починилось	> Что-то само починилось. Не трогайте.	InstantKpiReward	15	0	5	6	intern	middle
+table_converged	Таблица сошлась	> Таблица сошлась. Подозрительно приятно.	InstantKpiReward	20	0	5	5	intern	middle
+ticket_closed	Тикет закрыт	> Кто-то закрыл ваш тикет. Вопросов нет.	InstantKpiReward	20	0	5	5	junior	senior
+designer_pixel	Два пикселя	> Кнопку сдвинули на 2 пикселя. Срочно.	InstantKpiReward	15	0	5	5	junior	lead
+logs_opened	Логи открылись	> Логи открылись. Страдание стало структурным.	InstantKpiReward	25	0	5	4	middle	
+coffee_kicked	Кофе подействовал	> Кофе подействовал.	ClickKpiMultiplier	1.3	15	6	4	intern	senior
+meeting_cancelled	Созвон отменён	> Созвон отменили.	PassiveKpiMultiplier	1.5	15	6	4	intern	
+urgent_bug	Срочный баг	> Срочный баг. Уже третий день срочный.	ClickKpiMultiplier	1.5	12	6	3	junior	senior
+deploy_friday	Пятничный деплой	> Деплой в 18:00. Традиция сильнее здравого смысла.	ClickKpiMultiplier	1.5	10	6	3	senior	
+nice_chart	Красивый график	> График растёт. Смысл не проверяли.	PassiveKpiMultiplier	2.0	12	6	2	lead	
+
+
+# =====================================================
+# SECTION 2 — ACTIVE EVENTS (ActiveOfficeEventManager)
+# =====================================================
+#
+# effectValue и durationSeconds — основные балансные параметры.
+# Логика: чем позже ранг, тем сильнее эффект и тем реже событие (меньший вес).
+# popupLifetimeSeconds — время на реакцию. 10–12 сек оптимально.
+#
+# Click vs Passive — 3 на 3, баланс соблюдён.
+# =====================================================
+
+id	title	description	effectDescription	buttonText	effectType	effectValue	durationSeconds	popupLifetimeSeconds	weight	minRankId
+active_urgent_bug	СРОЧНЫЙ БАГ	Прод снова лежит. Никто не удивлён.	Клики x2 · 30 сек.	РАЗГРЕСТИ	ClickKpiMultiplier	2.0	30	10	8	intern
+active_meeting_cancelled	МИТИНГ ОТМЕНЁН	Час свободы. Неожиданно и подозрительно.	Пассив x1.5 · 45 сек.	ИСПОЛЬЗОВАТЬ ТИШИНУ	PassiveKpiMultiplier	1.5	45	12	7	intern
+active_critical_fix	КРИТИЧЕСКИЙ ФИКС	Нужно прямо сейчас. Как обычно.	Клики x1.5 · 40 сек.	ФИКСИТЬ	ClickKpiMultiplier	1.5	40	10	6	junior
+active_quiet_office	ТИХИЙ ЧАС	Все в отпуске. Или скрываются. Неважно.	Пассив x2 · 30 сек.	НЕ СПУГНУТЬ	PassiveKpiMultiplier	2.0	30	8	5	junior
+active_release_day	ДЕНЬ РЕЛИЗА	Паника официально одобрена руководством.	Клики x2.5 · 25 сек.	ГОРЕТЬ	ClickKpiMultiplier	2.5	25	8	4	senior
+active_ceo_report	ОТЧЁТ ДЛЯ CEO	Цифры должны расти. Любые цифры.	Пассив x2.5 · 35 сек.	ПОКАЗАТЬ ГРАФИК	PassiveKpiMultiplier	2.5	35	10	3	lead
