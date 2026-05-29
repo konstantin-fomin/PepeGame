@@ -1,7 +1,8 @@
 // AudioManager.cs
-// Version: 2026-05-26 v1.3 (Runtime volume control + fullscreen)
+// Version: 2026-05-29 v1.7 (Per-track volume sliders)
 
 using UnityEngine;
+using System.Collections;
 
 public class AudioManager : MonoBehaviour
 {
@@ -15,7 +16,8 @@ public class AudioManager : MonoBehaviour
     // ================= AUDIO SOURCES =================
 
     [Header("Audio Sources")]
-    [SerializeField] private AudioSource musicSource;
+    [SerializeField] private AudioSource musicSourceA;
+    [SerializeField] private AudioSource musicSourceB;
     [SerializeField] private AudioSource sfxSource;
     [SerializeField] private AudioSource specialLoopSource;
 
@@ -23,9 +25,17 @@ public class AudioManager : MonoBehaviour
 
     [Header("Music")]
     [Range(0f, 1f)]
-    [SerializeField] private float musicVolume = 0.5f;
+    [SerializeField] private float masterMusicVolume = 0.5f;
+    [SerializeField] private float crossfadeDuration = 1.5f;
+    [SerializeField] private AudioClip menuMusicClip;
+    [Range(0f, 1f)]
+    [SerializeField] private float menuMusicVolume = 1f;
 
+    private AudioSource activeMusicSource;
+    private AudioSource inactiveMusicSource;
     private AudioClip currentMusic;
+    private float currentTrackVolume = 1f;
+    private Coroutine crossfadeCoroutine;
 
     // ================= SFX =================
 
@@ -68,6 +78,16 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip menuClickClip;
     [Range(0f, 1f)][SerializeField] private float menuClickVolume = 0.7f;
 
+    [Header("SFX - Popup")]
+    [SerializeField] private AudioClip popupClip;
+    [Range(0f, 1f)][SerializeField] private float popupVolume = 0.7f;
+    [SerializeField] private AudioClip popupSwoshClip;
+    [Range(0f, 1f)][SerializeField] private float popupSwoshVolume = 0.5f;
+
+    [Header("SFX - Toast")]
+    [SerializeField] private AudioClip toastClip;
+    [Range(0f, 1f)][SerializeField] private float toastVolume = 0.5f;
+
     // ================= RUNTIME VOLUME =================
 
     private float musicVolumeMultiplier = 1f;
@@ -77,6 +97,12 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
+        activeMusicSource = musicSourceA;
+        inactiveMusicSource = musicSourceB;
+
+        if (musicSourceA != null) musicSourceA.loop = true;
+        if (musicSourceB != null) musicSourceB.loop = true;
+
         SetMusicVolume(PlayerPrefs.GetFloat("MusicVolume", 1f));
         sfxVolumeMultiplier = PlayerPrefs.GetFloat("SFXVolume", 1f);
     }
@@ -86,8 +112,11 @@ public class AudioManager : MonoBehaviour
     public void SetMusicVolume(float value)
     {
         musicVolumeMultiplier = Mathf.Clamp01(value);
-        if (musicSource != null)
-            musicSource.volume = musicVolume * musicVolumeMultiplier;
+        float targetVol = masterMusicVolume * currentTrackVolume * musicVolumeMultiplier;
+
+        if (activeMusicSource != null && activeMusicSource.isPlaying)
+            activeMusicSource.volume = targetVol;
+
         PlayerPrefs.SetFloat("MusicVolume", value);
     }
 
@@ -95,6 +124,9 @@ public class AudioManager : MonoBehaviour
     {
         sfxVolumeMultiplier = Mathf.Clamp01(value);
         PlayerPrefs.SetFloat("SFXVolume", value);
+
+        if (specialLoopSource != null && specialLoopSource.isPlaying)
+            specialLoopSource.volume = specialLoopVolume * sfxVolumeMultiplier;
     }
 
     public float GetMusicVolume() =>
@@ -102,6 +134,11 @@ public class AudioManager : MonoBehaviour
 
     public float GetSFXVolume() =>
         PlayerPrefs.GetFloat("SFXVolume", 1f);
+
+    private float ComputeMusicVolume(float trackVolume)
+    {
+        return masterMusicVolume * trackVolume * musicVolumeMultiplier;
+    }
 
     // ================= FULLSCREEN =================
 
@@ -116,21 +153,80 @@ public class AudioManager : MonoBehaviour
 
     // ================= MUSIC API =================
 
+    public void PlayMenuMusic()
+    {
+        CrossfadeToClip(menuMusicClip, menuMusicVolume);
+    }
+
     public void PlayMusicForRank(RankData rank)
     {
-        if (rank == null || rank.backgroundMusic == null || musicSource == null)
+        if (rank == null || rank.backgroundMusic == null)
             return;
 
-        if (currentMusic == rank.backgroundMusic)
-            return;
+        CrossfadeToClip(rank.backgroundMusic, rank.backgroundMusicVolume);
+    }
 
-        currentMusic = rank.backgroundMusic;
+    public void StopMusic()
+    {
+        if (crossfadeCoroutine != null)
+        {
+            StopCoroutine(crossfadeCoroutine);
+            crossfadeCoroutine = null;
+        }
 
-        musicSource.Stop();
-        musicSource.clip = currentMusic;
-        musicSource.volume = musicVolume * musicVolumeMultiplier;
-        musicSource.loop = true;
-        musicSource.Play();
+        if (activeMusicSource != null) activeMusicSource.Stop();
+        if (inactiveMusicSource != null) inactiveMusicSource.Stop();
+        currentMusic = null;
+    }
+
+    private void CrossfadeToClip(AudioClip clip, float trackVolume)
+    {
+        if (clip == null) return;
+        if (clip == currentMusic) return;
+
+        currentMusic = clip;
+        currentTrackVolume = trackVolume;
+
+        if (crossfadeCoroutine != null)
+            StopCoroutine(crossfadeCoroutine);
+
+        crossfadeCoroutine = StartCoroutine(CrossfadeCoroutine(clip, trackVolume));
+    }
+
+    private IEnumerator CrossfadeCoroutine(AudioClip newClip, float trackVolume)
+    {
+        float targetVol = ComputeMusicVolume(trackVolume);
+
+        inactiveMusicSource.clip = newClip;
+        inactiveMusicSource.volume = 0f;
+        inactiveMusicSource.loop = true;
+        inactiveMusicSource.Play();
+
+        float t = 0f;
+        float startVol = activeMusicSource.isPlaying ? activeMusicSource.volume : 0f;
+
+        while (t < crossfadeDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(t / crossfadeDuration);
+
+            if (activeMusicSource.isPlaying)
+                activeMusicSource.volume = Mathf.Lerp(startVol, 0f, progress);
+
+            inactiveMusicSource.volume = Mathf.Lerp(0f, targetVol, progress);
+
+            yield return null;
+        }
+
+        activeMusicSource.Stop();
+        activeMusicSource.volume = 0f;
+        inactiveMusicSource.volume = targetVol;
+
+        AudioSource temp = activeMusicSource;
+        activeMusicSource = inactiveMusicSource;
+        inactiveMusicSource = temp;
+
+        crossfadeCoroutine = null;
     }
 
     // ================= SFX API =================
@@ -145,6 +241,10 @@ public class AudioManager : MonoBehaviour
     public void PlayMenuClick() => PlayOneShot(menuClickClip, menuClickVolume);
 
     public void PlayStartScene() => PlayOneShot(startSceneClip, startSceneVolume);
+
+    public void PlayPopup() => PlayOneShot(popupClip, popupVolume);
+    public void PlayPopupSwosh() => PlayOneShot(popupSwoshClip, popupSwoshVolume);
+    public void PlayToast() => PlayOneShot(toastClip, toastVolume);
 
     public void PlaySpecialStart()
     {
@@ -164,7 +264,7 @@ public class AudioManager : MonoBehaviour
             return;
 
         specialLoopSource.clip = specialLoopClip;
-        specialLoopSource.volume = specialLoopVolume;
+        specialLoopSource.volume = specialLoopVolume * sfxVolumeMultiplier;
         specialLoopSource.loop = true;
         specialLoopSource.Play();
     }
@@ -176,6 +276,18 @@ public class AudioManager : MonoBehaviour
 
         specialLoopSource.Stop();
     }
+
+    // ================= PUBLIC SFX =================
+
+    public void PlaySfxClip(AudioClip clip, float volume = 1f)
+    {
+        if (sfxSource == null || clip == null)
+            return;
+
+        sfxSource.PlayOneShot(clip, volume * sfxVolumeMultiplier);
+    }
+
+    public AudioClip StartSceneClip => startSceneClip;
 
     // ================= INTERNAL =================
 

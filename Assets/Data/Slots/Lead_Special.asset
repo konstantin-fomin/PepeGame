@@ -58,4 +58,4 @@ MonoBehaviour:
     clickBonus: 750000
     passiveBonus: 1200000
     specialDuration: 12
-    icon: {fileID: 3153594705665199260, guid: e18a71146bdc80e42a5c2f220ef0f9e0, type: 3}
+    icon: {fileID: 21300000, guid: e18a71146bdc80e42a5c2f220ef0f9e0, type: 3}

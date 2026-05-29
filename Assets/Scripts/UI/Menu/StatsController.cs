@@ -41,8 +41,8 @@ public class StatsController : MonoBehaviour
         if (stats == null) return;
 
         playtimeText.text  = $"Время в офисе:      {FormatTime(stats.TotalPlaytimeSeconds)}";
-        kpiText.text       = $"KPI заработано:     {FormatNumber(stats.TotalKpiEarned)}";
-        clicksText.text    = $"Кликов совершено:   {FormatNumber(stats.TotalClicks)}";
+        kpiText.text       = $"KPI заработано:     {NumberFormatter.Format(stats.TotalKpiEarned)}";
+        clicksText.text    = $"Кликов совершено:   {NumberFormatter.Format(stats.TotalClicks)}";
         rankText.text      = $"Текущий ранг:       {gameManager.CurrentRank?.rankName ?? "—"}";
         upgradesText.text  = $"Апгрейдов куплено:  {stats.UpgradesBought} / 57";
         hrCommentText.text = $"\"{hrComments[Random.Range(0, hrComments.Length)]}\"";
@@ -56,10 +56,4 @@ public class StatsController : MonoBehaviour
         return $"{m}м {(int)(totalSeconds % 60):00}с";
     }
 
-    private string FormatNumber(long value)
-    {
-        if (value >= 1000000) return $"{value / 1000000f:0.#}M";
-        if (value >= 1000)    return $"{value / 1000f:0.#}K";
-        return value.ToString("N0");
-    }
 }

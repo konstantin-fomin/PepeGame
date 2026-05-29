@@ -23,7 +23,7 @@ MonoBehaviour:
   - type: 3
     value: 20
   durationSeconds: 0
-  popupLifetimeSeconds: 5
+  popupLifetimeSeconds: 8
   weight: 5
   minRankId: intern
   maxRankId: middle

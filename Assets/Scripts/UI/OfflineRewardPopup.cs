@@ -20,8 +20,7 @@ public class OfflineRewardPopup : MonoBehaviour
         int offline = gameManager.PendingOfflineKpi;
         if (offline <= 0) return;
 
-        string timeMsg = FormatKpi(offline);
-        messageText.text = $"Пока вас не было,\nПепе страдал без вас.\n\nНо всё же заработал:\n+{timeMsg} KPI";
+        messageText.text = $"Пока вас не было,\nПепе страдал без вас.\n\nНо всё же заработал:\n+{NumberFormatter.Format(offline)} KPI";
 
         gameObject.SetActive(true);
         StartCoroutine(FadeIn());
@@ -60,10 +59,4 @@ public class OfflineRewardPopup : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    private string FormatKpi(int value)
-    {
-        if (value >= 1000000) return $"{value / 1000000f:0.#}M";
-        if (value >= 1000)    return $"{value / 1000f:0.#}K";
-        return value.ToString();
-    }
 }

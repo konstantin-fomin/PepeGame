@@ -148,8 +148,8 @@ public class UIController : MonoBehaviour
 
     private void RefreshKpi()
     {
-        kpiText.text = $"{gameManager.CurrentKpi}";
-        kpiPerSecondText.text = $"+{gameManager.KpiPerSecond} KPI / сек";
+        kpiText.text = NumberFormatter.Format(gameManager.CurrentKpi);
+        kpiPerSecondText.text = $"+{NumberFormatter.Format(gameManager.KpiPerSecond)} KPI / сек";
     }
 
     // ================= RANK =================
@@ -176,7 +176,7 @@ public class UIController : MonoBehaviour
 
         float progress01 = Mathf.Clamp01((float)currentXp / requiredXp);
         rankProgressBar.value = progress01;
-        rankProgressText.text = $"<color=#FFB800>({currentXp} / {requiredXp})</color>";
+        rankProgressText.text = $"<color=#FFB800>({NumberFormatter.Format(currentXp)} / {NumberFormatter.Format(requiredXp)})</color>";
     }
 
     // ================= UPGRADE CARD =================
@@ -185,19 +185,17 @@ public class UIController : MonoBehaviour
     {
         Upgrade upgrade = gameManager.GetCurrentUpgrade(slotType);
 
+        if (upgrade == null)
+        {
+            card.SetCompleted();
+            return;
+        }
+
         card.SetUpgrade(upgrade);
+        card.SetIcon(upgrade.icon);
+        card.SetInteractable(true);
 
-        if (upgrade != null)
-            card.SetIcon(upgrade.icon);
-        else
-            card.SetIcon(null);
-
-        card.SetInteractable(upgrade != null);
-
-        bool noMoney =
-            upgrade != null &&
-            !gameManager.CanBuyUpgrade(slotType);
-
+        bool noMoney = !gameManager.CanBuyUpgrade(slotType);
         card.SetNoMoneyOverlay(noMoney);
     }
 

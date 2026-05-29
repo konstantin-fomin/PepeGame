@@ -12,6 +12,7 @@ public class CeilingLightFlicker : MonoBehaviour
     [SerializeField] private float flickerMinIntensity = 0.15f;
     [SerializeField] private float flickerMaxIntensity = 0.55f;
     [SerializeField] private bool enableFlicker = true;
+    [SerializeField] private float lampSoundVolume = 0.15f;
 
     private float timer;
     private float targetIntensity;
@@ -43,6 +44,10 @@ public class CeilingLightFlicker : MonoBehaviour
             {
                 targetIntensity = 0f;
                 timer = Random.Range(0.15f, 0.35f);
+
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlaySfxClip(
+                        AudioManager.Instance.StartSceneClip, lampSoundVolume);
             }
             else
             {

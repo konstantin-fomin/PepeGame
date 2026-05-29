@@ -99,6 +99,16 @@ public class GameManager : MonoBehaviour
         return activeSpecials[activeSpecials.Count - 1].remainingTime;
     }
 
+    /// <summary>
+    /// Запускает звук лупа, если есть активные specials.
+    /// Вызывается при входе в игру из меню.
+    /// </summary>
+    public void StartSpecialLoopIfNeeded()
+    {
+        if (activeSpecials.Count > 0)
+            audioManager?.StartSpecialLoop();
+    }
+
     // ================= EVENTS =================
 
     public event Action OnStateChanged;
@@ -141,6 +151,7 @@ public class GameManager : MonoBehaviour
         public int kpiPerClick;
         public int kpiPerSecond;
 
+        public string currentRankId;
         public string currentRankName;
         public long lastSaveUtcTicks;
 
@@ -167,10 +178,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         LoadGame();
-
-        if (audioManager != null && currentRank != null)
-            audioManager.PlayMusicForRank(currentRank);
-
         OnStateChanged?.Invoke();
     }
 
@@ -311,6 +318,7 @@ public class GameManager : MonoBehaviour
 
     public Upgrade GetCurrentUpgrade(SlotType slotType)
     {
+        if (branches == null) return null;
         return branches.ContainsKey(slotType)
             ? branches[slotType].GetCurrentUpgrade()
             : null;
@@ -326,7 +334,7 @@ public class GameManager : MonoBehaviour
 
     public void TryBuyUpgrade(SlotType slotType)
     {
-        if (!branches.ContainsKey(slotType))
+        if (branches == null || !branches.ContainsKey(slotType))
         {
             audioManager?.PlayError();
             return;
@@ -450,6 +458,7 @@ public class GameManager : MonoBehaviour
             kpi = currentKpi,
             kpiPerClick = kpiPerClick,
             kpiPerSecond = kpiPerSecond,
+            currentRankId = currentRank.rankId,
             currentRankName = currentRank.rankName,
             lastSaveUtcTicks = DateTime.UtcNow.Ticks
         };
@@ -483,13 +492,31 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        SaveData data = JsonUtility.FromJson<SaveData>(
-            PlayerPrefs.GetString(SAVE_KEY)
-        );
+        SaveData data;
+        try
+        {
+            data = JsonUtility.FromJson<SaveData>(
+                PlayerPrefs.GetString(SAVE_KEY)
+            );
+            if (data == null)
+                throw new Exception("SaveData is null after parse");
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[Save] Corrupted save, starting fresh. Error: {e.Message}");
+            PlayerPrefs.DeleteKey(SAVE_KEY);
+            InitFromRank(currentRank);
+            isLoading = false;
+            return;
+        }
 
         // --- Rank ---
 
-        RankData loadedRank = ranks.Find(r => r.rankName == data.currentRankName);
+        RankData loadedRank = null;
+        if (!string.IsNullOrEmpty(data.currentRankId))
+            loadedRank = ranks.Find(r => r.rankId == data.currentRankId);
+        if (loadedRank == null && !string.IsNullOrEmpty(data.currentRankName))
+            loadedRank = ranks.Find(r => r.rankName == data.currentRankName);
 
         if (loadedRank == null)
         {
@@ -540,8 +567,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (activeSpecials.Count > 0)
-            audioManager?.StartSpecialLoop();
+        // Special loop sound starts in StartSpecialLoopIfNeeded(),
+        // called from MenuNavigationController.StartGame()
+        // to avoid playing in the menu.
 
         // --- Offline progress ---
 

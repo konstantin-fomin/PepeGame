@@ -64,6 +64,7 @@ public class MenuNavigationController : MonoBehaviour
         StatsTracker.Instance?.Save();
         OfficeEventManager.Instance?.StopEventSystem();
         FindObjectOfType<ActiveOfficeEventManager>()?.StopSystem();
+        AudioManager.Instance?.StopSpecialLoop();
 
         SetActive(mainMenuPanel, true);
         SetActive(gameHudPanel, false);
@@ -75,6 +76,9 @@ public class MenuNavigationController : MonoBehaviour
         zoomTransition?.ResetMonitor();
 
         mainMenuPanel.GetComponent<MainMenuController>()?.SetHasSave(hasSave);
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayMenuMusic();
     }
 
     // --- Game ---
@@ -89,6 +93,9 @@ public class MenuNavigationController : MonoBehaviour
 
         environmentLoader.StartGameFlow(loadSave);
 
+        if (AudioManager.Instance != null && gameManager.CurrentRank != null)
+            AudioManager.Instance.PlayMusicForRank(gameManager.CurrentRank);
+
         SessionTimerView sessionTimer = FindObjectOfType<SessionTimerView>();
         if (!loadSave)
         {
@@ -97,19 +104,21 @@ public class MenuNavigationController : MonoBehaviour
         sessionTimer?.StartTimer();
 
         StatsTracker.Instance?.StartTracking();
+        gameManager?.StartSpecialLoopIfNeeded();
         OfficeEventManager.Instance?.StartEventSystem();
         FindObjectOfType<ActiveOfficeEventManager>()?.StartSystem();
     }
 
-    public void StartGameWithZoom(bool loadSave)
+    public void StartGameWithZoom(bool loadSave, System.Action beforeStart = null)
     {
-        StartCoroutine(ZoomThenStart(loadSave));
+        StartCoroutine(ZoomThenStart(loadSave, beforeStart));
     }
 
-    private IEnumerator ZoomThenStart(bool loadSave)
+    private IEnumerator ZoomThenStart(bool loadSave, System.Action beforeStart)
     {
         yield return StartCoroutine(
             zoomTransition.PlayZoomIn(() => { }));
+        beforeStart?.Invoke();
         StartGame(loadSave);
     }
 
@@ -175,8 +184,10 @@ public class MenuNavigationController : MonoBehaviour
             "Новая карьера",
             "Начать заново?\nВесь прогресс будет сброшен.",
             onConfirm: () => {
-                gameManager.ResetProgress();
-                StartGameWithZoom(loadSave: false);
+                StartGameWithZoom(
+                    loadSave: false,
+                    beforeStart: () => gameManager.ResetProgress()
+                );
             }
         );
     }

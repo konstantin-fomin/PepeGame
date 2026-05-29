@@ -48,7 +48,7 @@ public class CardBuyAnimator : MonoBehaviour
 
         // Запускаем флеш и flyout параллельно с bounce
         StartCoroutine(FlashCard(flashColorSuccess));
-        SpawnFlyout($"-{FormatNumber(cost)} KPI");
+        SpawnFlyout($"-{NumberFormatter.Format(cost)} KPI");
 
         // Bounce (пока флеш уже идёт)
         yield return StartCoroutine(ScaleTo(1.05f, 0.10f));
@@ -177,10 +177,4 @@ public class CardBuyAnimator : MonoBehaviour
         Destroy(rt.gameObject);
     }
 
-    private string FormatNumber(int value)
-    {
-        if (value >= 1000000) return $"{value / 1000000f:0.#}M";
-        if (value >= 1000)    return $"{value / 1000f:0.#}K";
-        return value.ToString();
-    }
 }

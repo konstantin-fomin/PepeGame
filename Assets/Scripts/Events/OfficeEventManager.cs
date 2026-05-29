@@ -314,7 +314,7 @@ private void SpawnEventToast(OfficeEventData ev)
 
         if (result.kpiReward > 0)
         {
-            effectMessages.Add($"+{result.kpiReward} KPI");
+            effectMessages.Add($"+{NumberFormatter.Format(result.kpiReward)} KPI");
         }
 
         if (effectMessages.Count > 0)

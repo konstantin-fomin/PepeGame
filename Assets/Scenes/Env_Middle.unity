@@ -1149,6 +1149,7 @@ MonoBehaviour:
   flickerMinIntensity: 0.5
   flickerMaxIntensity: 0.65
   enableFlicker: 1
+  lampSoundVolume: 0.4
 --- !u!114 &1868595140
 MonoBehaviour:
   m_ObjectHideFlags: 0

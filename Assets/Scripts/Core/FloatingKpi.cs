@@ -84,7 +84,7 @@ public class FloatingKpi : MonoBehaviour
         if (text == null)
             return;
 
-        text.text = $"+{amount} KPI";
+        text.text = $"+{NumberFormatter.Format(amount)} KPI";
         ApplyTextStyle(isCritical);
         ApplySingleLineLayout(isCritical);
         SetTextAlpha(1f);

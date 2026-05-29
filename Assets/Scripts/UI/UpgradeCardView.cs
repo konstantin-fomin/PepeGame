@@ -1,6 +1,6 @@
 // UpgradeCardView.cs
-// Version: 2026-05-24 v1.3 (Special duration in effect text)
-// Purpose: UI view for upgrade card + money overlay
+// Version: 2026-05-29 v1.4 (Completed overlay for finished branches)
+// Purpose: UI view for upgrade card + money overlay + completed state
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,6 +23,18 @@ public class UpgradeCardView : MonoBehaviour
     [Header("Overlay (No Money)")]
     [SerializeField] private GameObject darkOverlay;
     [SerializeField] private GameObject lockIcon;
+
+    [Header("Completed Overlay")]
+    [SerializeField] private GameObject completedOverlay;
+    [SerializeField] private TMP_Text completedTitleText;
+    [SerializeField] private TMP_Text completedDescriptionText;
+    [SerializeField] private TMP_Text completedMaxText;
+
+    [Header("Content Groups")]
+    [SerializeField] private GameObject iconContainer;
+    [SerializeField] private GameObject priceButton;
+
+    private bool isCompleted = false;
 
     // ================= VALIDATION =================
 
@@ -50,11 +62,56 @@ public class UpgradeCardView : MonoBehaviour
             return;
         }
 
+        ExitCompletedState();
+
         titleText.text = upgrade.title.ToUpper();
         descriptionText.text = upgrade.description;
         effectText.text = BuildEffectText(upgrade);
-        priceText.text = upgrade.basePrice.ToString();
+        priceText.text = NumberFormatter.Format(upgrade.basePrice);
     }
+
+    public void SetCompleted()
+    {
+        isCompleted = true;
+
+        // Hide normal content
+        titleText.text = "";
+        descriptionText.text = "";
+        effectText.text = "";
+        priceText.text = "";
+        iconImage.enabled = false;
+
+        if (iconContainer != null)
+            iconContainer.SetActive(false);
+
+        if (priceButton != null)
+            priceButton.SetActive(false);
+
+        // Disable interaction
+        button.interactable = false;
+
+        // Hide no-money overlay
+        if (darkOverlay != null)
+            darkOverlay.SetActive(false);
+
+        if (lockIcon != null)
+            lockIcon.SetActive(false);
+
+        // Show completed overlay
+        if (completedOverlay != null)
+            completedOverlay.SetActive(true);
+
+        if (completedTitleText != null)
+            completedTitleText.text = "ПЛАН ВЫПОЛНЕН";
+
+        if (completedDescriptionText != null)
+            completedDescriptionText.text = "Больше задач не завезли.";
+
+        if (completedMaxText != null)
+            completedMaxText.text = "MAX";
+    }
+
+    public bool IsCompleted => isCompleted;
 
     public void SetIcon(Sprite sprite)
     {
@@ -67,6 +124,7 @@ public class UpgradeCardView : MonoBehaviour
     /// </summary>
     public void SetInteractable(bool value)
     {
+        if (isCompleted) return;
         button.interactable = value;
     }
 
@@ -75,6 +133,8 @@ public class UpgradeCardView : MonoBehaviour
     /// </summary>
     public void SetNoMoneyOverlay(bool show)
     {
+        if (isCompleted) return;
+
         if (darkOverlay != null)
             darkOverlay.SetActive(show);
 
@@ -89,6 +149,21 @@ public class UpgradeCardView : MonoBehaviour
     }
 
     // ================= INTERNAL =================
+
+    private void ExitCompletedState()
+    {
+        if (!isCompleted) return;
+        isCompleted = false;
+
+        if (completedOverlay != null)
+            completedOverlay.SetActive(false);
+
+        if (iconContainer != null)
+            iconContainer.SetActive(true);
+
+        if (priceButton != null)
+            priceButton.SetActive(true);
+    }
 
     private void Clear()
     {
@@ -106,19 +181,29 @@ public class UpgradeCardView : MonoBehaviour
 
     private string BuildEffectText(Upgrade upgrade)
     {
-        string bonus = "";
-
-        if (upgrade.clickBonus > 0)
-            bonus = $"+{upgrade.clickBonus} KPI / click";
-        else if (upgrade.passiveBonus > 0)
-            bonus = $"+{upgrade.passiveBonus} KPI / sec";
-
+        // Special cards: "+3 click • +8/sec • 10s"
         if (upgrade.specialDuration > 0f)
         {
-            string duration = $"{Mathf.RoundToInt(upgrade.specialDuration)}s";
-            return string.IsNullOrEmpty(bonus) ? duration : $"{bonus} • {duration}";
+            var parts = new System.Collections.Generic.List<string>();
+
+            if (upgrade.clickBonus > 0)
+                parts.Add($"+{NumberFormatter.Format(upgrade.clickBonus)} click");
+
+            if (upgrade.passiveBonus > 0)
+                parts.Add($"+{NumberFormatter.Format(upgrade.passiveBonus)}/sec");
+
+            parts.Add($"{Mathf.RoundToInt(upgrade.specialDuration)}s");
+
+            return string.Join(" • ", parts.ToArray());
         }
 
-        return bonus;
+        // Click / Passive cards
+        if (upgrade.clickBonus > 0)
+            return $"+{NumberFormatter.Format(upgrade.clickBonus)} KPI / click";
+
+        if (upgrade.passiveBonus > 0)
+            return $"+{NumberFormatter.Format(upgrade.passiveBonus)} KPI / sec";
+
+        return "";
     }
 }

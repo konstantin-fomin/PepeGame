@@ -54,6 +54,7 @@ public class OfficeEventPopupView : MonoBehaviour
 
         if (isActiveAndEnabled)
         {
+            AudioManager.Instance?.PlayPopupSwosh();
             StartCoroutine(SlideIn());
         }
     }
@@ -69,6 +70,9 @@ public class OfficeEventPopupView : MonoBehaviour
     private void OnDismissClicked()
     {
         if (!isShowing) return;
+
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlayPopup();
 
         Action callback = onAcceptCallback;
         onAcceptCallback = null;

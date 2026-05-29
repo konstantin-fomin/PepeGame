@@ -17,6 +17,8 @@ public class RankData : ScriptableObject
     [Header("Audio")]
     [Tooltip("Background music for this rank")]
     public AudioClip backgroundMusic;
+    [Range(0f, 1f)]
+    public float backgroundMusicVolume = 1f;
 
     [Header("Upgrade Branches")]
     public List<SlotBranchConfig> slotBranches;
