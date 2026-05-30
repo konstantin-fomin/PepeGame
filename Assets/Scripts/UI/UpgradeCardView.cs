@@ -1,5 +1,5 @@
 // UpgradeCardView.cs
-// Version: 2026-05-29 v1.4 (Completed overlay for finished branches)
+// Version: 2026-05-30 v1.5 (completed overlay layout enforced in code)
 // Purpose: UI view for upgrade card + money overlay + completed state
 
 using UnityEngine;
@@ -50,6 +50,34 @@ public class UpgradeCardView : MonoBehaviour
         if (button == null)          { Debug.LogError("[UpgradeCard] button not assigned", this);          valid = false; }
 
         if (!valid) enabled = false;
+
+        ConfigureCompletedOverlayLayout();
+    }
+
+    /// <summary>
+    /// Карточка использует VerticalLayoutGroup, который иначе раскладывает
+    /// CompletedOverlay как элемент стека и ломает позицию текста (MAX уезжает
+    /// за карточку). Принудительно выводим оверлей из-под layout group и
+    /// растягиваем на всю карточку — единообразно для всех префабов карточек.
+    /// </summary>
+    private void ConfigureCompletedOverlayLayout()
+    {
+        if (completedOverlay == null) return;
+
+        RectTransform rt = completedOverlay.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+        }
+
+        LayoutElement le = completedOverlay.GetComponent<LayoutElement>();
+        if (le == null)
+            le = completedOverlay.AddComponent<LayoutElement>();
+        le.ignoreLayout = true;
     }
 
     // ================= PUBLIC API =================
