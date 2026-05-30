@@ -1,5 +1,5 @@
 // UIController.cs
-// Version: 2026-05-24 v3.1 (Timer bar via anchorMax for Sliced Image)
+// Version: 2026-05-30 v4.0 (career completion)
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,9 +43,11 @@ public class UIController : MonoBehaviour
 
     public RankUpPopupView RankUpPopup => rankUpPopup;
 
+    // ================= CAREER COMPLETED =================
+    [Header("Career Completed")]
+    [SerializeField] private CareerCompletedScreenView careerCompletedScreen;
+
     // ================= SPECIAL EFFECTS =================
-    // specialTimerBar: Image (Sliced), Anchors Min(0,1) Max(1,1), Height 8px, Left/Right/Top = 0
-    // specialVignette: Image (full screen), sprite with dark edges + transparent center
 
     [Header("Pause")]
     [SerializeField] private Button pauseButton;
@@ -78,6 +80,13 @@ public class UIController : MonoBehaviour
         {
             gameManager.OnStateChanged += RefreshUI;
             gameManager.OnRankUp += rankUpPopup.Show;
+            gameManager.OnCareerCompleted += HandleCareerCompleted;
+        }
+
+        if (careerCompletedScreen != null)
+        {
+            careerCompletedScreen.OnStayCeo += HandleStayCeo;
+            careerCompletedScreen.OnNewCareerConfirmed += HandleNewCareer;
         }
     }
 
@@ -87,6 +96,13 @@ public class UIController : MonoBehaviour
         {
             gameManager.OnStateChanged -= RefreshUI;
             gameManager.OnRankUp -= rankUpPopup.Show;
+            gameManager.OnCareerCompleted -= HandleCareerCompleted;
+        }
+
+        if (careerCompletedScreen != null)
+        {
+            careerCompletedScreen.OnStayCeo -= HandleStayCeo;
+            careerCompletedScreen.OnNewCareerConfirmed -= HandleNewCareer;
         }
     }
 
@@ -131,6 +147,33 @@ public class UIController : MonoBehaviour
         UpdateSpecialEffects();
     }
 
+    // ================= CAREER COMPLETED =================
+
+    private void HandleCareerCompleted()
+    {
+        if (gameManager.HasSeenCareerCompletedScreen) return;
+        if (careerCompletedScreen == null) return;
+
+        var stats = StatsTracker.Instance;
+        long totalKpi = stats != null ? stats.TotalKpiEarned : 0;
+        float totalTime = stats != null ? stats.TotalPlaytimeSeconds : 0f;
+        int totalClicks = stats != null ? stats.TotalClicks : 0;
+
+        careerCompletedScreen.Show(totalKpi, totalTime, totalClicks);
+    }
+
+    private void HandleStayCeo()
+    {
+        gameManager.MarkCareerScreenSeen();
+    }
+
+    private void HandleNewCareer()
+    {
+        gameManager.ResetProgress();
+        MenuNavigationController.Instance.ShowMainMenu(false);
+        MenuNavigationController.Instance.StartGameWithZoom(false);
+    }
+
     // ================= UI REFRESH =================
 
     private void RefreshUI()
@@ -164,6 +207,13 @@ public class UIController : MonoBehaviour
 
     private void RefreshProgress()
     {
+        if (gameManager.IsCareerCompleted)
+        {
+            rankProgressBar.value = 1f;
+            rankProgressText.text = "MAX";
+            return;
+        }
+
         int currentXp = gameManager.CurrentExperience;
         int requiredXp = gameManager.ExperienceToNextRank;
 
@@ -226,7 +276,6 @@ public class UIController : MonoBehaviour
             return;
         }
 
-        // Первый кадр активации — сброс в 1
         if (!wasSpecialActive)
         {
             rt.anchorMax = new Vector2(1f, rt.anchorMax.y);
@@ -249,14 +298,12 @@ public class UIController : MonoBehaviour
 
         float remaining = gameManager.GetSpecialRemainingTime();
 
-        // Частота пульса: 2 Гц нормально, нарастает до 8 Гц в последние 3 секунды
         float pulseFreq = remaining <= 3f
             ? Mathf.Lerp(8f, 2f, remaining / 3f)
             : 2f;
 
         float oscillation = Mathf.Abs(Mathf.Sin(Time.time * pulseFreq * Mathf.PI));
 
-        // Затухание: альфа плавно уходит в 0 вместе с progress, без резкого скачка
         float fadeOut = Mathf.Clamp01(progress * 5f);
         float alpha = oscillation * 0.3f * fadeOut;
 

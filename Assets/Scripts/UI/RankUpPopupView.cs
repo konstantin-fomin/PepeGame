@@ -25,6 +25,9 @@ public class RankUpPopupView : MonoBehaviour
     [SerializeField] private float popupFadeDuration = 0.25f;
     [SerializeField] private float buttonAppearDelay = 0.6f;
 
+    [Header("Confetti")]
+    [SerializeField] private CorporateConfettiController confetti;
+
     public event System.Action OnPopupClosed;
 
     public static bool IsShowing { get; private set; }
@@ -46,6 +49,15 @@ public class RankUpPopupView : MonoBehaviour
         sarcasticMessageText.text = newRank.rankUpMessage;
 
         gameObject.SetActive(true);
+
+        if (confetti != null)
+        {
+            string newId = newRank.rankId != null ? newRank.rankId.ToLower() : "";
+            if (newId == "lead" || newId == "ceo")
+                confetti.PlayPromotionMedium();
+            else
+                confetti.PlayPromotionSmall();
+        }
     }
 
     private void OnEnable()
@@ -92,6 +104,9 @@ public class RankUpPopupView : MonoBehaviour
     private IEnumerator HideSequence()
     {
         continueButtonGroup.interactable = false;
+
+        if (confetti != null)
+            confetti.Cleanup();
 
         if (ScreenFader.Instance != null)
             yield return StartCoroutine(ScreenFader.Instance.FadeOut(0.35f));

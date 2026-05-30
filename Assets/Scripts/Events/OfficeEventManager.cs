@@ -155,6 +155,9 @@ private float GetSafeMultiplier(float value)
 private bool IsGameplayAvailableForEvent()
     {
         if (RankUpPopupView.IsShowing) return false;
+        if (OfflineProgressPopupView.IsShowing) return false;
+        if (FirstLaunchTutorialPopupView.IsShowing) return false;
+        if (CareerCompletedScreenView.IsShowing) return false;
         return menuNav == null || menuNav.IsGameplayAvailableForOfficeEvents;
     }
 

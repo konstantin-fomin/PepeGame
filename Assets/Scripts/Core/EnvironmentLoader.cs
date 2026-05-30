@@ -6,9 +6,12 @@ public class EnvironmentLoader : MonoBehaviour
 {
     [SerializeField] private GameManager gameManager;
     [SerializeField] private UIController uiController;
+    [SerializeField] private OfflineProgressPopupView offlinePopup;
+    [SerializeField] private FirstLaunchTutorialPopupView tutorialPopup;
 
     private string currentEnvironmentScene = "";
     private string pendingScene = "";
+    private bool pendingLoadSave;
 
     private void OnEnable()
     {
@@ -22,6 +25,7 @@ public class EnvironmentLoader : MonoBehaviour
 
     public void StartGameFlow(bool loadSave)
     {
+        pendingLoadSave = loadSave;
         string sceneName = gameManager.CurrentRank?.environmentScene;
         if (!string.IsNullOrEmpty(sceneName))
             StartCoroutine(LoadInitial(sceneName));
@@ -60,6 +64,28 @@ public class EnvironmentLoader : MonoBehaviour
 
         yield return StartCoroutine(
             MonitorStartupEffect.Instance.PlayRevealPhase());
+
+        if (pendingLoadSave && offlinePopup != null)
+        {
+            OfflineProgressResult result = gameManager.PendingOfflineResult;
+            if (result.shouldShowPopup)
+            {
+                offlinePopup.Show(result);
+                gameManager.ClearPendingOfflineResult();
+            }
+        }
+
+        if (!pendingLoadSave && tutorialPopup != null && !gameManager.HasSeenTutorial)
+        {
+            tutorialPopup.OnPopupClosed += OnTutorialClosed;
+            tutorialPopup.Show();
+        }
+    }
+
+    private void OnTutorialClosed()
+    {
+        tutorialPopup.OnPopupClosed -= OnTutorialClosed;
+        gameManager.MarkTutorialSeen();
     }
 
     private void OnRankUp(RankData previousRank, RankData newRank)
@@ -98,7 +124,6 @@ public class EnvironmentLoader : MonoBehaviour
 
         onDone?.Invoke();
 
-        // Возвращаем картинку после смены сцены
         if (animate && ScreenFader.Instance != null)
         {
             yield return new WaitForSeconds(0.1f);

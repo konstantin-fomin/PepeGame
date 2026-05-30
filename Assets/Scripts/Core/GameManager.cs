@@ -1,5 +1,5 @@
 // GameManager.cs
-// Version: 2026-05-26 v3.0 (offline progress)
+// Version: 2026-05-30 v5.0 (career completion)
 
 using System;
 using System.Collections.Generic;
@@ -81,8 +81,6 @@ public class GameManager : MonoBehaviour
 
     private readonly List<ActiveSpecial> activeSpecials = new();
 
-    // --- Public API for Special state (single source of truth) ---
-
     public bool HasActiveSpecial => activeSpecials.Count > 0;
 
     public float GetSpecialProgress01()
@@ -99,10 +97,6 @@ public class GameManager : MonoBehaviour
         return activeSpecials[activeSpecials.Count - 1].remainingTime;
     }
 
-    /// <summary>
-    /// Запускает звук лупа, если есть активные specials.
-    /// Вызывается при входе в игру из меню.
-    /// </summary>
     public void StartSpecialLoopIfNeeded()
     {
         if (activeSpecials.Count > 0)
@@ -113,6 +107,7 @@ public class GameManager : MonoBehaviour
 
     public event Action OnStateChanged;
     public event Action<RankData, RankData> OnRankUp;
+    public event Action OnCareerCompleted;
 
     public struct WorkClickResult
     {
@@ -137,7 +132,74 @@ public class GameManager : MonoBehaviour
     // ================= STATE =================
 
     private bool isLoading = false;
-    public int PendingOfflineKpi { get; private set; } = 0;
+
+    [SerializeField, HideInInspector]
+    private OfflineProgressResult pendingOfflineResult;
+    public OfflineProgressResult PendingOfflineResult => pendingOfflineResult;
+
+    public void ClearPendingOfflineResult()
+    {
+        pendingOfflineResult = default;
+    }
+
+    // ================= TUTORIAL =================
+
+    [SerializeField, HideInInspector]
+    private bool hasSeenTutorial;
+    public bool HasSeenTutorial => hasSeenTutorial;
+
+    public void MarkTutorialSeen()
+    {
+        hasSeenTutorial = true;
+        SaveGame();
+    }
+
+    // ================= CAREER COMPLETION =================
+
+    [SerializeField, HideInInspector]
+    private bool isCareerCompleted;
+    [SerializeField, HideInInspector]
+    private bool hasSeenCareerCompletedScreen;
+    [SerializeField, HideInInspector]
+    private long careerCompletedAtUtcTicks;
+
+    public bool IsCareerCompleted => isCareerCompleted;
+    public bool HasSeenCareerCompletedScreen => hasSeenCareerCompletedScreen;
+
+    public void MarkCareerScreenSeen()
+    {
+        hasSeenCareerCompletedScreen = true;
+        SaveGame();
+    }
+
+    private void CheckCareerCompletion()
+    {
+        if (isCareerCompleted) return;
+        if (isLoading) return;
+
+        int rankIndex = ranks.IndexOf(currentRank);
+        if (rankIndex < ranks.Count - 1) return;
+
+        if (currentRank.requiredKpi > 0 && currentExperience < currentRank.requiredKpi)
+            return;
+
+        if (branches == null) return;
+        foreach (var pair in branches)
+        {
+            if (!pair.Value.IsFinished()) return;
+        }
+
+        isCareerCompleted = true;
+        careerCompletedAtUtcTicks = DateTime.UtcNow.Ticks;
+        SaveGame();
+        OnCareerCompleted?.Invoke();
+    }
+
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+        CheckCareerCompletion();
+    }
 
     // ================= SAVE =================
 
@@ -154,6 +216,11 @@ public class GameManager : MonoBehaviour
         public string currentRankId;
         public string currentRankName;
         public long lastSaveUtcTicks;
+
+        public bool hasSeenTutorial;
+        public bool isCareerCompleted;
+        public bool hasSeenCareerCompletedScreen;
+        public long careerCompletedAtUtcTicks;
 
         public List<BranchSave> branches = new();
         public List<SpecialSave> specials = new();
@@ -178,6 +245,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         LoadGame();
+
+        if (pendingOfflineResult.wasApplied)
+            SaveGame();
+
         OnStateChanged?.Invoke();
     }
 
@@ -251,13 +322,13 @@ public class GameManager : MonoBehaviour
     public void AddKpiPublic(int amount)
     {
         AddKpi(amount);
-        OnStateChanged?.Invoke();
+        NotifyStateChanged();
     }
 
     public void AddXpPublic(int amount)
     {
         AddExperience(amount);
-        OnStateChanged?.Invoke();
+        NotifyStateChanged();
     }
 
     public WorkClickResult WorkClick()
@@ -280,7 +351,7 @@ public class GameManager : MonoBehaviour
         int xpEarned = Mathf.RoundToInt(kpiPerClick * xpMultiplier);
         AddExperience(xpEarned);
         StatsTracker.Instance?.AddKpi(kpiEarned);
-        OnStateChanged?.Invoke();
+        NotifyStateChanged();
 
         return new WorkClickResult(
             kpiEarned,
@@ -303,7 +374,7 @@ public class GameManager : MonoBehaviour
             int xpEarned = Mathf.RoundToInt(kpiPerSecond * xpMultiplier);
             AddExperience(xpEarned);
             StatsTracker.Instance?.AddKpi(earned);
-            OnStateChanged?.Invoke();
+            NotifyStateChanged();
         }
     }
 
@@ -354,7 +425,7 @@ public class GameManager : MonoBehaviour
 
         StatsTracker.Instance?.AddUpgrade();
         audioManager?.PlayBuy();
-        OnStateChanged?.Invoke();
+        NotifyStateChanged();
     }
 
     private void ApplyUpgrade(Upgrade upg)
@@ -407,7 +478,7 @@ public class GameManager : MonoBehaviour
                 audioManager?.PlaySpecialEnd();
             }
 
-            OnStateChanged?.Invoke();
+            NotifyStateChanged();
         }
     }
 
@@ -439,6 +510,12 @@ public class GameManager : MonoBehaviour
         ResetFlavorMults();
         ResetActiveMults();
 
+        pendingOfflineResult = default;
+        hasSeenTutorial = false;
+        isCareerCompleted = false;
+        hasSeenCareerCompletedScreen = false;
+        careerCompletedAtUtcTicks = 0;
+
         currentRank = ranks[0];
         InitFromRank(currentRank);
 
@@ -460,7 +537,11 @@ public class GameManager : MonoBehaviour
             kpiPerSecond = kpiPerSecond,
             currentRankId = currentRank.rankId,
             currentRankName = currentRank.rankName,
-            lastSaveUtcTicks = DateTime.UtcNow.Ticks
+            lastSaveUtcTicks = DateTime.UtcNow.Ticks,
+            hasSeenTutorial = hasSeenTutorial,
+            isCareerCompleted = isCareerCompleted,
+            hasSeenCareerCompletedScreen = hasSeenCareerCompletedScreen,
+            careerCompletedAtUtcTicks = careerCompletedAtUtcTicks
         };
 
         foreach (var pair in branches)
@@ -484,6 +565,7 @@ public class GameManager : MonoBehaviour
     private void LoadGame()
     {
         isLoading = true;
+        pendingOfflineResult = default;
 
         if (!PlayerPrefs.HasKey(SAVE_KEY))
         {
@@ -535,6 +617,10 @@ public class GameManager : MonoBehaviour
         currentKpi = data.kpi;
         kpiPerClick = data.kpiPerClick;
         kpiPerSecond = data.kpiPerSecond;
+        hasSeenTutorial = data.hasSeenTutorial;
+        isCareerCompleted = data.isCareerCompleted;
+        hasSeenCareerCompletedScreen = data.hasSeenCareerCompletedScreen;
+        careerCompletedAtUtcTicks = data.careerCompletedAtUtcTicks;
 
         // --- Branch indices ---
 
@@ -567,10 +653,6 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        // Special loop sound starts in StartSpecialLoopIfNeeded(),
-        // called from MenuNavigationController.StartGame()
-        // to avoid playing in the menu.
-
         // --- Offline progress ---
 
         if (data.lastSaveUtcTicks > 0)
@@ -578,15 +660,31 @@ public class GameManager : MonoBehaviour
             DateTime lastSave = new DateTime(data.lastSaveUtcTicks, DateTimeKind.Utc);
             double offlineSeconds = (DateTime.UtcNow - lastSave).TotalSeconds;
 
-            offlineSeconds = Mathf.Min((float)offlineSeconds, 4 * 3600f);
+            offlineSeconds = System.Math.Min(offlineSeconds, 4 * 3600.0);
 
-            int earned = Mathf.FloorToInt((float)(kpiPerSecond * offlineSeconds * 0.6f));
+            int earnedKpi = (int)(kpiPerSecond * offlineSeconds * 0.6);
 
-            if (earned > 0)
+            bool isCeo = ranks.IndexOf(currentRank) >= ranks.Count - 1;
+            int earnedXp = 0;
+            if (!isCeo && kpiPerSecond > 0)
+                earnedXp = (int)(kpiPerSecond * xpMultiplier * offlineSeconds * 0.6);
+
+            if (earnedKpi > 0)
+                currentKpi += earnedKpi;
+
+            if (earnedXp > 0)
+                AddExperience(earnedXp);
+
+            bool shouldShow = offlineSeconds >= 60.0 && (earnedKpi > 0 || earnedXp > 0);
+
+            pendingOfflineResult = new OfflineProgressResult
             {
-                currentKpi += earned;
-                PendingOfflineKpi = earned;
-            }
+                offlineSeconds = offlineSeconds,
+                earnedKpi = earnedKpi,
+                earnedXp = earnedXp,
+                wasApplied = earnedKpi > 0 || earnedXp > 0,
+                shouldShowPopup = shouldShow
+            };
         }
 
         isLoading = false;

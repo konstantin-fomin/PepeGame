@@ -41,6 +41,10 @@ public class MenuNavigationController : MonoBehaviour
 
     private void HandleEscape()
     {
+        if (OfflineProgressPopupView.IsShowing) return;
+        if (FirstLaunchTutorialPopupView.IsShowing) return;
+        if (CareerCompletedScreenView.IsShowing) return;
+
         switch (currentState)
         {
             case MenuState.Game:     ShowPause();           break;

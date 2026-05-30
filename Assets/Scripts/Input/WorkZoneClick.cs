@@ -1,5 +1,5 @@
 // WorkZoneClick.cs
-// Version: 2026-05-26 v1.7 (StatsTracker integration)
+// Version: 2026-05-30 v1.8 (modal popup blocking)
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -39,6 +39,9 @@ public class WorkZoneClick : MonoBehaviour
     public void OnPointerClick(InputValue value)
     {
         if (RankUpPopupView.IsShowing) return;
+        if (OfflineProgressPopupView.IsShowing) return;
+        if (FirstLaunchTutorialPopupView.IsShowing) return;
+        if (CareerCompletedScreenView.IsShowing) return;
         if (MenuNavigationController.Instance != null &&
             !MenuNavigationController.Instance.IsGameActive) return;
 
