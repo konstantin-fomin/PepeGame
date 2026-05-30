@@ -69,8 +69,8 @@ public class CareerTrackView : MonoBehaviour
 
         if (!isCeo)
         {
-            int currentXp = gameManager.CurrentExperience;
-            int nextRankXp = gameManager.ExperienceToNextRank;
+            long currentXp = gameManager.CurrentExperience;
+            long nextRankXp = gameManager.ExperienceToNextRank;
 
             if (xpText != null)
                 xpText.text = string.Format("XP: {0} / {1}", currentXp, nextRankXp);

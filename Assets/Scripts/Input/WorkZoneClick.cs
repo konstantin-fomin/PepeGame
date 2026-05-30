@@ -83,7 +83,7 @@ public class WorkZoneClick : MonoBehaviour
 
     private IEnumerator SpawnFloatingKpiWithDelay(
         Vector2 screenPos,
-        int amount,
+        long amount,
         bool isCritical)
     {
         yield return new WaitForSeconds(floatingKpiDelay);

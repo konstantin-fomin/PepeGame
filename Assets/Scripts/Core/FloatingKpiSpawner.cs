@@ -21,12 +21,12 @@ public class FloatingKpiSpawner : MonoBehaviour
             pool.Add(CreateInstance());
     }
 
-    public void Spawn(Vector2 screenPosition, int amount)
+    public void Spawn(Vector2 screenPosition, long amount)
     {
         Spawn(screenPosition, amount, false);
     }
 
-    public void Spawn(Vector2 screenPosition, int amount, bool isCritical)
+    public void Spawn(Vector2 screenPosition, long amount, bool isCritical)
     {
         FloatingKpi instance = GetFromPool();
 

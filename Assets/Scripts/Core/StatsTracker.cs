@@ -42,7 +42,7 @@ public class StatsTracker : MonoBehaviour
     public void StartTracking() => isTracking = true;
     public void StopTracking()  => isTracking = false;
 
-    public void AddKpi(int amount)
+    public void AddKpi(long amount)
     {
         if (amount > 0) TotalKpiEarned += amount;
     }

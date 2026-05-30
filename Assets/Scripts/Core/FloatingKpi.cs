@@ -60,12 +60,12 @@ public class FloatingKpi : MonoBehaviour
         }
     }
 
-    public void Init(int amount)
+    public void Init(long amount)
     {
         Init(amount, false);
     }
 
-    public void Init(int amount, bool isCritical)
+    public void Init(long amount, bool isCritical)
     {
         this.isCritical = isCritical;
 

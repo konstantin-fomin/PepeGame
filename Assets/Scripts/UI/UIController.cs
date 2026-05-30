@@ -214,8 +214,8 @@ public class UIController : MonoBehaviour
             return;
         }
 
-        int currentXp = gameManager.CurrentExperience;
-        int requiredXp = gameManager.ExperienceToNextRank;
+        long currentXp = gameManager.CurrentExperience;
+        long requiredXp = gameManager.ExperienceToNextRank;
 
         if (requiredXp <= 0)
         {

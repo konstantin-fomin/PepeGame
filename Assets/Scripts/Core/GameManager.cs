@@ -1,5 +1,5 @@
 // GameManager.cs
-// Version: 2026-05-30 v5.0 (career completion)
+// Version: 2026-05-30 v5.1 (long economy: KPI/XP widened from int to long)
 
 using System;
 using System.Collections.Generic;
@@ -18,22 +18,22 @@ public class GameManager : MonoBehaviour
     // ================= EXPERIENCE =================
 
     [Header("Experience")]
-    [SerializeField] private int currentExperience;
+    [SerializeField] private long currentExperience;
 
-    public int CurrentExperience => currentExperience;
-    public int ExperienceToNextRank =>
+    public long CurrentExperience => currentExperience;
+    public long ExperienceToNextRank =>
         currentRank != null ? currentRank.requiredKpi : 0;
 
     // ================= KPI =================
 
     [Header("KPI")]
-    [SerializeField] private int currentKpi;
-    [SerializeField] private int kpiPerClick = 1;
-    [SerializeField] private int kpiPerSecond = 0;
+    [SerializeField] private long currentKpi;
+    [SerializeField] private long kpiPerClick = 1;
+    [SerializeField] private long kpiPerSecond = 0;
 
-    public int CurrentKpi => currentKpi;
-    public int KpiPerClick => kpiPerClick;
-    public int KpiPerSecond => kpiPerSecond;
+    public long CurrentKpi => currentKpi;
+    public long KpiPerClick => kpiPerClick;
+    public long KpiPerSecond => kpiPerSecond;
     public RankData CurrentRank => currentRank;
     public List<RankData> Ranks => ranks;
     public int CurrentRankIndex => ranks.IndexOf(currentRank);
@@ -111,14 +111,14 @@ public class GameManager : MonoBehaviour
 
     public struct WorkClickResult
     {
-        public int kpiEarned;
-        public int xpEarned;
+        public long kpiEarned;
+        public long xpEarned;
         public bool isCritical;
         public float criticalMultiplier;
 
         public WorkClickResult(
-            int kpiEarned,
-            int xpEarned,
+            long kpiEarned,
+            long xpEarned,
             bool isCritical,
             float criticalMultiplier)
         {
@@ -208,10 +208,10 @@ public class GameManager : MonoBehaviour
     [Serializable]
     private class SaveData
     {
-        public int experience;
-        public int kpi;
-        public int kpiPerClick;
-        public int kpiPerSecond;
+        public long experience;
+        public long kpi;
+        public long kpiPerClick;
+        public long kpiPerSecond;
 
         public string currentRankId;
         public string currentRankName;
@@ -277,7 +277,7 @@ public class GameManager : MonoBehaviour
 
     // ================= EXPERIENCE =================
 
-    private void AddExperience(int amount)
+    private void AddExperience(long amount)
     {
         if (amount <= 0) return;
 
@@ -313,19 +313,19 @@ public class GameManager : MonoBehaviour
 
     // ================= KPI =================
 
-    private void AddKpi(int amount)
+    private void AddKpi(long amount)
     {
         if (amount <= 0) return;
         currentKpi += amount;
     }
 
-    public void AddKpiPublic(int amount)
+    public void AddKpiPublic(long amount)
     {
         AddKpi(amount);
         NotifyStateChanged();
     }
 
-    public void AddXpPublic(int amount)
+    public void AddXpPublic(long amount)
     {
         AddExperience(amount);
         NotifyStateChanged();
@@ -342,13 +342,13 @@ public class GameManager : MonoBehaviour
             UnityEngine.Random.value < safeCriticalChance;
 
         float kpiMultiplierForClick = isCritical ? safeCriticalMultiplier : 1f;
-        int kpiEarned = Mathf.RoundToInt(
-            kpiPerClick * clickKpiMultiplier * kpiMultiplierForClick
+        long kpiEarned = (long)Math.Round(
+            (double)kpiPerClick * clickKpiMultiplier * kpiMultiplierForClick
         );
 
         AddKpi(kpiEarned);
 
-        int xpEarned = Mathf.RoundToInt(kpiPerClick * xpMultiplier);
+        long xpEarned = (long)Math.Round((double)kpiPerClick * xpMultiplier);
         AddExperience(xpEarned);
         StatsTracker.Instance?.AddKpi(kpiEarned);
         NotifyStateChanged();
@@ -369,9 +369,9 @@ public class GameManager : MonoBehaviour
         if (passiveTimer >= 1f)
         {
             passiveTimer -= 1f;
-            int earned = Mathf.RoundToInt(kpiPerSecond * passiveKpiMultiplier);
+            long earned = (long)Math.Round((double)kpiPerSecond * passiveKpiMultiplier);
             AddKpi(earned);
-            int xpEarned = Mathf.RoundToInt(kpiPerSecond * xpMultiplier);
+            long xpEarned = (long)Math.Round((double)kpiPerSecond * xpMultiplier);
             AddExperience(xpEarned);
             StatsTracker.Instance?.AddKpi(earned);
             NotifyStateChanged();
@@ -399,7 +399,7 @@ public class GameManager : MonoBehaviour
     {
         Upgrade upg = GetCurrentUpgrade(slotType);
         if (upg == null) return false;
-        int price = Mathf.RoundToInt(upg.basePrice * cardDiscountMultiplier);
+        long price = (long)Math.Round((double)upg.basePrice * cardDiscountMultiplier);
         return currentKpi >= price;
     }
 
@@ -412,7 +412,7 @@ public class GameManager : MonoBehaviour
         }
 
         Upgrade upg = branches[slotType].GetCurrentUpgrade();
-        int price = upg != null ? Mathf.RoundToInt(upg.basePrice * cardDiscountMultiplier) : 0;
+        long price = upg != null ? (long)Math.Round((double)upg.basePrice * cardDiscountMultiplier) : 0;
         if (upg == null || currentKpi < price)
         {
             audioManager?.PlayError();
@@ -622,6 +622,14 @@ public class GameManager : MonoBehaviour
         hasSeenCareerCompletedScreen = data.hasSeenCareerCompletedScreen;
         careerCompletedAtUtcTicks = data.careerCompletedAtUtcTicks;
 
+        // Repair saves written before the int->long fix: an overflowed
+        // accumulator could be stored as a negative value. KPI/XP are never
+        // negative in this economy, so clamp them back to a valid floor.
+        if (currentExperience < 0) currentExperience = 0;
+        if (currentKpi < 0) currentKpi = 0;
+        if (kpiPerClick < 1) kpiPerClick = 1;
+        if (kpiPerSecond < 0) kpiPerSecond = 0;
+
         // --- Branch indices ---
 
         if (data.branches != null)
@@ -662,12 +670,12 @@ public class GameManager : MonoBehaviour
 
             offlineSeconds = System.Math.Min(offlineSeconds, 4 * 3600.0);
 
-            int earnedKpi = (int)(kpiPerSecond * offlineSeconds * 0.6);
+            long earnedKpi = (long)((double)kpiPerSecond * offlineSeconds * 0.6);
 
             bool isCeo = ranks.IndexOf(currentRank) >= ranks.Count - 1;
-            int earnedXp = 0;
+            long earnedXp = 0;
             if (!isCeo && kpiPerSecond > 0)
-                earnedXp = (int)(kpiPerSecond * xpMultiplier * offlineSeconds * 0.6);
+                earnedXp = (long)((double)kpiPerSecond * xpMultiplier * offlineSeconds * 0.6);
 
             if (earnedKpi > 0)
                 currentKpi += earnedKpi;

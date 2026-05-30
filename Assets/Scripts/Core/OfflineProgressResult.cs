@@ -2,8 +2,8 @@
 public struct OfflineProgressResult
 {
     public double offlineSeconds;
-    public int earnedKpi;
-    public int earnedXp;
+    public long earnedKpi;
+    public long earnedXp;
     public bool wasApplied;
     public bool shouldShowPopup;
 }
