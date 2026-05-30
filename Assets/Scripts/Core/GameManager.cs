@@ -496,6 +496,13 @@ public class GameManager : MonoBehaviour
 
     public void ResetProgress()
     {
+        ResetProgress(true);
+    }
+
+    // saveAfterReset=false leaves no save on disk → true "first launch" state
+    // (main menu will show no "Continue", tutorial shows on next new game).
+    public void ResetProgress(bool saveAfterReset)
+    {
         PlayerPrefs.DeleteKey(SAVE_KEY);
 
         currentExperience = 0;
@@ -521,7 +528,10 @@ public class GameManager : MonoBehaviour
 
         StatsTracker.Instance?.ResetStats();
         audioManager?.PlayMusicForRank(currentRank);
-        SaveGame();
+
+        if (saveAfterReset)
+            SaveGame();
+
         OnStateChanged?.Invoke();
     }
 

@@ -196,6 +196,20 @@ public class MenuNavigationController : MonoBehaviour
         );
     }
 
+    // Full reset to a "first launch" state, then refresh the main menu so it
+    // looks like a brand-new install (no Continue). Called from the menu RESET button.
+    public void ConfirmResetProgress()
+    {
+        confirmDialog.Show(
+            "Сброс прогресса",
+            "Сбросить весь прогресс?\nИгра начнётся с нуля, как при первом запуске.",
+            onConfirm: () => {
+                gameManager.ResetProgress(saveAfterReset: false);
+                ShowMainMenu(hasSave: false);
+            }
+        );
+    }
+
     public void ConfirmReturnToMenu()
     {
         confirmDialog.Show(

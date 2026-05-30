@@ -3238,6 +3238,7 @@ MonoBehaviour:
   settingsButton: {fileID: 886071112}
   statsButton: {fileID: 1902597566}
   quitButton: {fileID: 1924428565}
+  resetButton: {fileID: 858215953}
 --- !u!114 &311561943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3292,6 +3293,7 @@ RectTransform:
   - {fileID: 431428843}
   - {fileID: 1507879750}
   - {fileID: 1070416830}
+  - {fileID: 858215952}
   m_Father: {fileID: 1537429710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -7622,7 +7624,6 @@ RectTransform:
   - {fileID: 297721447}
   - {fileID: 1016519128}
   - {fileID: 1067604935}
-  - {fileID: 858215952}
   - {fileID: 682411373}
   - {fileID: 717542489}
   - {fileID: 1183625719}
@@ -7976,13 +7977,13 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 640840298}
-  m_Father: {fileID: 838070800}
+  m_Father: {fileID: 311561945}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 490.62, y: -939.0458}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -30, y: 30}
   m_SizeDelta: {x: 98.75, y: 41.9061}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 1, y: 0}
 --- !u!114 &858215953
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8026,19 +8027,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 858215954}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1292502899}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: ResetProgress
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &858215954
 MonoBehaviour:
   m_ObjectHideFlags: 0
