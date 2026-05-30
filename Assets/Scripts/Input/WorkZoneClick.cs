@@ -1,5 +1,5 @@
 // WorkZoneClick.cs
-// Version: 2026-05-30 v1.8 (modal popup blocking)
+// Version: 2026-05-30 v1.9 (lazy screen-light lookup across additive env scenes)
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -68,9 +68,9 @@ public class WorkZoneClick : MonoBehaviour
             audioManager?.PlayClick();
 
         if (clickResult.isCritical)
-            laptopScreenLight?.TriggerLightPulse(criticalPulseStrength);
+            TriggerScreenLightPulse(criticalPulseStrength);
         else
-            laptopScreenLight?.TriggerLightPulse();
+            TriggerScreenLightPulse(1f);
 
         StartCoroutine(SpawnFloatingKpiWithDelay(
             screenPos,
@@ -80,6 +80,18 @@ public class WorkZoneClick : MonoBehaviour
     }
 
     // ================= INTERNAL =================
+
+    // The screen light lives in an additively-loaded environment scene that
+    // isn't present at Start, and gets destroyed/recreated on rank change.
+    // Resolve it lazily: re-find whenever the cached reference is null
+    // (Unity's == null is true for destroyed objects too).
+    private void TriggerScreenLightPulse(float strength)
+    {
+        if (laptopScreenLight == null)
+            laptopScreenLight = FindObjectOfType<LaptopScreenLightController>();
+
+        laptopScreenLight?.TriggerLightPulse(strength);
+    }
 
     private IEnumerator SpawnFloatingKpiWithDelay(
         Vector2 screenPos,

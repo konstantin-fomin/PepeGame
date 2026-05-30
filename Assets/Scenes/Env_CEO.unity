@@ -629,14 +629,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LaptopScreenLightController
   light2D: {fileID: 1736082975}
   characterLight: {fileID: 641937949}
-  baseIntensity: 0.05
-  pulseIntensity: 0.18
+  baseIntensity: 0.02
+  pulseIntensity: 0.03
   pulseSpeed: 8
   returnSpeed: 3
   breathingSpeed: 0.8
-  breathingAmount: 0.05
-  characterBaseIntensity: 0.6
-  characterPulseIntensity: 1.5
+  breathingAmount: 0.02
+  characterBaseIntensity: 0.1
+  characterPulseIntensity: 0.15
 --- !u!1 &1107418339
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,6 +965,7 @@ MonoBehaviour:
   flickerMinIntensity: 0.15
   flickerMaxIntensity: 0.55
   enableFlicker: 0
+  lampSoundVolume: 0.15
 --- !u!114 &1868595140
 MonoBehaviour:
   m_ObjectHideFlags: 0

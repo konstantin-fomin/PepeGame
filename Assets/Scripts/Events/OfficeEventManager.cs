@@ -47,12 +47,21 @@ public class OfficeEventManager : MonoBehaviour
     private Coroutine toastVisibilityCoroutine;
     private Coroutine activeEventCoroutine;
 
+    // Anti-repeat: rolling window of recently shown event ids.
+    private List<string> recentEventIds = new List<string>();
+    private const int RECENT_WINDOW = 5;
+
+    // canRepeat=false events: shown at most once per session.
+    private HashSet<string> shownNonRepeatableIds = new HashSet<string>();
+
     private void Awake() => Instance = this;
 
     public void StartEventSystem()
     {
         if (isRunning) return;
         isRunning = true;
+        recentEventIds.Clear();
+        shownNonRepeatableIds.Clear();
         StartCoroutine(EventLoop());
     }
 
@@ -177,20 +186,38 @@ private bool IsGameplayAvailableForEvent()
                 int maxIdx = rankOrder.IndexOf(e.maxRankId.ToLower());
                 if (maxIdx >= 0 && currentRankIdx > maxIdx) return false;
             }
+            // FIX 2: non-repeatable events appear at most once per session.
+            if (!e.canRepeat && shownNonRepeatableIds.Contains(e.id)) return false;
             return true;
         }).ToList();
 
         if (available.Count == 0) return null;
 
-        int totalWeight = available.Sum(e => e.weight);
+        // FIX 1: drop recently shown events, unless that empties the pool.
+        var pool = available.Where(e => !recentEventIds.Contains(e.id)).ToList();
+        if (pool.Count == 0) pool = available;
+
+        int totalWeight = pool.Sum(e => e.weight);
         int roll = Random.Range(0, totalWeight);
         int cumulative = 0;
-        foreach (var e in available)
+        OfficeEventData picked = null;
+        foreach (var e in pool)
         {
             cumulative += e.weight;
-            if (roll < cumulative) return e;
+            if (roll < cumulative) { picked = e; break; }
         }
-        return available[available.Count - 1];
+        if (picked == null) picked = pool[pool.Count - 1];
+
+        // FIX 1: record in the rolling recent window.
+        recentEventIds.Add(picked.id);
+        if (recentEventIds.Count > RECENT_WINDOW)
+            recentEventIds.RemoveAt(0);
+
+        // FIX 2: mark non-repeatable event as used for this session.
+        if (!picked.canRepeat)
+            shownNonRepeatableIds.Add(picked.id);
+
+        return picked;
     }
 
 

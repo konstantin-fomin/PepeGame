@@ -299,13 +299,13 @@ public class UIController : MonoBehaviour
         float remaining = gameManager.GetSpecialRemainingTime();
 
         float pulseFreq = remaining <= 3f
-            ? Mathf.Lerp(8f, 2f, remaining / 3f)
-            : 2f;
+            ? Mathf.Lerp(4f, 1f, remaining / 3f)
+            : 1f;
 
         float oscillation = Mathf.Abs(Mathf.Sin(Time.time * pulseFreq * Mathf.PI));
 
         float fadeOut = Mathf.Clamp01(progress * 5f);
-        float alpha = oscillation * 0.3f * fadeOut;
+        float alpha = oscillation * 0.15f * fadeOut;
 
         Color c = vignetteColor;
         c.a = alpha;
