@@ -183,12 +183,8 @@ public class GameManager : MonoBehaviour
         if (currentRank.requiredKpi > 0 && currentExperience < currentRank.requiredKpi)
             return;
 
-        if (branches == null) return;
-        foreach (var pair in branches)
-        {
-            if (!pair.Value.IsFinished()) return;
-        }
-
+        // Win condition: reach CEO and hit the XP target. Buying out every
+        // upgrade branch is NOT required.
         isCareerCompleted = true;
         careerCompletedAtUtcTicks = DateTime.UtcNow.Ticks;
         SaveGame();

@@ -24,3 +24,8 @@ UserSettings/
 .agents/
 .codex/
 AGENTS.md
+
+# Build outputs
+Build_WebGL/
+Build_Windows/
+*.zip
