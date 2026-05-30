@@ -19,3 +19,8 @@ UserSettings/
 *.pidb
 *.booproj
 *.svd
+
+# Local agent tooling (not part of the game project)
+.agents/
+.codex/
+AGENTS.md
