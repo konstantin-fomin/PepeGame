@@ -26,6 +26,12 @@ public class MainMenuController : MonoBehaviour
         if (resetButton != null)
             resetButton.onClick.AddListener(() =>
                 MenuNavigationController.Instance.ConfirmResetProgress());
+
+        // Application.Quit() is a no-op in the browser — hide the Quit button on WebGL.
+#if UNITY_WEBGL
+        if (quitButton != null)
+            quitButton.gameObject.SetActive(false);
+#endif
     }
 
     public void SetHasSave(bool hasSave)
