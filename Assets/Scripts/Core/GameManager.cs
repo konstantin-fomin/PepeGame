@@ -300,14 +300,6 @@ public class GameManager : MonoBehaviour
         currentRank = newRank;
         InitFromRank(newRank);
 
-        // Cancel active specials silently — no end sound on rank-up
-        foreach (var s in activeSpecials)
-        {
-            kpiPerClick -= s.upgrade.clickBonus;
-            kpiPerSecond -= s.upgrade.passiveBonus;
-        }
-        activeSpecials.Clear();
-        ResetActiveMults();
         audioManager?.StopSpecialLoop();
 
         audioManager?.PlayRankUp();
@@ -481,7 +473,8 @@ public class GameManager : MonoBehaviour
             if (activeSpecials.Count == 0)
             {
                 audioManager?.StopSpecialLoop();
-                audioManager?.PlaySpecialEnd();
+                if (!RankUpPopupView.IsShowing)
+                    audioManager?.PlaySpecialEnd();
             }
 
             NotifyStateChanged();
