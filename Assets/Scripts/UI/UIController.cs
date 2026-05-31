@@ -72,6 +72,9 @@ public class UIController : MonoBehaviour
         if (specialCard == null)     { Debug.LogError("[UI] specialCard not assigned", this);     valid = false; }
 
         if (!valid) enabled = false;
+
+        if (rankProgressBar != null)
+            rankProgressBar.interactable = false;
     }
 
     private void OnEnable()
