@@ -106,8 +106,17 @@ public class ActiveOfficeEventManager : MonoBehaviour
         }
 
         isBoostActive = true;
-        OnActiveEventStarted?.Invoke(data.title, data.durationSeconds);
+        OnActiveEventStarted?.Invoke(LocalizedTitle(data), data.durationSeconds);
         boostCoroutine = StartCoroutine(BoostTimer(data));
+    }
+
+    // Localized title for the running-event indicator (falls back to the asset value).
+    private string LocalizedTitle(ActiveOfficeEventData data)
+    {
+        var loc = LocalizationManager.Instance;
+        if (loc != null && !string.IsNullOrEmpty(data.locId) && loc.TryGet(data.locId, out string v))
+            return v;
+        return data.title;
     }
 
     private IEnumerator BoostTimer(ActiveOfficeEventData data)

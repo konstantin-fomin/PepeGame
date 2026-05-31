@@ -26,8 +26,8 @@ public class OfflineProgressPopupView : MonoBehaviour
     {
         if (!result.shouldShowPopup) return;
 
-        titleText.text = "ПОКА ВАС НЕ БЫЛО";
-        descriptionText.text = "Офис сделал вид, что работал.";
+        titleText.text = L("LOC_0049", "ПОКА ВАС НЕ БЫЛО");
+        descriptionText.text = L("LOC_0050", "Офис сделал вид, что работал.");
 
         bool showKpi = result.earnedKpi > 0;
         bool showXp = result.earnedXp > 0;
@@ -43,6 +43,11 @@ public class OfflineProgressPopupView : MonoBehaviour
         IsShowing = true;
         gameObject.SetActive(true);
         StartCoroutine(FadeIn());
+    }
+
+    private static string L(string key, string fallback)
+    {
+        return LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : fallback;
     }
 
     private void Hide()

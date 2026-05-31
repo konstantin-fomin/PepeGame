@@ -19,6 +19,7 @@ MonoBehaviour:
     \u043D\u0435 \u0442\u0430\u043C."
   effectDescription: 
   buttonText: 
+  locId: LOC_0267
   effects:
   - type: 6
     value: 0

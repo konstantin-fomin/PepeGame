@@ -18,6 +18,7 @@ MonoBehaviour:
     \u041A\u0430\u043A \u043E\u0431\u044B\u0447\u043D\u043E."
   effectDescription: "\u041A\u043B\u0438\u043A\u0438 x1.5 \xB7 40 \u0441\u0435\u043A."
   buttonText: "\u0424\u0418\u041A\u0421\u0418\u0422\u042C"
+  locId: LOC_0295
   effectType: 0
   effectValue: 1.5
   durationSeconds: 40

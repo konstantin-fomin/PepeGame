@@ -52,20 +52,20 @@ public class CareerCompletedScreenView : MonoBehaviour
 
     public void Show(long totalKpiEarned, float totalPlaytimeSeconds, int totalClicks)
     {
-        titleText.text = "КАРЬЕРА ЗАВЕРШЕНА";
-        bodyText.text =
+        titleText.text = L("LOC_0051", "КАРЬЕРА ЗАВЕРШЕНА");
+        bodyText.text = L("LOC_0052",
             "Вы достигли CEO.\n" +
             "Теперь можно ничего не понимать,\n" +
-            "но уверенно согласовывать процессы.";
+            "но уверенно согласовывать процессы.");
 
-        kpiStatText.text = $"Итоговый KPI: <color={VALUE_COLOR}>{NumberFormatter.Format(totalKpiEarned)}</color>";
-        timeStatText.text = $"Время в офисе: <color={VALUE_COLOR}>{FormatTime(totalPlaytimeSeconds)}</color>";
-        clicksStatText.text = $"Кликов совершено: <color={VALUE_COLOR}>{NumberFormatter.Format(totalClicks)}</color>";
+        kpiStatText.text = $"{L("LOC_0053", "Итоговый KPI:")} <color={VALUE_COLOR}>{NumberFormatter.Format(totalKpiEarned)}</color>";
+        timeStatText.text = $"{L("LOC_0032", "Время в офисе:")} <color={VALUE_COLOR}>{FormatTime(totalPlaytimeSeconds)}</color>";
+        clicksStatText.text = $"{L("LOC_0034", "Кликов совершено:")} <color={VALUE_COLOR}>{NumberFormatter.Format(totalClicks)}</color>";
 
-        confirmTitleText.text = "НАЧАТЬ НОВУЮ КАРЬЕРУ?";
-        confirmMessageText.text =
+        confirmTitleText.text = L("LOC_0054", "НАЧАТЬ НОВУЮ КАРЬЕРУ?");
+        confirmMessageText.text = L("LOC_0055",
             "Текущий прогресс будет сброшен.\n" +
-            "HR обещает, что в этот раз будет иначе.";
+            "HR обещает, что в этот раз будет иначе.");
 
         mainContent.SetActive(true);
         confirmContent.SetActive(false);
@@ -76,6 +76,11 @@ public class CareerCompletedScreenView : MonoBehaviour
 
         if (confetti != null)
             confetti.PlayFinalCareer();
+    }
+
+    private static string L(string key, string fallback)
+    {
+        return LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : fallback;
     }
 
     private void HandleStayCeo()

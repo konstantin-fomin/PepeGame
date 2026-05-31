@@ -1,7 +1,8 @@
 // AudioManager.cs
-// Version: 2026-05-29 v1.7 (Per-track volume sliders)
+// Version: 2026-05-31 v1.8 (mute toggle + persisted audio settings + change event)
 
 using UnityEngine;
+using System;
 using System.Collections;
 
 public class AudioManager : MonoBehaviour
@@ -93,6 +94,24 @@ public class AudioManager : MonoBehaviour
     private float musicVolumeMultiplier = 1f;
     private float sfxVolumeMultiplier = 1f;
 
+    // Mute support: remember the last audible level so unmute restores it.
+    private float lastNonZeroMusicVolume = 0.7f;
+    private float lastNonZeroSfxVolume = 0.7f;
+    private bool isMuted = false;
+
+    public event Action OnAudioSettingsChanged;
+
+    public bool IsMuted => isMuted;
+    public float MusicVolume => musicVolumeMultiplier;
+    public float SfxVolume => sfxVolumeMultiplier;
+
+    // PlayerPrefs keys (reusing the pre-existing MusicVolume/SFXVolume keys).
+    private const string PK_MUSIC = "MusicVolume";
+    private const string PK_SFX = "SFXVolume";
+    private const string PK_LAST_MUSIC = "LastMusicVolume";
+    private const string PK_LAST_SFX = "LastSFXVolume";
+    private const string PK_MUTED = "IsMuted";
+
     // ================= UNITY =================
 
     private void Start()
@@ -103,8 +122,7 @@ public class AudioManager : MonoBehaviour
         if (musicSourceA != null) musicSourceA.loop = true;
         if (musicSourceB != null) musicSourceB.loop = true;
 
-        SetMusicVolume(PlayerPrefs.GetFloat("MusicVolume", 1f));
-        sfxVolumeMultiplier = PlayerPrefs.GetFloat("SFXVolume", 1f);
+        LoadAudioSettings();
     }
 
     // ================= VOLUME API =================
@@ -112,28 +130,105 @@ public class AudioManager : MonoBehaviour
     public void SetMusicVolume(float value)
     {
         musicVolumeMultiplier = Mathf.Clamp01(value);
-        float targetVol = masterMusicVolume * currentTrackVolume * musicVolumeMultiplier;
+        if (musicVolumeMultiplier > 0f) lastNonZeroMusicVolume = musicVolumeMultiplier;
 
-        if (activeMusicSource != null && activeMusicSource.isPlaying)
-            activeMusicSource.volume = targetVol;
-
-        PlayerPrefs.SetFloat("MusicVolume", value);
+        ApplyMusicVolumeToSource();
+        AutoDetectMuteState();
+        SaveAudioSettings();
+        OnAudioSettingsChanged?.Invoke();
     }
 
     public void SetSFXVolume(float value)
     {
         sfxVolumeMultiplier = Mathf.Clamp01(value);
-        PlayerPrefs.SetFloat("SFXVolume", value);
+        if (sfxVolumeMultiplier > 0f) lastNonZeroSfxVolume = sfxVolumeMultiplier;
 
+        ApplySfxVolumeToSource();
+        AutoDetectMuteState();
+        SaveAudioSettings();
+        OnAudioSettingsChanged?.Invoke();
+    }
+
+    public void ToggleMute()
+    {
+        if (!isMuted)
+        {
+            if (musicVolumeMultiplier > 0f) lastNonZeroMusicVolume = musicVolumeMultiplier;
+            if (sfxVolumeMultiplier > 0f) lastNonZeroSfxVolume = sfxVolumeMultiplier;
+
+            SetMusicVolume(0f);
+            SetSFXVolume(0f);
+            isMuted = true;
+        }
+        else
+        {
+            float restoreMusic = lastNonZeroMusicVolume > 0f ? lastNonZeroMusicVolume : 0.7f;
+            float restoreSfx = lastNonZeroSfxVolume > 0f ? lastNonZeroSfxVolume : 0.7f;
+
+            SetMusicVolume(restoreMusic);
+            SetSFXVolume(restoreSfx);
+            isMuted = false;
+        }
+
+        SaveAudioSettings();
+        OnAudioSettingsChanged?.Invoke();
+    }
+
+    // Sliders dragged to/from zero implicitly toggle the mute flag.
+    private void AutoDetectMuteState()
+    {
+        if (musicVolumeMultiplier > 0f && sfxVolumeMultiplier > 0f) isMuted = false;
+        else if (musicVolumeMultiplier <= 0f && sfxVolumeMultiplier <= 0f) isMuted = true;
+    }
+
+    private void ApplyMusicVolumeToSource()
+    {
+        float targetVol = masterMusicVolume * currentTrackVolume * musicVolumeMultiplier;
+        if (activeMusicSource != null && activeMusicSource.isPlaying)
+            activeMusicSource.volume = targetVol;
+    }
+
+    private void ApplySfxVolumeToSource()
+    {
         if (specialLoopSource != null && specialLoopSource.isPlaying)
             specialLoopSource.volume = specialLoopVolume * sfxVolumeMultiplier;
     }
 
+    private void SaveAudioSettings()
+    {
+        PlayerPrefs.SetFloat(PK_MUSIC, musicVolumeMultiplier);
+        PlayerPrefs.SetFloat(PK_SFX, sfxVolumeMultiplier);
+        PlayerPrefs.SetFloat(PK_LAST_MUSIC, lastNonZeroMusicVolume);
+        PlayerPrefs.SetFloat(PK_LAST_SFX, lastNonZeroSfxVolume);
+        PlayerPrefs.SetInt(PK_MUTED, isMuted ? 1 : 0);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadAudioSettings()
+    {
+        musicVolumeMultiplier = Mathf.Clamp01(PlayerPrefs.GetFloat(PK_MUSIC, 1f));
+        sfxVolumeMultiplier = Mathf.Clamp01(PlayerPrefs.GetFloat(PK_SFX, 1f));
+        lastNonZeroMusicVolume = PlayerPrefs.GetFloat(PK_LAST_MUSIC, 0.7f);
+        lastNonZeroSfxVolume = PlayerPrefs.GetFloat(PK_LAST_SFX, 0.7f);
+        isMuted = PlayerPrefs.GetInt(PK_MUTED, 0) == 1;
+
+        if (isMuted)
+        {
+            musicVolumeMultiplier = 0f;
+            sfxVolumeMultiplier = 0f;
+        }
+
+        ApplyMusicVolumeToSource();
+        ApplySfxVolumeToSource();
+
+        OnAudioSettingsChanged?.Invoke();
+    }
+
     public float GetMusicVolume() =>
-        PlayerPrefs.GetFloat("MusicVolume", 1f);
+        PlayerPrefs.GetFloat(PK_MUSIC, 1f);
 
     public float GetSFXVolume() =>
-        PlayerPrefs.GetFloat("SFXVolume", 1f);
+        PlayerPrefs.GetFloat(PK_SFX, 1f);
 
     private float ComputeMusicVolume(float trackVolume)
     {

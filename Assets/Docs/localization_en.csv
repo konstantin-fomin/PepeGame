@@ -1,0 +1,319 @@
+﻿ID,Section,Context,RU,EN
+LOC_0001,UI,Главное меню - подзаголовок,Корпоративный симулятор выживания,Corporate survival simulator
+LOC_0002,UI,Главное меню - кнопка продолжить,НАЧАТЬ СМЕНУ,START SHIFT
+LOC_0003,UI,Главное меню - кнопка начать,НАЧАТЬ,START
+LOC_0004,UI,Главное меню - кнопка новой карьеры,НОВАЯ КАРЬЕРА,NEW CAREER
+LOC_0005,UI,Кнопка - настройки,Настройки,Settings
+LOC_0006,UI,Кнопка - статистика,Статистика,Statistics
+LOC_0007,UI,Кнопка - выход,Выход,Exit
+LOC_0008,UI,Пауза - заголовок,ПАУЗА,PAUSE
+LOC_0009,UI,Пауза - кнопка продолжить,Продолжить смену,Continue Shift
+LOC_0010,UI,Кнопка - главное меню,Главное меню,Main Menu
+LOC_0011,UI,Кнопка - вернуться к работе,Назад к работе,Back to Work
+LOC_0012,UI,Настройки - заголовок,НАСТРОЙКИ,SETTINGS
+LOC_0013,UI,Настройки - музыка,Музыка,Music
+LOC_0014,UI,Настройки - звуки,Звуки,Sound
+LOC_0015,UI,Настройки - полный экран,Полный экран,Fullscreen
+LOC_0016,UI,Кнопка - назад,Назад,Back
+LOC_0017,UI,Статистика - заголовок экрана,ОТЧЁТ О ПРОИЗВОДИТЕЛЬНОСТИ,PERFORMANCE REPORT
+LOC_0018,UI,Статистика - подпись комментария,Комментарий HR:,HR comment:
+LOC_0019,UI,Карьерный трек - заголовок,КАРЬЕРНЫЙ ТРЕК,CAREER TRACK
+LOC_0020,UI,Диалог - кнопка подтвердить,Подтвердить,Confirm
+LOC_0021,UI,Диалог - кнопка отмены (верхний регистр),ОТМЕНА,CANCEL
+LOC_0022,UI,Диалог - кнопка отмены,Отмена,Cancel
+LOC_0023,UI,Оффлайн-награда - кнопка забрать,ЗАБРАТЬ,CLAIM
+LOC_0024,UI,Попап повышения - кнопка продолжить,Продолжить,Continue
+LOC_0025,UI,Финал - кнопка остаться CEO,ОСТАТЬСЯ CEO,STAY CEO
+LOC_0026,UI,"Карточка - оверлей «всё куплено», заголовок",ПЛАН ВЫПОЛНЕН,PLAN COMPLETE
+LOC_0027,UI,"Карточка - оверлей «всё куплено», описание",Больше задач не завезли.,No more tasks were shipped.
+LOC_0028,UI,HUD - пассивный доход,+{0} KPI / сек,+{0} KPI / sec
+LOC_0029,UI,Карьерный трек - до повышения,До повышения: {0} XP,Until promotion: {0} XP
+LOC_0030,UI,Карьерный трек - максимальный ранг,Максимальный ранг достигнут,Max rank reached
+LOC_0031,UI,Таймер сессии - в офисе,в офисе: {0},in office: {0}
+LOC_0032,UI,Статистика - подпись «время в офисе»,Время в офисе:,Time in office:
+LOC_0033,UI,Статистика - подпись «KPI заработано»,KPI заработано:,KPI earned:
+LOC_0034,UI,Статистика - подпись «кликов совершено»,Кликов совершено:,Clicks made:
+LOC_0035,UI,Статистика - подпись «текущий ранг»,Текущий ранг:,Current rank:
+LOC_0036,UI,Статистика - подпись «карьера»,Карьера:,Career:
+LOC_0037,UI,Статистика - статус «активна»,Активна,Active
+LOC_0038,UI,Статистика - статус «завершена»,Завершена,Complete
+LOC_0039,UI,Статистика - флейвор 1,Показатели приемлемые. Отдых не одобрен.,Metrics acceptable. Rest denied.
+LOC_0040,UI,Статистика - флейвор 2,Компания ценит ваше потраченное время.,The company values your wasted time.
+LOC_0041,UI,Статистика - флейвор 3,Продуктивность на уровне. Ожиданий нет.,Productivity is fine. Expectations are not.
+LOC_0042,UI,Статистика - флейвор 4,HR доволен. Это подозрительно.,HR is pleased. Suspicious.
+LOC_0043,UI,Статистика - флейвор 5,Вы кликаете. Это уже больше чем от вас ждали.,You click. That's already more than expected.
+LOC_0044,UI,Статистика - флейвор 6,Прогресс зафиксирован. Премия не предусмотрена.,Progress logged. Bonus not included.
+LOC_0045,UI,Статистика - флейвор 7,Данные получены. Выводы неутешительны.,Data received. Conclusions are bleak.
+LOC_0046,UI,Статистика - флейвор 8,Спасибо за службу. Продолжайте страдать.,Thank you for your service. Keep suffering.
+LOC_0047,UI,Туториал - заголовок,ПЕРВАЯ СМЕНА,FIRST SHIFT
+LOC_0048,UI,Туториал - текст,"Кликайте по рабочей зоне, чтобы выжимать KPI. Покупайте карточки, чтобы работать эффективнее и страдать продуктивнее. XP двигает вас к следующему рангу.",Click the work zone to squeeze out KPI. Buy cards to work more efficiently and suffer more productively. XP moves you toward the next rank.
+LOC_0049,UI,Оффлайн-попап - заголовок,ПОКА ВАС НЕ БЫЛО,WHILE YOU WERE AWAY
+LOC_0050,UI,Оффлайн-попап - описание,"Офис сделал вид, что работал.",The office pretended to work.
+LOC_0051,UI,Финал - заголовок,КАРЬЕРА ЗАВЕРШЕНА,CAREER COMPLETE
+LOC_0052,UI,Финал - текст,"Вы достигли CEO. Теперь можно ничего не понимать, но уверенно согласовывать процессы.",You reached CEO. Now you can understand nothing and approve processes with confidence.
+LOC_0053,UI,Финал - подпись «итоговый KPI»,Итоговый KPI:,Final KPI:
+LOC_0054,UI,"Финал - подтверждение, заголовок",НАЧАТЬ НОВУЮ КАРЬЕРУ?,START A NEW CAREER?
+LOC_0055,UI,"Финал - подтверждение, текст","Текущий прогресс будет сброшен. HR обещает, что в этот раз будет иначе.",Current progress will be reset. HR promises this time will be different.
+LOC_0056,UI,Диалог «новая карьера» - заголовок,Новая карьера,New Career
+LOC_0057,UI,Диалог «новая карьера» - текст,Начать заново? Весь прогресс будет сброшен.,Start over? All progress will be reset.
+LOC_0058,UI,Диалог «сброс прогресса» - заголовок,Сброс прогресса,Reset Progress
+LOC_0059,UI,Диалог «сброс прогресса» - текст,"Сбросить весь прогресс? Игра начнётся с нуля, как при первом запуске.","Reset all progress? The game will start from zero, like the first launch."
+LOC_0060,UI,Диалог «главное меню» - текст,Выйти в главное меню? Прогресс будет сохранён.,Exit to main menu? Progress will be saved.
+LOC_0061,UI,Диалог «выход» - текст,Выйти из игры? Прогресс будет сохранён.,Exit the game? Progress will be saved.
+LOC_0062,CARDS,Карточка 1 (Intern/Click) - название,Нервный клик,Nervous Click
+LOC_0063,CARDS,Карточка 1 (Intern/Click) - описание,Мышка страдает вместе с тобой,The mouse suffers with you
+LOC_0064,CARDS,Карточка 2 (Intern/Click) - название,Первый дедлайн,First Deadline
+LOC_0065,CARDS,Карточка 2 (Intern/Click) - описание,"Ты не понял, но уже срочно","You don't get it, but it's urgent"
+LOC_0066,CARDS,Карточка 3 (Intern/Click) - название,Слепой тык,Blind Poke
+LOC_0067,CARDS,Карточка 3 (Intern/Click) - описание,"Метод научный, просто без науки","Scientific method, minus science"
+LOC_0068,CARDS,Карточка 58 (Intern/Click) - название,Тык по инструкции,Click by Manual
+LOC_0069,CARDS,Карточка 58 (Intern/Click) - описание,"Ничего не понял, но нажал","Understood nothing, clicked anyway"
+LOC_0070,CARDS,Карточка 4 (Intern/Passive) - название,Фоновая паника,Background Panic
+LOC_0071,CARDS,Карточка 4 (Intern/Passive) - описание,"KPI капает, тревога тоже","KPI drips, anxiety too"
+LOC_0072,CARDS,Карточка 5 (Intern/Passive) - название,Автоответчик стажёра,Intern Autoreply
+LOC_0073,CARDS,Карточка 5 (Intern/Passive) - описание,"Никто не читает, но работает","Nobody reads it, but it works"
+LOC_0074,CARDS,Карточка 59 (Intern/Passive) - название,Стажёрская очередь,Intern Queue
+LOC_0075,CARDS,Карточка 59 (Intern/Passive) - описание,"Ждёшь ответа, KPI капает","Waiting for an answer, KPI drips"
+LOC_0076,CARDS,Карточка 60 (Intern/Passive) - название,Открытый туториал,Open Tutorial
+LOC_0077,CARDS,Карточка 60 (Intern/Passive) - описание,"Вкладка висит, польза считается","Tab stays open, value counts"
+LOC_0078,CARDS,Карточка 6 (Intern/Passive) - название,Чужая инструкция,Someone's Manual
+LOC_0079,CARDS,Карточка 6 (Intern/Passive) - описание,"Скопировал чужое, получил своё","Copied theirs, earned yours"
+LOC_0080,CARDS,Карточка 7 (Intern/Special) - название,Бесплатный кофе,Free Coffee
+LOC_0081,CARDS,Карточка 7 (Intern/Special) - описание,"Руки трясутся, но работа идёт","Hands shake, work continues"
+LOC_0082,CARDS,Карточка 8 (Intern/Special) - название,Ментор онлайн,Mentor Online
+LOC_0083,CARDS,Карточка 8 (Intern/Special) - описание,Сейчас объяснит и исчезнет снова,"Will explain now, then vanish again"
+LOC_0084,CARDS,Карточка 61 (Intern/Special) - название,Чай из кулера,Cooler Tea
+LOC_0085,CARDS,Карточка 61 (Intern/Special) - описание,"Вкус сомнительный, скорость рабочая","Questionable taste, working speed"
+LOC_0086,CARDS,Карточка 9 (Junior/Click) - название,Горящие клавиши,Hotkeys on Fire
+LOC_0087,CARDS,Карточка 9 (Junior/Click) - описание,"Пальцы болят, но ты жмёшь дальше","Fingers hurt, you keep pressing"
+LOC_0088,CARDS,Карточка 10 (Junior/Click) - описание,"Если прокатило, значит правильно","If it passed, it was right"
+LOC_0089,CARDS,Карточка 11 (Junior/Click) - название,Спросить в чате,Ask in Chat
+LOC_0090,CARDS,Карточка 11 (Junior/Click) - описание,Ответят через три часа,They'll answer in three hours
+LOC_0091,CARDS,Карточка 62 (Junior/Click) - название,Баг на удачу,Lucky Bug
+LOC_0092,CARDS,Карточка 62 (Junior/Click) - описание,"Нашёл случайно, выглядишь умно","Found by accident, looked smart"
+LOC_0093,CARDS,Карточка 63 (Junior/Click) - название,Мышиная ярость,Mouse Rage
+LOC_0094,CARDS,Карточка 63 (Junior/Click) - описание,"Курсор плачет, задача движется","Cursor cries, task moves"
+LOC_0095,CARDS,Карточка 12 (Junior/Passive) - название,Фоновая суета,Background Fuss
+LOC_0096,CARDS,Карточка 12 (Junior/Passive) - описание,Что-то делается само,Something does itself
+LOC_0097,CARDS,Карточка 13 (Junior/Passive) - название,Вечный статус,Endless Status
+LOC_0098,CARDS,Карточка 13 (Junior/Passive) - описание,"Вроде занят, вроде нет","Busy, maybe not"
+LOC_0099,CARDS,Карточка 64 (Junior/Passive) - название,Джунский автопилот,Junior Autopilot
+LOC_0100,CARDS,Карточка 64 (Junior/Passive) - описание,"Делаешь привычно, страдаешь стабильно","Routine work, stable suffering"
+LOC_0101,CARDS,Карточка 65 (Junior/Passive) - название,Очередь в ревью,Review Queue
+LOC_0102,CARDS,Карточка 65 (Junior/Passive) - описание,"Тебя ждут, KPI идёт","You're waiting, KPI moves"
+LOC_0103,CARDS,Карточка 66 (Junior/Passive) - название,Тикет без ответа,Unanswered Ticket
+LOC_0104,CARDS,Карточка 66 (Junior/Passive) - описание,"Вопрос висит, прогресс считается","Question hangs, progress counts"
+LOC_0105,CARDS,Карточка 14 (Junior/Passive) - название,Задача висит,Task Hangs
+LOC_0106,CARDS,Карточка 14 (Junior/Passive) - описание,"Никто не трогает, KPI идёт","Nobody touches it, KPI flows"
+LOC_0107,CARDS,Карточка 15 (Junior/Special) - название,Гугл знает лучше,Google Knows Better
+LOC_0108,CARDS,Карточка 15 (Junior/Special) - описание,Документация для слабых,Docs are for the weak
+LOC_0109,CARDS,Карточка 16 (Junior/Special) - название,Срочный фикс,Urgent Fix
+LOC_0110,CARDS,Карточка 16 (Junior/Special) - описание,"Сломал одно, поднял другое","Broke one thing, raised another"
+LOC_0111,CARDS,Карточка 17 (Junior/Special) - название,Созвон без цели,Aimless Call
+LOC_0112,CARDS,Карточка 17 (Junior/Special) - описание,"Время умерло, отчёт родился","Time died, report was born"
+LOC_0113,CARDS,Карточка 67 (Junior/Special) - название,Кофе из автомата,Vending Coffee
+LOC_0114,CARDS,Карточка 67 (Junior/Special) - описание,"Не вкусно, зато быстрее","Tastes bad, works faster"
+LOC_0115,CARDS,Карточка 18 (Middle/Click) - название,Костыль работает,Duct Tape Works
+LOC_0116,CARDS,Карточка 18 (Middle/Click) - описание,Главное не трогать,Just don't touch it
+LOC_0117,CARDS,Карточка 19 (Middle/Click) - название,Быстрый ревью,Fast Review
+LOC_0118,CARDS,Карточка 19 (Middle/Click) - описание,"Посмотрел бегло, осудил уверенно","Skimmed it, judged with confidence"
+LOC_0119,CARDS,Карточка 68 (Middle/Click) - название,Уверенный костыль,Confident Duct Tape
+LOC_0120,CARDS,Карточка 68 (Middle/Click) - описание,"Работает странно, но уже принято","Works weird, already approved"
+LOC_0121,CARDS,Карточка 20 (Middle/Click) - название,Тык в проде,Prod Poke
+LOC_0122,CARDS,Карточка 20 (Middle/Click) - описание,"Смело, опасно, почти профессионально","Bold, dangerous, almost professional"
+LOC_0123,CARDS,Карточка 69 (Middle/Click) - название,Быстрый фикс,Quick Fix
+LOC_0124,CARDS,Карточка 69 (Middle/Click) - описание,"Починил быстро, молишься тихо","Fixed fast, praying quietly"
+LOC_0125,CARDS,Карточка 70 (Middle/Click) - название,Правка по памяти,Memory Patch
+LOC_0126,CARDS,Карточка 70 (Middle/Click) - описание,"Где-то видел, значит сойдёт","Saw it somewhere, good enough"
+LOC_0127,CARDS,Карточка 21 (Middle/Passive) - название,Автопилот задач,Task Autopilot
+LOC_0128,CARDS,Карточка 21 (Middle/Passive) - описание,"Ты устал, система делает вид","You're tired, system pretends"
+LOC_0129,CARDS,Карточка 22 (Middle/Passive) - название,Тихий переработ,Quiet Overtime
+LOC_0130,CARDS,Карточка 22 (Middle/Passive) - описание,"Никто не просил, но надо","Nobody asked, still needed"
+LOC_0131,CARDS,Карточка 71 (Middle/Passive) - название,Дежурный мониторинг,On-Duty Monitoring
+LOC_0132,CARDS,Карточка 71 (Middle/Passive) - описание,"Всё зелёное, пока не красное",All green until it turns red
+LOC_0133,CARDS,Карточка 72 (Middle/Passive) - название,Рабочий шум,Work Noise
+LOC_0134,CARDS,Карточка 72 (Middle/Passive) - описание,"Все заняты, цифры ползут","Everyone's busy, numbers crawl"
+LOC_0135,CARDS,Карточка 73 (Middle/Passive) - название,Старый скрипт,Old Script
+LOC_0136,CARDS,Карточка 73 (Middle/Passive) - описание,"Никто не помнит, но помогает","Nobody remembers it, still helps"
+LOC_0137,CARDS,Карточка 23 (Middle/Passive) - название,Табличная магия,Spreadsheet Magic
+LOC_0138,CARDS,Карточка 23 (Middle/Passive) - описание,"Формулы плачут, KPI растёт","Formulas cry, KPI grows"
+LOC_0139,CARDS,Карточка 24 (Middle/Special) - название,Перерыв на мемы,Meme Break
+LOC_0140,CARDS,Карточка 24 (Middle/Special) - описание,"Мозг перезагрузился, вина осталась","Brain rebooted, guilt stayed"
+LOC_0141,CARDS,Карточка 25 (Middle/Special) - название,Нашёл виноватого,Found the Guilty One
+LOC_0142,CARDS,Карточка 25 (Middle/Special) - описание,"Команда выдохнула, ты нет","Team exhaled, you didn't"
+LOC_0143,CARDS,Карточка 26 (Middle/Special) - название,Минус один баг,Minus One Bug
+LOC_0144,CARDS,Карточка 26 (Middle/Special) - описание,"Появилось два, но потом","Two appeared, but later"
+LOC_0145,CARDS,Карточка 74 (Middle/Special) - название,Тихий деплой,Silent Deploy
+LOC_0146,CARDS,Карточка 74 (Middle/Special) - описание,"Ничего не упало, подозрительно",Nothing crashed. Suspicious
+LOC_0147,CARDS,Карточка 27 (Senior/Click) - название,Боевой рефактор,Combat Refactor
+LOC_0148,CARDS,Карточка 27 (Senior/Click) - описание,"Всё страшно, но стало быстрее","It's scary, but faster now"
+LOC_0149,CARDS,Карточка 28 (Senior/Click) - название,Правка на лету,Live Patch
+LOC_0150,CARDS,Карточка 28 (Senior/Click) - описание,Проверять будем уже после релиза,We'll test it after release
+LOC_0151,CARDS,Карточка 29 (Senior/Click) - название,Жёсткий приоритет,Hard Priority
+LOC_0152,CARDS,Карточка 29 (Senior/Click) - описание,"Всё важно, но это важнее","Everything matters, this matters more"
+LOC_0153,CARDS,Карточка 75 (Senior/Click) - название,Архитектурный удар,Architecture Strike
+LOC_0154,CARDS,Карточка 75 (Senior/Click) - описание,"Схема сложная, клик сильнее","Diagram is complex, click is stronger"
+LOC_0155,CARDS,Карточка 30 (Senior/Click) - название,Последний аргумент,Final Argument
+LOC_0156,CARDS,Карточка 30 (Senior/Click) - описание,"Кликнул так, что спор закончился",Clicked so hard the argument ended
+LOC_0157,CARDS,Карточка 76 (Senior/Click) - название,Экстренный патч,Emergency Patch
+LOC_0158,CARDS,Карточка 76 (Senior/Click) - описание,"Временный навсегда, зато работает","Temporary forever, but it works"
+LOC_0159,CARDS,Карточка 77 (Senior/Click) - название,Точный тык,Precise Poke
+LOC_0160,CARDS,Карточка 77 (Senior/Click) - описание,"Попал туда, куда боялись",Hit the spot everyone feared
+LOC_0161,CARDS,Карточка 31 (Senior/Passive) - название,Система держится,System Holds
+LOC_0162,CARDS,Карточка 31 (Senior/Passive) - описание,Никто не знает почему,Nobody knows why
+LOC_0163,CARDS,Карточка 32 (Senior/Passive) - название,Наследие легаси,Legacy Heritage
+LOC_0164,CARDS,Карточка 32 (Senior/Passive) - описание,Старый ужас приносит KPI,Old horror brings KPI
+LOC_0165,CARDS,Карточка 78 (Senior/Passive) - название,Самописный бот,Homemade Bot
+LOC_0166,CARDS,Карточка 78 (Senior/Passive) - описание,"Делает работу, пугает коллег","Does the work, scares coworkers"
+LOC_0167,CARDS,Карточка 79 (Senior/Passive) - название,Лог сам сказал,The Log Confessed
+LOC_0168,CARDS,Карточка 79 (Senior/Passive) - описание,"Ты слушал, система призналась","You listened, the system admitted it"
+LOC_0169,CARDS,Карточка 80 (Senior/Passive) - название,Тихий скрипт,Quiet Script
+LOC_0170,CARDS,Карточка 80 (Senior/Passive) - описание,"Работает ночью, славы не просит","Works at night, asks no fame"
+LOC_0171,CARDS,Карточка 81 (Senior/Passive) - название,Запасной костыль,Backup Duct Tape
+LOC_0172,CARDS,Карточка 81 (Senior/Passive) - описание,"Лежал годами, снова пригодился","Sat for years, useful again"
+LOC_0173,CARDS,Карточка 33 (Senior/Passive) - название,Невидимая работа,Invisible Work
+LOC_0174,CARDS,Карточка 33 (Senior/Passive) - описание,"Её нет, пока не сломается",It doesn't exist until it breaks
+LOC_0175,CARDS,Карточка 34 (Senior/Special) - название,Релизный угар,Release Madness
+LOC_0176,CARDS,Карточка 34 (Senior/Special) - описание,Паника временно повышает продуктивность,Panic temporarily boosts productivity
+LOC_0177,CARDS,Карточка 35 (Senior/Special) - название,Магия опыта,Experience Magic
+LOC_0178,CARDS,Карточка 35 (Senior/Special) - описание,Ты уже страдал похожим образом,You've suffered like this before
+LOC_0179,CARDS,Карточка 36 (Senior/Special) - название,Тишина в чате,Chat Silence
+LOC_0180,CARDS,Карточка 36 (Senior/Special) - описание,Редкий баф на концентрацию,Rare focus buff
+LOC_0181,CARDS,Карточка 82 (Senior/Special) - название,Боевой режим,Combat Mode
+LOC_0182,CARDS,Карточка 82 (Senior/Special) - описание,"Сон выключен, продуктивность включена","Sleep off, productivity on"
+LOC_0183,CARDS,Карточка 37 (Lead/Click) - название,Давление сверху,Pressure from Above
+LOC_0184,CARDS,Карточка 37 (Lead/Click) - описание,"Кликаешь быстрее, потому что надо",You click faster because you must
+LOC_0185,CARDS,Карточка 38 (Lead/Click) - название,Разбор полётов,Postmortem
+LOC_0186,CARDS,Карточка 38 (Lead/Click) - описание,"Все виноваты, KPI твой","Everyone's guilty, KPI is yours"
+LOC_0187,CARDS,Карточка 39 (Lead/Click) - название,Сильное решение,Strong Decision
+LOC_0188,CARDS,Карточка 39 (Lead/Click) - описание,"Сомнительно, зато уверенно сказано","Questionable, but said with confidence"
+LOC_0189,CARDS,Карточка 83 (Lead/Click) - название,Тимлидский взгляд,Team Lead Stare
+LOC_0190,CARDS,Карточка 83 (Lead/Click) - описание,"Посмотрел строго, процесс ускорился","Glared sternly, process sped up"
+LOC_0191,CARDS,Карточка 40 (Lead/Click) - название,Пинок процессу,Process Kick
+LOC_0192,CARDS,Карточка 40 (Lead/Click) - описание,Процесс застонал и ускорился,Process groaned and sped up
+LOC_0193,CARDS,Карточка 84 (Lead/Click) - название,Удар по бэклогу,Backlog Strike
+LOC_0194,CARDS,Карточка 84 (Lead/Click) - описание,"Задачи дрогнули, дедлайн ожил","Tasks trembled, deadline woke up"
+LOC_0195,CARDS,Карточка 85 (Lead/Click) - название,Командный пинг,Team Ping
+LOC_0196,CARDS,Карточка 85 (Lead/Click) - описание,"Все проснулись, ты виноват","Everyone woke up, your fault"
+LOC_0197,CARDS,Карточка 41 (Lead/Passive) - название,Делегировал боль,Delegated Pain
+LOC_0198,CARDS,Карточка 41 (Lead/Passive) - описание,"Другие страдают, KPI капает","Others suffer, KPI drips"
+LOC_0199,CARDS,Карточка 42 (Lead/Passive) - название,Планёрка кормит,Standup Feeds
+LOC_0200,CARDS,Карточка 42 (Lead/Passive) - описание,"Слова закончились, цифры выросли","Words ran out, numbers grew"
+LOC_0201,CARDS,Карточка 86 (Lead/Passive) - название,Созвон капает,Call Drips
+LOC_0202,CARDS,Карточка 86 (Lead/Passive) - описание,"Говорят долго, KPI растёт","They talk long, KPI grows"
+LOC_0203,CARDS,Карточка 87 (Lead/Passive) - название,Чужие дедлайны,Other People's Deadlines
+LOC_0204,CARDS,Карточка 87 (Lead/Passive) - описание,"Они спешат, ты получаешь","They rush, you collect"
+LOC_0205,CARDS,Карточка 88 (Lead/Passive) - название,Асинхронная боль,Async Pain
+LOC_0206,CARDS,Карточка 88 (Lead/Passive) - описание,"Никто не рядом, все страдают","Nobody's nearby, everyone suffers"
+LOC_0207,CARDS,Карточка 89 (Lead/Passive) - название,Канбан дышит,Kanban Breathes
+LOC_0208,CARDS,Карточка 89 (Lead/Passive) - описание,"Карточки двигаются, люди нет","Cards move, people don't"
+LOC_0209,CARDS,Карточка 43 (Lead/Passive) - название,Командная усталость,Team Fatigue
+LOC_0210,CARDS,Карточка 43 (Lead/Passive) - описание,Каждый выгорел в общий зачёт,Everyone burned out for the team score
+LOC_0211,CARDS,Карточка 90 (Lead/Passive) - название,Отчёт сам пишется,Report Writes Itself
+LOC_0212,CARDS,Карточка 90 (Lead/Passive) - описание,"Цифры красивые, смысл устал","Numbers look nice, meaning is tired"
+LOC_0213,CARDS,Карточка 44 (Lead/Special) - название,Эскалация наверх,Escalate Upward
+LOC_0214,CARDS,Карточка 44 (Lead/Special) - описание,"Проблема улетела, бонус остался","Problem flew away, bonus stayed"
+LOC_0215,CARDS,Карточка 45 (Lead/Special) - название,Фокус режим,Focus Mode
+LOC_0216,CARDS,Карточка 45 (Lead/Special) - описание,Все молчат подозрительно долго,Everyone's quiet for suspiciously long
+LOC_0217,CARDS,Карточка 46 (Lead/Special) - название,Отмена встречи,Meeting Canceled
+LOC_0218,CARDS,Карточка 46 (Lead/Special) - описание,День внезапно стал продуктивным,The day suddenly became productive
+LOC_0219,CARDS,Карточка 91 (Lead/Special) - название,Срочная эскалация,Urgent Escalation
+LOC_0220,CARDS,Карточка 91 (Lead/Special) - описание,"Все забегали, KPI подпрыгнул","Everyone started running, KPI jumped"
+LOC_0221,CARDS,Карточка 92 (Lead/Special) - название,День без митингов,No-Meeting Day
+LOC_0222,CARDS,Карточка 92 (Lead/Special) - описание,"Невероятно, работа реально пошла","Unbelievable, work actually moved"
+LOC_0223,CARDS,Карточка 47 (CEO/Click) - название,Клик акционера,Shareholder Click
+LOC_0224,CARDS,Карточка 47 (CEO/Click) - описание,"Один жест, и все побежали","One gesture, everyone runs"
+LOC_0225,CARDS,Карточка 48 (CEO/Click) - название,Стратегический тык,Strategic Poke
+LOC_0226,CARDS,Карточка 48 (CEO/Click) - описание,"Никто не понял, но записали","Nobody understood, but wrote it down"
+LOC_0227,CARDS,Карточка 49 (CEO/Click) - название,Большая кнопка,Big Button
+LOC_0228,CARDS,Карточка 49 (CEO/Click) - описание,"Нажал красиво, последствия потом","Pressed beautifully, consequences later"
+LOC_0229,CARDS,Карточка 93 (CEO/Click) - название,Королевский клик,Royal Click
+LOC_0230,CARDS,Карточка 93 (CEO/Click) - описание,"Нажал один раз, отдел побежал","Clicked once, department ran"
+LOC_0231,CARDS,Карточка 50 (CEO/Click) - название,Видение сверху,View from Above
+LOC_0232,CARDS,Карточка 50 (CEO/Click) - описание,"Деталей нет, зато масштабно","No details, but great scale"
+LOC_0233,CARDS,Карточка 94 (CEO/Click) - название,Приказ сверху,Order from Above
+LOC_0234,CARDS,Карточка 94 (CEO/Click) - описание,"Логики нет, скорость есть","No logic, plenty of speed"
+LOC_0235,CARDS,Карточка 95 (CEO/Click) - название,Кнопка роста,Growth Button
+LOC_0236,CARDS,Карточка 95 (CEO/Click) - описание,"Жмёшь уверенно, страдают другие","You press confidently, others suffer"
+LOC_0237,CARDS,Карточка 51 (CEO/Passive) - название,Деньги сами,Money Itself
+LOC_0238,CARDS,Карточка 51 (CEO/Passive) - описание,KPI пахнет чужими переработками,KPI smells like other people's overtime
+LOC_0239,CARDS,Карточка 52 (CEO/Passive) - название,Совет директоров,Board of Directors
+LOC_0240,CARDS,Карточка 52 (CEO/Passive) - описание,"Сидят дорого, капает стабильно","Sits expensively, drips steadily"
+LOC_0241,CARDS,Карточка 96 (CEO/Passive) - название,Бюджетный дождь,Budget Rain
+LOC_0242,CARDS,Карточка 96 (CEO/Passive) - описание,"Деньги падают, вопросы позже","Money falls, questions later"
+LOC_0243,CARDS,Карточка 97 (CEO/Passive) - название,Отдел оптимизации,Optimization Dept.
+LOC_0244,CARDS,Карточка 97 (CEO/Passive) - описание,"Люди исчезают, графики радуются","People vanish, charts rejoice"
+LOC_0245,CARDS,Карточка 98 (CEO/Passive) - название,Инвестор доволен,Investor Pleased
+LOC_0246,CARDS,Карточка 98 (CEO/Passive) - описание,"Никто не понял, но выросло","Nobody understood, but it grew"
+LOC_0247,CARDS,Карточка 53 (CEO/Passive) - название,Мотивационная речь,Motivational Speech
+LOC_0248,CARDS,Карточка 53 (CEO/Passive) - описание,"Все устали, прибыль поверила","Everyone's tired, profit believed"
+LOC_0249,CARDS,Карточка 99 (CEO/Passive) - название,Презентация успеха,Success Presentation
+LOC_0250,CARDS,Карточка 99 (CEO/Passive) - описание,"Проблемы спрятали, прибыль показали","Problems hidden, profit shown"
+LOC_0251,CARDS,Карточка 54 (CEO/Passive) - название,Золотой парашют,Golden Parachute
+LOC_0252,CARDS,Карточка 54 (CEO/Passive) - описание,Даже падение приносит доход,Even falling earns income
+LOC_0253,CARDS,Карточка 55 (CEO/Special) - название,Массовая оптимизация,Mass Optimization
+LOC_0254,CARDS,Карточка 55 (CEO/Special) - описание,"Людей меньше, график бодрее","Fewer people, perkier chart"
+LOC_0255,CARDS,Карточка 56 (CEO/Special) - название,Великая презентация,Great Presentation
+LOC_0256,CARDS,Карточка 56 (CEO/Special) - описание,"Слайды сияют, реальность молчит","Slides shine, reality stays silent"
+LOC_0257,CARDS,Карточка 57 (CEO/Special) - название,Кризисный бонус,Crisis Bonus
+LOC_0258,CARDS,Карточка 57 (CEO/Special) - описание,"Всё горит, но премия капает","Everything burns, bonus drips"
+LOC_0259,CARDS,Карточка 100 (CEO/Special) - название,Громкий анонс,Loud Announcement
+LOC_0260,CARDS,Карточка 100 (CEO/Special) - описание,"Новостей мало, шума много","Little news, lots of noise"
+LOC_0261,RANKS,Карьерный трек - флейвор Intern,ещё верит в задачи,still believes in tasks
+LOC_0262,RANKS,Карьерный трек - флейвор Junior,"уже понял, что всё горит",already knows everything is on fire
+LOC_0263,RANKS,Карьерный трек - флейвор Middle,чинит чужие костыли,fixes other people's duct tape
+LOC_0264,RANKS,Карьерный трек - флейвор Senior,сам стал частью legacy,became part of the legacy
+LOC_0265,RANKS,Карьерный трек - флейвор Lead,отвечает за всё,responsible for everything
+LOC_0266,RANKS,Карьерный трек - флейвор CEO,красиво смотрит на графики,stares beautifully at charts
+LOC_0267,FLAVOR,Тост-событие 01,> Jira обновилась. Старые кнопки снова не там.,> Jira updated. Old buttons are misplaced again.
+LOC_0268,FLAVOR,Тост-событие 02,> HR прислал рассылку. Усталость получена.,> HR sent a newsletter. Fatigue received.
+LOC_0269,FLAVOR,Тост-событие 03,> Баг почувствовал проверку и исчез.,> The bug sensed testing and vanished.
+LOC_0270,FLAVOR,Тост-событие 04,> Менеджер сказал «это быстро». Плохой знак.,> Manager said “this is quick.” Bad sign.
+LOC_0271,FLAVOR,Тост-событие 05,> Коллега написал «привет» и пропал.,> Coworker wrote “hi” and disappeared.
+LOC_0272,FLAVOR,Тост-событие 06,> Документация найдена. Уже устарела.,> Documentation found. Already outdated.
+LOC_0273,FLAVOR,Тост-событие 07,> Всё зелёное. Тесты точно запускались?,> Everything is green. Were the tests actually run?
+LOC_0274,FLAVOR,Тост-событие 08,> Локально работает. Прод обиделся.,> Works locally. Prod took offense.
+LOC_0275,FLAVOR,Тост-событие 09,> Задача вернулась из ревью. Комментарий: «не то».,> Task returned from review. Comment: “wrong thing.”
+LOC_0276,FLAVOR,Тост-событие 10,> Что-то само починилось. Не трогайте.,> Something fixed itself. Do not touch.
+LOC_0277,FLAVOR,Тост-событие 11,> Таблица сошлась. Подозрительно приятно.,> Spreadsheet matched. Suspiciously pleasant.
+LOC_0278,FLAVOR,Тост-событие 12,> Кто-то закрыл ваш тикет. Вопросов нет.,> Someone closed your ticket. No questions.
+LOC_0279,FLAVOR,Тост-событие 13,> Кнопку сдвинули на 2 пикселя. Срочно.,> Button moved by 2 pixels. Urgent.
+LOC_0280,FLAVOR,Тост-событие 14,> Логи открылись. Страдание стало структурным.,> Logs opened. Suffering became structured.
+LOC_0281,FLAVOR,Тост-событие 15,> Созвон отменили.,> Meeting canceled.
+LOC_0282,FLAVOR,Тост-событие 16,> Кофе подействовал.,> Coffee kicked in.
+LOC_0283,FLAVOR,Тост-событие 17,> Срочный баг. Уже третий день срочный.,> Urgent bug. Urgent for the third day.
+LOC_0284,FLAVOR,Тост-событие 18,> Никто не пишет. Система напряглась.,> Nobody is writing. The system got tense.
+LOC_0285,FLAVOR,Тост-событие 19,> Деплой в 18:00. Традиция сильнее здравого смысла.,> Deploy at 18:00. Tradition beats common sense.
+LOC_0286,FLAVOR,Тост-событие 20,> График растёт. Смысл не проверяли.,> The chart goes up. Nobody checked why.
+LOC_0287,ACTIVE_EVENTS,Активное событие 01 - заголовок,СРОЧНЫЙ БАГ,URGENT BUG
+LOC_0288,ACTIVE_EVENTS,Активное событие 01 - описание,Прод снова лежит. Никто не удивлён.,Prod is down again. Nobody is surprised.
+LOC_0289,ACTIVE_EVENTS,Активное событие 01 - эффект,Клики x2 · 30 сек.,Clicks x2 · 30 sec.
+LOC_0290,ACTIVE_EVENTS,Активное событие 01 - кнопка,РАЗГРЕСТИ,CLEAN UP
+LOC_0291,ACTIVE_EVENTS,Активное событие 02 - заголовок,МИТИНГ ОТМЕНЁН,MEETING CANCELED
+LOC_0292,ACTIVE_EVENTS,Активное событие 02 - описание,Час свободы. Неожиданно и подозрительно.,One free hour. Unexpected and suspicious.
+LOC_0293,ACTIVE_EVENTS,Активное событие 02 - эффект,Пассив x1.5 · 45 сек.,Passive x1.5 · 45 sec.
+LOC_0294,ACTIVE_EVENTS,Активное событие 02 - кнопка,ИСПОЛЬЗОВАТЬ ТИШИНУ,USE THE SILENCE
+LOC_0295,ACTIVE_EVENTS,Активное событие 03 - заголовок,КРИТИЧЕСКИЙ ФИКС,CRITICAL FIX
+LOC_0296,ACTIVE_EVENTS,Активное событие 03 - описание,Нужно прямо сейчас. Как обычно.,Needed right now. As usual.
+LOC_0297,ACTIVE_EVENTS,Активное событие 03 - эффект,Клики x1.5 · 40 сек.,Clicks x1.5 · 40 sec.
+LOC_0298,ACTIVE_EVENTS,Активное событие 03 - кнопка,ФИКСИТЬ,FIX IT
+LOC_0299,ACTIVE_EVENTS,Активное событие 04 - заголовок,ТИХИЙ ЧАС,QUIET HOUR
+LOC_0300,ACTIVE_EVENTS,Активное событие 04 - описание,Все в отпуске. Или скрываются. Неважно.,Everyone's on vacation. Or hiding. Doesn't matter.
+LOC_0301,ACTIVE_EVENTS,Активное событие 04 - эффект,Пассив x2 · 30 сек.,Passive x2 · 30 sec.
+LOC_0302,ACTIVE_EVENTS,Активное событие 04 - кнопка,НЕ СПУГНУТЬ,DON'T SCARE IT
+LOC_0303,ACTIVE_EVENTS,Активное событие 05 - заголовок,ДЕНЬ РЕЛИЗА,RELEASE DAY
+LOC_0304,ACTIVE_EVENTS,Активное событие 05 - описание,Паника официально одобрена руководством.,Panic is officially approved by management.
+LOC_0305,ACTIVE_EVENTS,Активное событие 05 - эффект,Клики x2.5 · 25 сек.,Clicks x2.5 · 25 sec.
+LOC_0306,ACTIVE_EVENTS,Активное событие 05 - кнопка,ГОРЕТЬ,BURN
+LOC_0307,ACTIVE_EVENTS,Активное событие 06 - заголовок,ОТЧЁТ ДЛЯ CEO,REPORT FOR CEO
+LOC_0308,ACTIVE_EVENTS,Активное событие 06 - описание,Цифры должны расти. Любые цифры.,Numbers must go up. Any numbers.
+LOC_0309,ACTIVE_EVENTS,Активное событие 06 - эффект,Пассив x2.5 · 35 сек.,Passive x2.5 · 35 sec.
+LOC_0310,ACTIVE_EVENTS,Активное событие 06 - кнопка,ПОКАЗАТЬ ГРАФИК,SHOW THE CHART
+LOC_0311,RANKUP,Повышение до ранга Junior - сообщение,"Теперь от вас ждут больше, платят почти так же.",Now they expect more and pay almost the same.
+LOC_0312,RANKUP,Повышение до ранга Middle - сообщение,"Теперь считается, что вы уже разобрались. Сочувствуем.",Now they assume you've figured it out. Our condolences.
+LOC_0313,RANKUP,Повышение до ранга Senior - сообщение,Теперь вы не просто страдаете. К вам идут за советом.,Now you don't just suffer. People come to you for advice.
+LOC_0314,RANKUP,Повышение до ранга Lead - сообщение,"Теперь вы отвечаете не только за себя, но и за чужой хаос.","Now you're responsible not only for yourself, but for other people's chaos."
+LOC_0315,RANKUP,Повышение до ранга CEO - сообщение,Вы добрались до вершины. Все деньги наконец-то в правильных руках.,You reached the top. All the money is finally in the right hands.
+LOC_0316,RANKUP,Попап повышения - заголовок,ПОВЫШЕН,PROMOTED
+LOC_0317,SYSTEM,Активный эффект - клик-множитель,Клики x{0} · {1} сек.,Clicks x{0} · {1} sec.
+LOC_0318,SYSTEM,Активный эффект - пассив-множитель,Пассивный KPI x{0} · {1} сек.,Passive KPI x{0} · {1} sec.

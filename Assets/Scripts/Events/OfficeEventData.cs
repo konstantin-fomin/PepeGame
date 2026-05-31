@@ -26,6 +26,9 @@ public class OfficeEventData : ScriptableObject
     public string effectDescription;
     public string buttonText;
 
+    // Localization key (CSV ID, e.g. "LOC_0267") for the toast message.
+    public string locId;
+
     public List<OfficeEventEffect> effects;
 
     public float durationSeconds      = 15f;

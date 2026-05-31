@@ -39,10 +39,10 @@ public class OfficeEventPopupView : MonoBehaviour
         onAcceptCallback = onAccept;
         isShowing = true;
 
-        if (titleText != null)       titleText.text       = data.title ?? string.Empty;
-        if (descriptionText != null) descriptionText.text = data.description ?? string.Empty;
-        if (effectText != null)      effectText.text      = data.effectDescription ?? string.Empty;
-        if (timerText != null)       timerText.text       = data.buttonText ?? string.Empty;
+        if (titleText != null)       titleText.text       = LocalizedField(data, 0, data.title);
+        if (descriptionText != null) descriptionText.text = LocalizedField(data, 1, data.description);
+        if (effectText != null)      effectText.text      = LocalizedField(data, 2, data.effectDescription);
+        if (timerText != null)       timerText.text       = LocalizedField(data, 3, data.buttonText);
 
         gameObject.SetActive(true);
 
@@ -153,6 +153,20 @@ public class OfficeEventPopupView : MonoBehaviour
             hiddenPos.x = 400f;
             popupRect.anchoredPosition = hiddenPos;
         }
+    }
+
+    // Localized text for one of the four consecutive ids (offset 0=title,1=desc,2=effect,3=button).
+    // Falls back to the asset value if no LocalizationManager / translation is available.
+    private string LocalizedField(ActiveOfficeEventData data, int offset, string fallback)
+    {
+        var loc = LocalizationManager.Instance;
+        if (loc != null && !string.IsNullOrEmpty(data.locId))
+        {
+            string key = offset == 0 ? data.locId : loc.OffsetId(data.locId, offset);
+            if (!string.IsNullOrEmpty(key) && loc.TryGet(key, out string v))
+                return v;
+        }
+        return fallback ?? string.Empty;
     }
 
     private void CacheMissingReferences()

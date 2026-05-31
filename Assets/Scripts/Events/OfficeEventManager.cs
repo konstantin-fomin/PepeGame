@@ -22,6 +22,10 @@ public class OfficeEventManager : MonoBehaviour
     [SerializeField] private float minInterval       = 60f;
     [SerializeField] private float maxInterval       = 150f;
 
+    // Localized effect-suffix templates (string.Format with {0}=multiplier, {1}=seconds).
+    private const string LOC_EFFECT_CLICK   = "LOC_0317"; // "Клики x{0} · {1} сек."
+    private const string LOC_EFFECT_PASSIVE = "LOC_0318"; // "Пассивный KPI x{0} · {1} сек."
+
     public OfficeEventData ActiveEvent   { get; private set; }
     public float ActiveTimeRemaining     { get; private set; }
     public bool  HasActiveEvent          => ActiveEvent != null;
@@ -85,7 +89,7 @@ private IEnumerator EventLoop()
             if (!isRunning) yield break;
 
             OfficeEventData ev = PickEvent();
-            if (ev != null)
+            if (ev != null && !ShouldSkipForLanguage(ev))
             {
                 SpawnEventToast(ev);
             }
@@ -93,6 +97,15 @@ private IEnumerator EventLoop()
             float wait = Random.Range(minInterval, maxInterval);
             yield return new WaitForSeconds(wait);
         }
+    }
+
+    // Spec STEP 9: in EN, an event without a translation is not shown at all.
+    private bool ShouldSkipForLanguage(OfficeEventData ev)
+    {
+        var loc = LocalizationManager.Instance;
+        if (loc == null || ev == null || string.IsNullOrEmpty(ev.locId)) return false;
+        if (loc.CurrentLanguage != LocalizationManager.Language.EN) return false;
+        return !loc.TryGet(ev.locId, out _);
     }
 
 private IEnumerator RunEvent(OfficeEventData ev)
@@ -320,13 +333,15 @@ private void SpawnEventToast(OfficeEventData ev)
                     float clickMultiplier = GetSafeMultiplier(effect.value);
                     gameManager.SetFlavorClickMult(clickMultiplier);
                     result.hasTemporaryBuff = true;
-                    effectMessages.Add($"Клики x{FormatMultiplier(clickMultiplier)} · {Mathf.CeilToInt(ev.durationSeconds)} сек.");
+                    effectMessages.Add(FormatEffectSuffix(LOC_EFFECT_CLICK, "Клики x{0} · {1} сек.",
+                        clickMultiplier, ev.durationSeconds));
                     break;
                 case OfficeEventType.PassiveKpiMultiplier:
                     float passiveMultiplier = GetSafeMultiplier(effect.value);
                     gameManager.SetFlavorPassiveMult(passiveMultiplier);
                     result.hasTemporaryBuff = true;
-                    effectMessages.Add($"Пассивный KPI x{FormatMultiplier(passiveMultiplier)} · {Mathf.CeilToInt(ev.durationSeconds)} сек.");
+                    effectMessages.Add(FormatEffectSuffix(LOC_EFFECT_PASSIVE, "Пассивный KPI x{0} · {1} сек.",
+                        passiveMultiplier, ev.durationSeconds));
                     break;
                 case OfficeEventType.InstantKpiReward:
                     int reward = CalculateInstantKpiReward(effect.value);
@@ -358,9 +373,26 @@ private void SpawnEventToast(OfficeEventData ev)
         return result;
     }
 
+    private string FormatEffectSuffix(string locKey, string fallbackTemplate, float multiplier, float durationSeconds)
+    {
+        string template = LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.Get(locKey)
+            : fallbackTemplate;
+        if (string.IsNullOrEmpty(template)) template = fallbackTemplate;
+
+        return string.Format(template,
+            FormatMultiplier(multiplier),
+            Mathf.CeilToInt(durationSeconds));
+    }
+
     private string GetBaseToastMessage(OfficeEventData ev)
     {
         if (ev == null) return string.Empty;
+
+        var loc = LocalizationManager.Instance;
+        if (loc != null && !string.IsNullOrEmpty(ev.locId) && loc.TryGet(ev.locId, out string localized))
+            return localized.Replace("\n", " ");
+
         if (!string.IsNullOrWhiteSpace(ev.description)) return ev.description.Replace("\n", " ");
         if (!string.IsNullOrWhiteSpace(ev.title)) return ev.title;
         return string.Empty;

@@ -46,7 +46,7 @@ public class RankUpPopupView : MonoBehaviour
         IsShowing = true;
 
         rankTransitionText.text = $"{previousRank.rankName}  →  {newRank.rankName}";
-        sarcasticMessageText.text = newRank.rankUpMessage;
+        sarcasticMessageText.text = LocalizedRankUpMessage(newRank);
 
         gameObject.SetActive(true);
 
@@ -58,6 +58,25 @@ public class RankUpPopupView : MonoBehaviour
             else
                 confetti.PlayPromotionSmall();
         }
+    }
+
+    // The promotion message is localized by the destination rank id (RANKUP rows in the CSV).
+    private string LocalizedRankUpMessage(RankData newRank)
+    {
+        string fallback = newRank.rankUpMessage;
+        var loc = LocalizationManager.Instance;
+        if (loc == null) return fallback;
+
+        string key = null;
+        switch ((newRank.rankId ?? "").ToLower())
+        {
+            case "junior": key = "LOC_0311"; break;
+            case "middle": key = "LOC_0312"; break;
+            case "senior": key = "LOC_0313"; break;
+            case "lead":   key = "LOC_0314"; break;
+            case "ceo":    key = "LOC_0315"; break;
+        }
+        return (key != null && loc.TryGet(key, out string v)) ? v : fallback;
     }
 
     private void OnEnable()

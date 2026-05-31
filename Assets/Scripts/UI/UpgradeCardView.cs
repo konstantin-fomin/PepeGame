@@ -1,5 +1,5 @@
 // UpgradeCardView.cs
-// Version: 2026-05-30 v1.5 (completed overlay layout enforced in code)
+// Version: 2026-05-31 v1.6 (localized title/description + live language refresh)
 // Purpose: UI view for upgrade card + money overlay + completed state
 
 using UnityEngine;
@@ -34,7 +34,13 @@ public class UpgradeCardView : MonoBehaviour
     [SerializeField] private GameObject iconContainer;
     [SerializeField] private GameObject priceButton;
 
+    // Localization keys for the completed overlay copy.
+    private const string LOC_COMPLETED_TITLE = "LOC_0026"; // "ПЛАН ВЫПОЛНЕН"
+    private const string LOC_COMPLETED_DESC  = "LOC_0027"; // "Больше задач не завезли."
+
     private bool isCompleted = false;
+    private Upgrade currentUpgrade;   // last shown upgrade (for re-render on language change)
+    private bool subscribed;
 
     // ================= VALIDATION =================
 
@@ -52,6 +58,34 @@ public class UpgradeCardView : MonoBehaviour
         if (!valid) enabled = false;
 
         ConfigureCompletedOverlayLayout();
+    }
+
+    private void OnEnable()
+    {
+        Subscribe();
+    }
+
+    private void OnDestroy()
+    {
+        if (subscribed && LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged -= OnLanguageChanged;
+        subscribed = false;
+    }
+
+    private void Subscribe()
+    {
+        if (subscribed) return;
+        if (LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged += OnLanguageChanged;
+            subscribed = true;
+        }
+    }
+
+    private void OnLanguageChanged()
+    {
+        if (isCompleted) SetCompleted();
+        else if (currentUpgrade != null) ApplyUpgradeTexts(currentUpgrade);
     }
 
     /// <summary>
@@ -91,9 +125,24 @@ public class UpgradeCardView : MonoBehaviour
         }
 
         ExitCompletedState();
+        Subscribe();
 
-        titleText.text = upgrade.title.ToUpper();
-        descriptionText.text = upgrade.description;
+        currentUpgrade = upgrade;
+        ApplyUpgradeTexts(upgrade);
+    }
+
+    private void ApplyUpgradeTexts(Upgrade upgrade)
+    {
+        string locTitle = LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.GetCardTitle(upgrade.id) : null;
+        string locDesc = LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.GetCardDescription(upgrade.id) : null;
+
+        string title = string.IsNullOrEmpty(locTitle) ? upgrade.title : locTitle;
+        string desc  = string.IsNullOrEmpty(locDesc) ? upgrade.description : locDesc;
+
+        titleText.text = title != null ? title.ToUpper() : "";
+        descriptionText.text = desc;
         effectText.text = BuildEffectText(upgrade);
         priceText.text = NumberFormatter.Format(upgrade.basePrice);
     }
@@ -101,6 +150,7 @@ public class UpgradeCardView : MonoBehaviour
     public void SetCompleted()
     {
         isCompleted = true;
+        Subscribe();
 
         // Hide normal content
         titleText.text = "";
@@ -130,10 +180,10 @@ public class UpgradeCardView : MonoBehaviour
             completedOverlay.SetActive(true);
 
         if (completedTitleText != null)
-            completedTitleText.text = "ПЛАН ВЫПОЛНЕН";
+            completedTitleText.text = Localized(LOC_COMPLETED_TITLE, "ПЛАН ВЫПОЛНЕН");
 
         if (completedDescriptionText != null)
-            completedDescriptionText.text = "Больше задач не завезли.";
+            completedDescriptionText.text = Localized(LOC_COMPLETED_DESC, "Больше задач не завезли.");
 
         if (completedMaxText != null)
             completedMaxText.text = "MAX";
@@ -178,6 +228,13 @@ public class UpgradeCardView : MonoBehaviour
 
     // ================= INTERNAL =================
 
+    private static string Localized(string key, string fallback)
+    {
+        return LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.Get(key)
+            : fallback;
+    }
+
     private void ExitCompletedState()
     {
         if (!isCompleted) return;
@@ -195,6 +252,8 @@ public class UpgradeCardView : MonoBehaviour
 
     private void Clear()
     {
+        currentUpgrade = null;
+
         titleText.text = "—";
         descriptionText.text = "";
         effectText.text = "";

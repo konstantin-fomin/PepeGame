@@ -88,6 +88,9 @@ public class UIController : MonoBehaviour
             careerCompletedScreen.OnStayCeo += HandleStayCeo;
             careerCompletedScreen.OnNewCareerConfirmed += HandleNewCareer;
         }
+
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged += RefreshUI;
     }
 
     private void OnDisable()
@@ -104,6 +107,9 @@ public class UIController : MonoBehaviour
             careerCompletedScreen.OnStayCeo -= HandleStayCeo;
             careerCompletedScreen.OnNewCareerConfirmed -= HandleNewCareer;
         }
+
+        if (LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged -= RefreshUI;
     }
 
     private void Start()
@@ -192,7 +198,10 @@ public class UIController : MonoBehaviour
     private void RefreshKpi()
     {
         kpiText.text = NumberFormatter.Format(gameManager.CurrentKpi);
-        kpiPerSecondText.text = $"+{NumberFormatter.Format(gameManager.KpiPerSecond)} KPI / сек";
+        string perSecTemplate = LocalizationManager.Instance != null
+            ? LocalizationManager.Instance.Get("LOC_0028")
+            : "+{0} KPI / сек";
+        kpiPerSecondText.text = string.Format(perSecTemplate, NumberFormatter.Format(gameManager.KpiPerSecond));
     }
 
     // ================= RANK =================

@@ -12,7 +12,13 @@ public class CareerTrackView : MonoBehaviour
         "Intern", "Junior", "Middle", "Senior", "Lead", "CEO"
     };
 
-    private static readonly string[] rankFlavors = {
+    // Localization keys for the per-rank flavor lines (CSV RANKS rows).
+    private static readonly string[] rankFlavorKeys = {
+        "LOC_0261", "LOC_0262", "LOC_0263", "LOC_0264", "LOC_0265", "LOC_0266"
+    };
+
+    // RU fallbacks used only if no LocalizationManager is present.
+    private static readonly string[] rankFlavorFallback = {
         "ещё верит в задачи",
         "уже понял, что всё горит",
         "чинит чужие костыли",
@@ -24,6 +30,29 @@ public class CareerTrackView : MonoBehaviour
     private static readonly Color completedColor = new Color(0.416f, 0.333f, 0.259f, 1f);
     private static readonly Color currentColor   = new Color(0.208f, 0.310f, 0.408f, 1f);
     private static readonly Color futureColor    = new Color(0.478f, 0.416f, 0.341f, 1f);
+
+    private bool subscribed;
+
+    private void OnEnable()
+    {
+        if (!subscribed && LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged += Refresh;
+            subscribed = true;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (subscribed && LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged -= Refresh;
+        subscribed = false;
+    }
+
+    private static string L(string key, string fallback)
+    {
+        return LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : fallback;
+    }
 
     public void Refresh()
     {
@@ -60,7 +89,8 @@ public class CareerTrackView : MonoBehaviour
                 color = futureColor;
             }
 
-            rankRows[i].text = string.Format("{0} {1}  {2}", marker, rankNames[i], rankFlavors[i]);
+            string flavor = L(rankFlavorKeys[i], rankFlavorFallback[i]);
+            rankRows[i].text = string.Format("{0} {1}  {2}", marker, rankNames[i], flavor);
             rankRows[i].color = color;
             rankRows[i].fontStyle = fontStyle;
         }
@@ -77,7 +107,7 @@ public class CareerTrackView : MonoBehaviour
 
             if (xpUntilNextText != null)
             {
-                xpUntilNextText.text = string.Format("До повышения: {0} XP", nextRankXp - currentXp);
+                xpUntilNextText.text = string.Format(L("LOC_0029", "До повышения: {0} XP"), nextRankXp - currentXp);
                 xpUntilNextText.gameObject.SetActive(true);
             }
         }
@@ -87,7 +117,7 @@ public class CareerTrackView : MonoBehaviour
                 xpText.text = "XP: MAX";
 
             if (xpUntilNextText != null)
-                xpUntilNextText.text = "Максимальный ранг достигнут";
+                xpUntilNextText.text = L("LOC_0030", "Максимальный ранг достигнут");
         }
     }
 }

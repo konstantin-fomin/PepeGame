@@ -8,6 +8,11 @@ public class ActiveOfficeEventData : ScriptableObject
     [SerializeField] public string description;
     [SerializeField] public string effectDescription;
     [SerializeField] public string buttonText;
+
+    // Localization base key (CSV ID of the title row, e.g. "LOC_0287").
+    // The four display fields occupy consecutive ids: title, description, effect, button.
+    [SerializeField] public string locId;
+
     [SerializeField] public OfficeEventType effectType;
     [SerializeField] public float effectValue;
     [SerializeField] public float durationSeconds;

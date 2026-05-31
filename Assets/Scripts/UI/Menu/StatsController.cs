@@ -13,7 +13,13 @@ public class StatsController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI hrCommentText;
     [SerializeField] private Button backButton;
 
-    private static readonly string[] hrComments = {
+    // HR flavor lines — localization keys (CSV) + RU fallbacks.
+    private static readonly string[] hrCommentKeys = {
+        "LOC_0039", "LOC_0040", "LOC_0041", "LOC_0042",
+        "LOC_0043", "LOC_0044", "LOC_0045", "LOC_0046"
+    };
+
+    private static readonly string[] hrCommentFallback = {
         "Показатели приемлемые. Отдых не одобрен.",
         "Компания ценит ваше потраченное время.",
         "Продуктивность на уровне. Ожиданий нет.",
@@ -24,6 +30,8 @@ public class StatsController : MonoBehaviour
         "Спасибо за службу. Продолжайте страдать."
     };
 
+    private bool subscribed;
+
     private void Start()
     {
         backButton.onClick.AddListener(() =>
@@ -32,7 +40,24 @@ public class StatsController : MonoBehaviour
 
     private void OnEnable()
     {
+        if (!subscribed && LocalizationManager.Instance != null)
+        {
+            LocalizationManager.Instance.OnLanguageChanged += Refresh;
+            subscribed = true;
+        }
         Refresh();
+    }
+
+    private void OnDisable()
+    {
+        if (subscribed && LocalizationManager.Instance != null)
+            LocalizationManager.Instance.OnLanguageChanged -= Refresh;
+        subscribed = false;
+    }
+
+    private static string L(string key, string fallback)
+    {
+        return LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : fallback;
     }
 
     private void Refresh()
@@ -41,14 +66,18 @@ public class StatsController : MonoBehaviour
         if (stats == null) return;
 
         string rankName = gameManager.CurrentRank?.rankName ?? "—";
-        string careerStatus = gameManager.IsCareerCompleted ? "Завершена" : "Активна";
+        string careerStatus = gameManager.IsCareerCompleted
+            ? L("LOC_0038", "Завершена")
+            : L("LOC_0037", "Активна");
 
-        playtimeText.text  = $"Время в офисе:      {FormatTime(stats.TotalPlaytimeSeconds)}";
-        kpiText.text       = $"KPI заработано:     {NumberFormatter.Format(stats.TotalKpiEarned)}";
-        clicksText.text    = $"Кликов совершено:   {NumberFormatter.Format(stats.TotalClicks)}";
-        rankText.text      = $"Текущий ранг:       {rankName}";
-        upgradesText.text  = $"Карьера:            {careerStatus}";
-        hrCommentText.text = $"\"{hrComments[Random.Range(0, hrComments.Length)]}\"";
+        playtimeText.text  = $"{L("LOC_0032", "Время в офисе:")} {FormatTime(stats.TotalPlaytimeSeconds)}";
+        kpiText.text       = $"{L("LOC_0033", "KPI заработано:")} {NumberFormatter.Format(stats.TotalKpiEarned)}";
+        clicksText.text    = $"{L("LOC_0034", "Кликов совершено:")} {NumberFormatter.Format(stats.TotalClicks)}";
+        rankText.text      = $"{L("LOC_0035", "Текущий ранг:")} {rankName}";
+        upgradesText.text  = $"{L("LOC_0036", "Карьера:")} {careerStatus}";
+
+        int idx = Random.Range(0, hrCommentKeys.Length);
+        hrCommentText.text = $"\"{L(hrCommentKeys[idx], hrCommentFallback[idx])}\"";
     }
 
     private string FormatTime(float totalSeconds)

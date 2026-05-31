@@ -182,11 +182,16 @@ public class MenuNavigationController : MonoBehaviour
     }
 
     // --- Confirm Dialogs ---
+    private static string L(string key, string fallback)
+    {
+        return LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : fallback;
+    }
+
     public void ConfirmNewCareer()
     {
         confirmDialog.Show(
-            "Новая карьера",
-            "Начать заново?\nВесь прогресс будет сброшен.",
+            L("LOC_0056", "Новая карьера"),
+            L("LOC_0057", "Начать заново?\nВесь прогресс будет сброшен."),
             onConfirm: () => {
                 StartGameWithZoom(
                     loadSave: false,
@@ -201,8 +206,8 @@ public class MenuNavigationController : MonoBehaviour
     public void ConfirmResetProgress()
     {
         confirmDialog.Show(
-            "Сброс прогресса",
-            "Сбросить весь прогресс?\nИгра начнётся с нуля, как при первом запуске.",
+            L("LOC_0058", "Сброс прогресса"),
+            L("LOC_0059", "Сбросить весь прогресс?\nИгра начнётся с нуля, как при первом запуске."),
             onConfirm: () => {
                 gameManager.ResetProgress(saveAfterReset: false);
                 ShowMainMenu(hasSave: false);
@@ -213,8 +218,8 @@ public class MenuNavigationController : MonoBehaviour
     public void ConfirmReturnToMenu()
     {
         confirmDialog.Show(
-            "Главное меню",
-            "Выйти в главное меню?\nПрогресс будет сохранён.",
+            L("LOC_0010", "Главное меню"),
+            L("LOC_0060", "Выйти в главное меню?\nПрогресс будет сохранён."),
             onConfirm: () => {
                 gameManager.SaveGame();
                 ShowMainMenu(hasSave: true);
@@ -225,8 +230,8 @@ public class MenuNavigationController : MonoBehaviour
     public void ConfirmQuit()
     {
         confirmDialog.Show(
-            "Выход",
-            "Выйти из игры?\nПрогресс будет сохранён.",
+            L("LOC_0007", "Выход"),
+            L("LOC_0061", "Выйти из игры?\nПрогресс будет сохранён."),
             onConfirm: () => {
                 gameManager.SaveGame();
                 Time.timeScale = 1f;

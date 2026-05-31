@@ -24,15 +24,20 @@ public class FirstLaunchTutorialPopupView : MonoBehaviour
 
     public void Show()
     {
-        titleText.text = "ПЕРВАЯ СМЕНА";
-        bodyText.text =
+        titleText.text = L("LOC_0047", "ПЕРВАЯ СМЕНА");
+        bodyText.text = L("LOC_0048",
             "Кликайте по рабочей зоне,\nчтобы выжимать KPI.\n\n" +
             "Покупайте карточки, чтобы работать\nэффективнее и страдать продуктивнее.\n\n" +
-            "XP двигает вас к следующему рангу.";
+            "XP двигает вас к следующему рангу.");
 
         IsShowing = true;
         gameObject.SetActive(true);
         StartCoroutine(FadeIn());
+    }
+
+    private static string L(string key, string fallback)
+    {
+        return LocalizationManager.Instance != null ? LocalizationManager.Instance.Get(key) : fallback;
     }
 
     private void Hide()

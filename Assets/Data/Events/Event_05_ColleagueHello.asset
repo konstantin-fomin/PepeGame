@@ -18,6 +18,7 @@ MonoBehaviour:
     \xAB\u043F\u0440\u0438\u0432\u0435\u0442\xBB \u0438 \u043F\u0440\u043E\u043F\u0430\u043B."
   effectDescription: 
   buttonText: 
+  locId: LOC_0271
   effects:
   - type: 6
     value: 0
