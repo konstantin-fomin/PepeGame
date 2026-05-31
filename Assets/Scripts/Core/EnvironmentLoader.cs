@@ -75,7 +75,12 @@ public class EnvironmentLoader : MonoBehaviour
             }
         }
 
-        if (!pendingLoadSave && tutorialPopup != null && !gameManager.HasSeenTutorial)
+        // Guard: the player may have left to the main menu during the startup
+        // animation above. Don't pop the tutorial over the menu.
+        bool stillInGame = MenuNavigationController.Instance == null
+            || MenuNavigationController.Instance.IsGameActive;
+
+        if (stillInGame && !pendingLoadSave && tutorialPopup != null && !gameManager.HasSeenTutorial)
         {
             tutorialPopup.OnPopupClosed += OnTutorialClosed;
             tutorialPopup.Show();
