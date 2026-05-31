@@ -300,6 +300,7 @@ public class GameManager : MonoBehaviour
         currentRank = newRank;
         InitFromRank(newRank);
 
+        audioManager?.StopSpecialLoop();
         audioManager?.PlayRankUp();
         audioManager?.PlayMusicForRank(newRank);
 
