@@ -45,7 +45,9 @@ public class WorkZoneClick : MonoBehaviour
         if (MenuNavigationController.Instance != null &&
             !MenuNavigationController.Instance.IsGameActive) return;
 
-        Vector2 screenPos = Mouse.current.position.ReadValue();
+        var pointer = Pointer.current;
+        if (pointer == null) return;
+        Vector2 screenPos = pointer.position.ReadValue();
 
         Vector3 screenPosWithZ = new Vector3(
             screenPos.x,
