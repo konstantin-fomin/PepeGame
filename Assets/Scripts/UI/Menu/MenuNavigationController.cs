@@ -20,6 +20,7 @@ public class MenuNavigationController : MonoBehaviour
     [SerializeField] private GameManager gameManager;
     [SerializeField] private EnvironmentLoader environmentLoader;
     [SerializeField] private MonitorZoomTransition zoomTransition;
+    [SerializeField] private FirstLaunchTutorialPopupView tutorialPopup;
 
     private MenuState currentState;
     private MenuState settingsPreviousState;
@@ -69,6 +70,8 @@ public class MenuNavigationController : MonoBehaviour
         OfficeEventManager.Instance?.StopEventSystem();
         FindObjectOfType<ActiveOfficeEventManager>()?.StopSystem();
         AudioManager.Instance?.StopSpecialLoop();
+
+        tutorialPopup?.HideImmediate();
 
         SetActive(mainMenuPanel, true);
         SetActive(gameHudPanel, false);

@@ -45,6 +45,16 @@ public class FirstLaunchTutorialPopupView : MonoBehaviour
         StartCoroutine(FadeOut());
     }
 
+    public void HideImmediate()
+    {
+        if (!IsShowing) return;
+        StopAllCoroutines();
+        canvasGroup.alpha = 0f;
+        canvasGroup.blocksRaycasts = false;
+        IsShowing = false;
+        gameObject.SetActive(false);
+    }
+
     private IEnumerator FadeIn()
     {
         canvasGroup.alpha = 0f;
