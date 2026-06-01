@@ -58,7 +58,15 @@ public class OfficeEventManager : MonoBehaviour
     // canRepeat=false events: shown at most once per session.
     private HashSet<string> shownNonRepeatableIds = new HashSet<string>();
 
-    private void Awake() => Instance = this;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     public void StartEventSystem()
     {

@@ -25,7 +25,15 @@ public class MenuNavigationController : MonoBehaviour
     private MenuState currentState;
     private MenuState settingsPreviousState;
 
-    private void Awake() => Instance = this;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
     private void Start()
     {

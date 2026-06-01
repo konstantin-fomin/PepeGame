@@ -21,6 +21,11 @@ public class StatsTracker : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
         Load();
     }
@@ -71,10 +76,12 @@ public class StatsTracker : MonoBehaviour
     private void Load()
     {
         TotalPlaytimeSeconds = PlayerPrefs.GetFloat(KEY_PLAYTIME, 0f);
-        TotalKpiEarned       = long.Parse(
-            PlayerPrefs.GetString(KEY_KPI, "0"));
-        TotalClicks          = PlayerPrefs.GetInt(KEY_CLICKS,   0);
-        UpgradesBought       = PlayerPrefs.GetInt(KEY_UPGRADES, 0);
+
+        if (!long.TryParse(PlayerPrefs.GetString(KEY_KPI, "0"), out long kpiVal)) kpiVal = 0;
+        TotalKpiEarned = kpiVal;
+
+        TotalClicks    = PlayerPrefs.GetInt(KEY_CLICKS,   0);
+        UpgradesBought = PlayerPrefs.GetInt(KEY_UPGRADES, 0);
     }
 
     private void OnApplicationPause(bool pause) { if (pause) Save(); }

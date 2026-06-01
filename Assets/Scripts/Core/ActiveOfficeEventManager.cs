@@ -66,6 +66,14 @@ public class ActiveOfficeEventManager : MonoBehaviour
 
             isPendingPopup = true;
             ActiveOfficeEventData capturedEvent = picked;
+
+            if (popupView == null)
+            {
+                Debug.LogError("[ActiveOfficeEventManager] popupView is null — assign in Inspector");
+                isPendingPopup = false;
+                continue;
+            }
+
             popupView.Show(capturedEvent, () => OnAccepted(capturedEvent));
 
             float timer = 0f;

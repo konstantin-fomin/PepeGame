@@ -11,7 +11,14 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
+        activeMusicSource   = musicSourceA;
+        inactiveMusicSource = musicSourceB;
     }
 
     // ================= AUDIO SOURCES =================
@@ -116,9 +123,6 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
-        activeMusicSource = musicSourceA;
-        inactiveMusicSource = musicSourceB;
-
         if (musicSourceA != null) musicSourceA.loop = true;
         if (musicSourceB != null) musicSourceB.loop = true;
 
